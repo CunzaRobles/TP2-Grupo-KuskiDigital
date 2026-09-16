@@ -16,11 +16,19 @@ function App() {
           <img src={viteLogo} className="vite" alt="Vite logo" />
         </div>
         <div>
-          <h1>Get started</h1>
+          <h1>KuskiDigital - Módulo Catálogo</h1>
           <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
+            Desarrollado por: <code>Roberto Meza</code>
           </p>
         </div>
+
+        {/* Módulo de Catálogo alineado a KuskiDigital */}
+        <div style={{ border: '1px solid #646cff', borderRadius: '8px', padding: '15px', margin: '20px 0' }}>
+          <h2>Vista Previa del Catálogo</h2>
+          <p><strong>Módulo:</strong> Componente de Catálogo React</p>
+          <p><strong>Estado:</strong> En desarrollo (Rama feature/vista-catalogo-react)</p>
+        </div>
+
         <button
           type="button"
           className="counter"
