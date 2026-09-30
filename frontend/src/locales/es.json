@@ -1,0 +1,1004 @@
+{
+  "marca": {
+    "nombre": "Kuski",
+    "lema": "Biodiversidad andina con origen"
+  },
+  "nav": {
+    "principal": "Navegación principal",
+    "inicio": "Inicio",
+    "catalogo": "Catálogo",
+    "origen": "Origen",
+    "nosotros": "Nosotros",
+    "abrirMenu": "Abrir menú",
+    "saltarContenido": "Saltar al contenido",
+    "menu": "Menú",
+    "preferencias": "Idioma y moneda"
+  },
+  "preferencias": {
+    "idioma": "Idioma",
+    "moneda": "Moneda",
+    "idiomas": {
+      "es": "Español",
+      "en": "English",
+      "de": "Deutsch"
+    },
+    "monedas": {
+      "PEN": "Soles",
+      "USD": "Dólares",
+      "EUR": "Euros"
+    }
+  },
+  "carrito": {
+    "titulo": "Tu carrito",
+    "abrir_one": "Abrir carrito, {{count}} producto",
+    "abrir_other": "Abrir carrito, {{count}} productos",
+    "vacio": "Tu carrito está vacío",
+    "agregado": "Agregado al carrito",
+    "agregarProducto": "Agregar {{nombre}} al carrito",
+    "sinMasStock": "Ya tienes en el carrito todo el stock disponible",
+    "verCarrito": "Ver carrito",
+    "vacioDescripcion": "Descubre café de altura, superalimentos y textiles de alpaca de nuestras comunidades.",
+    "explorar": "Explorar catálogo",
+    "unidades_one": "{{count}} producto",
+    "unidades_other": "{{count}} productos",
+    "subtotal": "Subtotal",
+    "notaEnvio": "El envío y el IGV (solo para envíos a Perú) se calculan en el checkout según tu país. Los verás antes de pagar.",
+    "irCheckout": "Continuar con la compra",
+    "ajustaAvisos": "Ajusta los productos marcados para continuar.",
+    "verResumen": "Ver resumen del carrito",
+    "precioUnitario": "Precio unitario",
+    "aviso": {
+      "NO_DISPONIBLE": "Ya no está disponible: quítalo para continuar",
+      "STOCK_INSUFICIENTE_one": "Solo queda {{count}} unidad",
+      "STOCK_INSUFICIENTE_other": "Solo quedan {{count}} unidades"
+    },
+    "cantidadDe": "Cantidad de {{nombre}}",
+    "quitar": "Quitar {{nombre}} del carrito",
+    "quitarCorto": "Quitar",
+    "fusionado": "Sumamos a tu cuenta los productos que agregaste como invitado",
+    "ajustado": "Ajustamos algunas cantidades al stock disponible.",
+    "error": "No pudimos actualizar tu carrito. Inténtalo de nuevo.",
+    "pagina": {
+      "eyebrow": "Resumen de compra"
+    },
+    "productos": "Productos del carrito",
+    "seguirComprando": "Seguir comprando",
+    "resumen": "Resumen",
+    "subtotalProductos_one": "Subtotal ({{count}} producto)",
+    "subtotalProductos_other": "Subtotal ({{count}} productos)",
+    "envio": "Envío",
+    "igv": "IGV (18 %, solo Perú)",
+    "enCheckout": "Se calcula en el checkout",
+    "totalProvisional": "Total sin envío",
+    "garantias": {
+      "envio": "Enviamos desde Cusco a todo el mundo",
+      "pasos": "Solo 4 pasos hasta confirmar tu pedido",
+      "pago": "Pago 100 % seguro: tarjeta, PayPal, Yape o Plin"
+    }
+  },
+  "ui": {
+    "cerrar": "Cerrar",
+    "cargando": "Cargando…",
+    "cantidad": "Cantidad",
+    "disminuir": "Disminuir cantidad",
+    "aumentar": "Aumentar cantidad",
+    "paso": "Paso {{actual}} de {{total}}",
+    "completado": "completado",
+    "actual": "paso actual",
+    "mostrarPassword": "Mostrar contraseña",
+    "ocultarPassword": "Ocultar contraseña",
+    "cancelar": "Cancelar"
+  },
+  "checkout": {
+    "pasos": {
+      "envio": "Envío",
+      "metodo": "Método de envío",
+      "pago": "Pago",
+      "confirmar": "Confirmar"
+    },
+    "eyebrow": "Compra segura",
+    "titulo": "Finalizar compra",
+    "volver": "Volver",
+    "continuar": "Continuar",
+    "vacio": {
+      "titulo": "No hay nada que pagar todavía",
+      "descripcion": "Tu carrito está vacío. Agrega productos del catálogo para continuar."
+    },
+    "avisos": {
+      "titulo": "Hay productos que necesitan tu atención",
+      "detalle": "Algún producto cambió de stock o ya no está disponible. Ajusta tu carrito antes de pagar."
+    },
+    "envio": {
+      "titulo": "¿A dónde enviamos tu pedido?",
+      "descripcion": "Al elegir el país verás al instante el costo de envío y el total.",
+      "continuar": "Continuar al método de envío",
+      "destinatario": "Nombre de quien recibe",
+      "pais": "País",
+      "paisAyuda": "El envío y los impuestos dependen del país.",
+      "elegirPais": "Elige el país de destino",
+      "direccion": "Dirección",
+      "ciudad": "Ciudad",
+      "codigoPostal": "Código postal (opcional)",
+      "telefono": "Teléfono (opcional)",
+      "telefonoAyuda": "Solo lo usa el courier para coordinar la entrega.",
+      "guardar": "Guardar esta dirección en mi cuenta",
+      "otra": "Enviar a otra dirección"
+    },
+    "metodo": {
+      "titulo": "Elige cómo quieres recibirlo",
+      "descripcion": "El precio que ves es el que pagarás. Los días son hábiles desde que despachamos.",
+      "estandar": "Estándar",
+      "express": "Express",
+      "detalle": "{{transportista}} · {{min}}–{{max}} días",
+      "llegada": "Llega entre el {{rango}}"
+    },
+    "pago": {
+      "titulo": "¿Cómo quieres pagar?",
+      "descripcion": "Pago simulado para la demo: no se realiza ningún cargo real.",
+      "continuar": "Revisar el pedido",
+      "elegir": "Método de pago",
+      "soloPen": "Solo en soles",
+      "seguro": "Tus datos viajan cifrados. No guardamos el número de tu tarjeta.",
+      "metodos": {
+        "tarjeta": "Tarjeta",
+        "paypal": "PayPal",
+        "yape": "Yape",
+        "plin": "Plin"
+      },
+      "marcas": {
+        "visa": "Visa",
+        "mastercard": "Mastercard",
+        "amex": "American Express"
+      },
+      "tarjeta": {
+        "numero": "Número de tarjeta",
+        "titular": "Titular",
+        "titularEjemplo": "Nombre Apellido",
+        "vence": "Vence",
+        "vencimiento": "Vencimiento",
+        "cvv": "CVV",
+        "marca": "Tarjeta {{marca}}",
+        "prueba": "Demo: 4111 1111 1111 1111 se aprueba; una tarjeta terminada en 0002 (por ejemplo 4000 0000 0000 0002) se rechaza. Usa una fecha futura y cualquier CVV."
+      },
+      "paypal": {
+        "correo": "Correo de tu cuenta PayPal",
+        "nota": "Al confirmar, PayPal aprobará el pago (simulado) y volverás a la tienda."
+      },
+      "celular": {
+        "label": "Celular registrado en {{app}}",
+        "ayuda": "9 dígitos, sin el +51.",
+        "nota": "Al confirmar te llegará la solicitud de pago en {{app}} (simulado) y te mostraremos el código de aprobación."
+      },
+      "yapeSoles": {
+        "titulo": "¿Quieres pagar con Yape o Plin?",
+        "detalle": "Solo aceptan soles. Ahora ves los precios en {{moneda}}; puedes cambiar a soles y el total se recalculará.",
+        "accion": "Pagar en soles (PEN)"
+      },
+      "rechazado": {
+        "titulo": "El pago no se aprobó",
+        "operacion": "Operación {{numero}}",
+        "ayuda": "Prueba con otra tarjeta o elige otro método de pago."
+      }
+    },
+    "confirmar": {
+      "titulo": "Revisa y confirma tu pedido",
+      "descripcion": "Este es el total final: incluye productos, envío e impuestos.",
+      "editar": "Editar",
+      "envioA": "Envío a",
+      "metodo": "Método de envío",
+      "pago": "Pago",
+      "pagar": "Pagar {{total}}",
+      "pagarSinTotal": "Pagar",
+      "revisarCarrito": "Revisar mi carrito",
+      "simulado": "Pago simulado con fines académicos: no se realizará ningún cargo real."
+    },
+    "procesando": {
+      "titulo": "Procesando tu pago",
+      "descripcion": "No cierres esta ventana, solo tomará unos segundos.",
+      "app": "Aprobando el pago en {{app}}… No cierres esta ventana.",
+      "etapas": {
+        "conectando": "Conectando con la pasarela de pago",
+        "verificando": "Verificando los datos",
+        "confirmando": "Confirmando tu pedido"
+      }
+    },
+    "resumen": {
+      "titulo": "Tu pedido",
+      "subtotal": "Subtotal",
+      "envio": "Envío",
+      "igv": "IGV (18 %)",
+      "igvNoAplica": "IGV",
+      "igvNoAplicaDetalle": "No aplica a envíos fuera de Perú",
+      "total": "Total",
+      "totalPendiente": "Elige el país para ver el total",
+      "eligePais": "Elige el país",
+      "tipoCambio": "Tipo de cambio: 1 {{moneda}} = S/ {{valor}} · equivale a {{totalPen}}",
+      "sinCostosOcultos": "Sin costos ocultos: el total incluye envío e impuestos. Es exactamente lo que pagarás."
+    }
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Cusco · de 1 050 a 3 760 msnm",
+      "titulo": "Lo mejor de los Andes, con nombre y comunidad",
+      "descripcion": "Café orgánico, superalimentos, textiles de alpaca y artesanía, trazables hasta la comunidad que los produce.",
+      "cta": "Explorar catálogo",
+      "imagenAlt": "Machu Picchu y las montañas de Cusco al atardecer"
+    },
+    "categorias": {
+      "eyebrow": "Cuatro líneas, un mismo origen",
+      "titulo": "Explora por categoría",
+      "descripcion": "Del cafetal de ceja de selva al telar de altura: cada línea nace en una comunidad distinta.",
+      "productos_one": "{{count}} producto",
+      "productos_other": "{{count}} productos"
+    },
+    "destacados": {
+      "eyebrow": "Selección de temporada",
+      "titulo": "Destacados de nuestras comunidades",
+      "descripcion": "Conoce de dónde viene cada producto y a qué altura se cultiva.",
+      "verTodo": "Ver todo el catálogo"
+    },
+    "trazabilidad": {
+      "eyebrow": "Trazabilidad",
+      "titulo": "Cada producto tiene un lugar en el mapa",
+      "descripcion": "Trabajamos directamente con comunidades productoras de Cusco. Toca un pin para conocer quién cultiva o teje lo que compras.",
+      "cifras": {
+        "comunidades": "Comunidades productoras",
+        "familias": "Familias beneficiadas",
+        "paises": "Países de destino",
+        "productos": "Productos trazables"
+      },
+      "altitud": "Cultivados y tejidos entre {{min}} y {{max}} metros sobre el nivel del mar.",
+      "mapa": "Mapa de las comunidades productoras de Cusco",
+      "popup": {
+        "productos_one": "{{count}} producto en la tienda",
+        "productos_other": "{{count}} productos en la tienda",
+        "familias_one": "{{count}} familia beneficiada",
+        "familias_other": "{{count}} familias beneficiadas",
+        "verProductos": "Ver sus productos"
+      }
+    }
+  },
+  "footer": {
+    "derechos": "© {{year}} Kuski Agroindustria S.A. · Cusco, Perú",
+    "descripcion": "Tienda de Kuski Agroindustria S.A.: productos de la biodiversidad andina, trazables hasta la comunidad que los produce.",
+    "ubicacion": "Cusco, Perú",
+    "redes": "Síguenos",
+    "columnas": {
+      "tienda": "Tienda",
+      "ayuda": "Ayuda",
+      "empresa": "Kuski"
+    },
+    "enlaces": {
+      "catalogo": "Todo el catálogo",
+      "envios": "Envíos internacionales",
+      "seguimiento": "Seguimiento de pedido",
+      "preguntas": "Preguntas frecuentes",
+      "contacto": "Contacto",
+      "origen": "Origen y trazabilidad",
+      "terminos": "Términos y condiciones",
+      "privacidad": "Privacidad"
+    },
+    "pagoSeguro": "Pago 100 % seguro",
+    "pagoSeguroDetalle": "Conexión cifrada SSL",
+    "metodosPago": "Métodos de pago aceptados"
+  },
+  "admin": {
+    "titulo": "Panel de administración",
+    "menu": "Menú del panel",
+    "abrirMenu": "Abrir menú",
+    "colapsarMenu": "Contraer menú lateral",
+    "expandirMenu": "Expandir menú lateral",
+    "modoOscuro": "Modo oscuro",
+    "modoClaro": "Modo claro",
+    "volverTienda": "Volver a la tienda",
+    "secciones": {
+      "dashboard": "Dashboard",
+      "ventas": "Ventas",
+      "pedidos": "Pedidos",
+      "inventario": "Inventario",
+      "productos": "Productos",
+      "categorias": "Categorías",
+      "usuarios": "Usuarios",
+      "estadisticas": "Estadísticas"
+    },
+    "grupos": {
+      "general": "General",
+      "operacion": "Operación",
+      "catalogo": "Catálogo",
+      "equipo": "Equipo"
+    },
+    "roles": {
+      "admin_gerente": "Gerencia",
+      "admin_ventas": "Ventas",
+      "admin_logistica": "Logística",
+      "cliente": "Cliente"
+    },
+    "metodosPago": {
+      "tarjeta": "Tarjeta",
+      "paypal": "PayPal",
+      "yape": "Yape",
+      "plin": "Plin"
+    },
+    "estadosPago": {
+      "pendiente": "pendiente",
+      "aprobado": "aprobado",
+      "rechazado": "rechazado",
+      "reembolsado": "reembolsado"
+    },
+    "sesion": {
+      "salir": "Cerrar sesión",
+      "cambiarCuenta": "Entrar con otra cuenta"
+    },
+    "login": {
+      "eyebrow": "Equipo Kuski",
+      "titulo": "Acceso al panel",
+      "descripcion": "Ingresa con tu cuenta de gerencia, ventas o logística.",
+      "lema": "Del campo cusqueño a 31 países, pedido a pedido.",
+      "punto1": "Ventas, ingresos y mercados en tiempo real",
+      "punto2": "Inventario con kardex y alertas de stock bajo",
+      "punto3": "Seguimiento de cada pedido hasta su entrega",
+      "enviar": "Entrar al panel",
+      "sinAcceso": "Esta cuenta no tiene acceso al panel",
+      "sinAccesoDetalle": "{{correo}} es una cuenta de cliente. Entra con una cuenta del equipo."
+    },
+    "sinPermiso": {
+      "titulo": "Sin acceso a esta sección",
+      "descripcion": "Tu rol no incluye esta sección del panel. Si la necesitas, pídesela a gerencia.",
+      "cliente": "Tu cuenta es de cliente: el panel es solo para el equipo de Kuski.",
+      "volver": "Ir a mi inicio"
+    },
+    "buscar": {
+      "titulo": "Búsqueda rápida",
+      "placeholder": "Buscar productos, pedidos, usuarios…",
+      "ayuda": "↑ ↓ para moverte · Enter para abrir · Esc para cerrar",
+      "minimo": "Escribe al menos 2 letras o elige una sección.",
+      "sinResultados": "No encontramos nada para «{{q}}».",
+      "irA": "Ir a la sección",
+      "grupos": {
+        "secciones": "Secciones",
+        "productos": "Productos",
+        "pedidos": "Pedidos",
+        "usuarios": "Usuarios"
+      }
+    },
+    "acciones": {
+      "editar": "Editar",
+      "eliminar": "Eliminar",
+      "guardar": "Guardar"
+    },
+    "filtros": {
+      "buscar": "Buscar",
+      "buscarPedido": "Código, cliente o correo",
+      "desde": "Desde",
+      "hasta": "Hasta",
+      "pais": "País",
+      "estado": "Estado",
+      "metodoPago": "Método de pago",
+      "todos": "Todos",
+      "todas": "Todas",
+      "limpiar": "Limpiar"
+    },
+    "tabla": {
+      "paginacion": "Paginación de la tabla",
+      "rango": "{{desde}}–{{hasta}} de {{total}}",
+      "pagina": "Página {{page}} de {{totalPages}}",
+      "sinResultados": "No hay resultados con estos filtros.",
+      "acciones": "Acciones",
+      "pedido": "Pedido",
+      "fecha": "Fecha",
+      "cliente": "Cliente",
+      "pais": "País",
+      "pago": "Pago",
+      "estado": "Estado",
+      "totalPen": "Total (S/)",
+      "destino": "Destino",
+      "envio": "Envío",
+      "unidades": "Unid.",
+      "producto": "Producto",
+      "categoria": "Categoría",
+      "comunidad": "Comunidad",
+      "precio": "Precio",
+      "stock": "Stock",
+      "stockMinimo": "Mínimo",
+      "usuario": "Usuario"
+    },
+    "dashboardPage": {
+      "saludo": "Hola, {{nombre}}",
+      "descripcion": "Así va el mes en Kuski. Montos en soles; el mes se compara con el mismo tramo del mes anterior.",
+      "ingresosMes": "Ingresos del mes",
+      "pedidosMes": "Pedidos del mes",
+      "ticketPromedio": "Ticket promedio",
+      "stockBajo": "Productos con stock bajo",
+      "stockBajoDetalle": "En o por debajo de su stock mínimo",
+      "stockBajoOk": "Todo el catálogo está sobre su stock mínimo.",
+      "sinComparacion": "Sin datos del mes anterior",
+      "vsMesAnterior": "vs. mes anterior",
+      "ingresosMensuales": "Ingresos mensuales",
+      "ingresosMensualesDetalle": "Últimos 12 meses, en soles (sin pedidos pendientes ni cancelados).",
+      "graficoAria": "Gráfico de columnas de ingresos por mes de los últimos 12 meses",
+      "verTabla": "Ver como tabla",
+      "verGrafico": "Ver gráfico",
+      "mes": "Mes",
+      "ingresos": "Ingresos",
+      "pedidosN_one": "{{count}} pedido",
+      "pedidosN_other": "{{count}} pedidos",
+      "colaPedidos": "Pedidos por atender",
+      "verPedidosEstado_one": "Ver {{count}} pedido {{estado}}",
+      "verPedidosEstado_other": "Ver {{count}} pedidos en estado {{estado}}",
+      "reponer": "Por reponer",
+      "verInventario": "Ver inventario"
+    },
+    "ventasPage": {
+      "descripcion": "Todas las ventas con sus filtros. El resumen suma el filtro completo, no solo esta página.",
+      "resumen": {
+        "ingresos": "Ingresos",
+        "ventas": "Ventas confirmadas",
+        "ticket": "Ticket promedio",
+        "pedidos": "Pedidos (todos los estados)"
+      }
+    },
+    "pedidosPage": {
+      "descripcion": "Prepara, despacha y entrega. Cada cambio de estado actualiza el tracking que ve el cliente.",
+      "gestionar": "Gestionar",
+      "detalleDescripcion": "Detalle, historial y cambio de estado del pedido.",
+      "historial": "Historial",
+      "montos": {
+        "subtotal": "Subtotal",
+        "envio": "Envío",
+        "igv": "IGV (18 %)"
+      },
+      "comentario": "Comentario (opcional)",
+      "comentarioAyuda": "Queda en el historial del pedido.",
+      "marcarComo": "Marcar como {{estado}}",
+      "cancelar": "Cancelar pedido",
+      "confirmarCancelacion": "¿Cancelar el pedido {{codigo}}?",
+      "confirmarCancelacionDetalle": "Se devuelven las unidades al inventario (entrada en el kardex), el pago se marca como reembolsado y se avisa al cliente. No se puede deshacer.",
+      "siCancelar": "Sí, cancelar pedido",
+      "estadoActualizado": "Pedido actualizado: {{estado}}",
+      "estadoFinal": "Este pedido ya está en un estado final: no admite más cambios."
+    },
+    "productosPage": {
+      "descripcion": "Catálogo completo, incluidos los productos desactivados.",
+      "nuevo": "Nuevo producto",
+      "buscar": "Nombre o SKU",
+      "activos": "Activos",
+      "inactivos": "Desactivados",
+      "activo": "Activo",
+      "inactivo": "Desactivado",
+      "destacado": "Destacado",
+      "desactivar": "Desactivar",
+      "confirmarDesactivar": "¿Desactivar «{{nombre}}»?",
+      "confirmarDesactivarDetalle": "Deja de mostrarse en la tienda, pero se conserva con su historial de pedidos y kardex. Puedes volver a activarlo al editarlo.",
+      "desactivado": "«{{nombre}}» desactivado"
+    },
+    "productoForm": {
+      "tituloNuevo": "Nuevo producto",
+      "eyebrowNuevo": "Catálogo",
+      "datos": "Datos del producto",
+      "nombre": "Nombre",
+      "sku": "SKU",
+      "skuAyuda": "Código interno único, p. ej. CAF-012",
+      "slug": "URL (slug)",
+      "slugAyuda": "Opcional: se genera a partir del nombre.",
+      "descripcion": "Descripción",
+      "origen": "Origen y certificaciones",
+      "elegir": "Elige una opción",
+      "certificaciones": "Certificaciones",
+      "fotos": "Fotos",
+      "fotosDetalle": "Se suben al elegirlas. La foto principal es la que se ve en el catálogo.",
+      "fotosNuevo": "Se suben al crear el producto. La primera será la principal.",
+      "precioStock": "Precio y stock",
+      "precio": "Precio base (S/)",
+      "peso": "Peso (g)",
+      "pesoAyuda": "Se usa para calcular el envío.",
+      "stockMinimo": "Stock mínimo",
+      "stockInicial": "Stock inicial",
+      "stockInicialAyuda": "Entra al kardex como «Stock inicial».",
+      "ajustarStock": "Ajustar en inventario",
+      "visibilidad": "Visibilidad",
+      "activo": "Visible en la tienda",
+      "activoAyuda": "Si lo desactivas, deja de venderse.",
+      "destacado": "Destacado en el inicio",
+      "destacadoAyuda": "Aparece en «Destacados» del home.",
+      "crear": "Crear producto",
+      "guardar": "Guardar cambios",
+      "creado": "Producto «{{nombre}}» creado",
+      "guardado": "Cambios guardados",
+      "verEnTienda": "Ver en la tienda"
+    },
+    "imagenes": {
+      "elegir": "Elige fotos o arrástralas aquí",
+      "ayuda": "JPG, PNG o WebP · máx. 5 MB cada una · {{total}} de {{max}}",
+      "principal": "Principal",
+      "hacerPrincipal": "Usar como foto principal",
+      "eliminar": "Eliminar foto",
+      "eliminada": "Foto eliminada",
+      "quitar": "Quitar {{nombre}}",
+      "tipoInvalido": "{{nombre}}: solo se aceptan JPG, PNG o WebP",
+      "muyGrande": "{{nombre}} supera los 5 MB",
+      "limite": "Un producto admite como máximo {{max}} fotos",
+      "fallos_one": "{{count}} foto no se pudo subir: vuelve a intentarlo desde la ficha",
+      "fallos_other": "{{count}} fotos no se pudieron subir: vuelve a intentarlo desde la ficha",
+      "estados": {
+        "pendiente": "Por subir",
+        "subiendo": "Subiendo…",
+        "error": "Error"
+      }
+    },
+    "inventarioPage": {
+      "descripcion": "Haz clic en el stock para corregirlo (queda como ajuste en el kardex). Las entradas y salidas se registran con su motivo.",
+      "stockN_one": "{{count}} unidad",
+      "stockN_other": "{{count}} unidades",
+      "soloStockBajo": "Solo stock bajo",
+      "editarStock": "Editar stock de {{nombre}} (ahora {{stock}})",
+      "stockContado": "Stock contado de {{nombre}}",
+      "stockInvalido": "El stock debe ser un número entero de 0 o más",
+      "stockActualizado": "{{nombre}}: stock en {{stock}}",
+      "movimiento": "Movimiento",
+      "kardex": "Kardex",
+      "registrarMovimiento": "Registrar movimiento",
+      "stockActual_one": "stock actual: {{count}} unidad",
+      "stockActual_other": "stock actual: {{count}} unidades",
+      "tipo": "Tipo de movimiento",
+      "tipos": {
+        "entrada": "Entrada",
+        "salida": "Salida",
+        "ajuste": "Ajuste"
+      },
+      "cantidad": "Cantidad",
+      "resultante_one": "Quedará {{count}} unidad",
+      "resultante_other": "Quedarán {{count}} unidades",
+      "sinStock": "No hay stock suficiente para esa salida",
+      "motivo": "Motivo (opcional)",
+      "motivoEjemplo": {
+        "entrada": "Ej.: cosecha de octubre",
+        "salida": "Ej.: merma, muestra para feria"
+      },
+      "kardexDe": "Kardex · {{nombre}}",
+      "kardexDetalle": "Todos los movimientos: ventas, cancelaciones, entradas, salidas y ajustes.",
+      "sinMovimientos": "Este producto aún no tiene movimientos.",
+      "quedan_one": "queda {{count}}",
+      "quedan_other": "quedan {{count}}"
+    },
+    "categoriasPage": {
+      "descripcion": "Las categorías ordenan el catálogo y la grilla del inicio.",
+      "nueva": "Nueva categoría",
+      "editar": "Editar categoría",
+      "formDescripcion": "El orden define la posición en la tienda (menor primero).",
+      "nombre": "Nombre",
+      "orden": "Orden",
+      "imagen": "Imagen (URL)",
+      "imagenAyuda": "Foto para la grilla del inicio (https://…)",
+      "productosN_one": "{{count}} ({{activos}} activo)",
+      "productosN_other": "{{count}} ({{activos}} activos)",
+      "conProductos": "Tiene productos: muévelos a otra categoría antes de eliminarla",
+      "nota": "Solo se pueden eliminar categorías sin productos (ni siquiera desactivados).",
+      "guardada": "Categoría «{{nombre}}» guardada",
+      "eliminada": "Categoría «{{nombre}}» eliminada",
+      "confirmarEliminar": "¿Eliminar «{{nombre}}»?",
+      "confirmarEliminarDetalle": "La categoría desaparece de la tienda. No se puede deshacer."
+    },
+    "usuariosPage": {
+      "descripcion": "Clientes y equipo. Cambia roles o desactiva cuentas; los cambios se aplican al instante.",
+      "nuevo": "Nueva cuenta",
+      "nuevoDescripcion": "Crea la cuenta de una persona del equipo. Compártele la contraseña inicial por un canal seguro.",
+      "buscar": "Nombre o correo",
+      "rol": "Rol",
+      "rolDe": "Rol de {{nombre}}",
+      "equipo": "Solo equipo",
+      "alta": "Alta",
+      "activos": "Activas",
+      "inactivos": "Desactivadas",
+      "activo": "Activa",
+      "inactivo": "Desactivada",
+      "activar": "Activar",
+      "desactivar": "Desactivar",
+      "tu": "tú",
+      "passwordInicial": "Contraseña inicial",
+      "passwordAyuda": "Mínimo 8 caracteres, con letras y números.",
+      "crear": "Crear cuenta",
+      "creado": "Cuenta {{correo}} creada",
+      "rolCambiado": "{{nombre}} ahora es {{rol}}",
+      "activado": "Cuenta de {{nombre}} activada",
+      "desactivado": "Cuenta de {{nombre}} desactivada"
+    },
+    "estadisticasPage": {
+      "titulo": "Estadísticas de mercado",
+      "descripcion": "Dónde se venden nuestros productos y cuáles lideran. Pedidos confirmados, en soles.",
+      "totales": {
+        "ingresos": "Ingresos totales",
+        "pedidos": "Pedidos confirmados",
+        "paises": "Países de destino",
+        "ticket": "Ticket promedio"
+      },
+      "porPais": "Ventas por país",
+      "porPaisDetalle": "Ingresos por país de destino y su participación.",
+      "top": "Top 10 productos",
+      "topDetalle": "Por ingresos, con las unidades vendidas.",
+      "unidades_one": "{{count}} unid.",
+      "unidades_other": "{{count}} unid.",
+      "sinVentas": "Aún no hay ventas confirmadas",
+      "sinVentasDetalle": "Cuando entren los primeros pedidos pagados verás aquí los mercados y los productos que lideran."
+    },
+    "validacion": {
+      "numero": "Ingresa un número",
+      "entero": "Debe ser un número entero",
+      "minimo": "El valor es demasiado bajo",
+      "maximo": "El valor es demasiado alto",
+      "sku": "De 3 a 30 letras, números o guiones",
+      "slug": "Solo minúsculas, números y guiones",
+      "nombre": "Escribe un nombre más largo",
+      "precio": "El precio debe ser mayor que 0",
+      "decimales": "Usa como máximo 2 decimales",
+      "categoria": "Elige una categoría",
+      "comunidad": "Elige una comunidad",
+      "url": "Ingresa una URL que empiece por https://"
+    },
+    "errores": {
+      "SIN_PERMISO": "Tu rol no permite esta acción.",
+      "STOCK_INSUFICIENTE": "No hay stock suficiente para esa salida.",
+      "SIN_CAMBIOS": "El stock indicado es igual al actual.",
+      "TRANSICION_INVALIDA": "El pedido cambió de estado mientras lo mirabas. Recarga e inténtalo de nuevo.",
+      "SKU_EN_USO": "Ya existe un producto con ese SKU.",
+      "SLUG_EN_USO": "Ya existe otro elemento con esa URL (slug).",
+      "CATEGORIA_NO_EXISTE": "La categoría elegida ya no existe.",
+      "COMUNIDAD_NO_EXISTE": "La comunidad elegida ya no existe.",
+      "CERTIFICACION_NO_EXISTE": "Alguna certificación elegida ya no existe.",
+      "CATEGORIA_DUPLICADA": "Ya existe una categoría con ese nombre.",
+      "CATEGORIA_CON_PRODUCTOS": "La categoría tiene productos: muévelos antes de eliminarla.",
+      "ACCION_SOBRE_SI_MISMO": "No puedes cambiar tu propio rol ni desactivar tu cuenta.",
+      "TIPO_ARCHIVO_INVALIDO": "El archivo no es una imagen JPG, PNG o WebP válida.",
+      "ARCHIVO_DEMASIADO_GRANDE": "La imagen supera el máximo de 5 MB.",
+      "LIMITE_IMAGENES": "El producto ya tiene el máximo de fotos.",
+      "STORAGE_NO_CONFIGURADO": "El almacenamiento de imágenes no está configurado en el servidor.",
+      "PRODUCTO_NO_ENCONTRADO": "No encontramos ese producto.",
+      "PEDIDO_NO_ENCONTRADO": "No encontramos ese pedido.",
+      "CORREO_EN_USO": "Ya existe una cuenta con ese correo."
+    }
+  },
+  "noEncontrado": {
+    "titulo": "Esta ruta no lleva a ninguna comunidad",
+    "descripcion": "La página que buscas no existe o fue movida.",
+    "volver": "Volver al inicio",
+    "eyebrow": "Error 404",
+    "catalogo": "Explorar el catálogo",
+    "sugerencias": "O visita una de nuestras categorías"
+  },
+  "producto": {
+    "agotado": "Agotado",
+    "altitud": "{{valor}} msnm",
+    "calificacion": "{{valor}} de 5 estrellas",
+    "migas": "Ruta de navegación",
+    "galeria": {
+      "ampliar": "Ampliar imagen",
+      "zoom": "Ampliar",
+      "posicion": "Imagen {{n}} de {{total}}",
+      "miniaturas": "Imágenes del producto",
+      "ver": "Ver imagen {{n}} de {{total}}",
+      "anterior": "Imagen anterior",
+      "siguiente": "Imagen siguiente"
+    },
+    "stock": {
+      "disponible": "En stock, listo para enviar",
+      "pocas_one": "¡Solo queda {{count}} unidad!",
+      "pocas_other": "Solo quedan {{count}} unidades",
+      "enCarrito_one": "Ya tienes {{count}} en tu carrito",
+      "enCarrito_other": "Ya tienes {{count}} en tu carrito"
+    },
+    "agregar": "Agregar al carrito",
+    "comprarAhora": "Comprar ahora",
+    "envio": "Envío desde Cusco a todo el mundo: estándar en 12–18 días o express en 4–7 días.",
+    "sinCostosOcultos": "Sin costos ocultos: verás el envío, el IGV y el tipo de cambio antes de pagar.",
+    "resenas": {
+      "total_one": "{{count}} reseña",
+      "total_other": "{{count}} reseñas",
+      "sinResenas": "Aún sin reseñas",
+      "vacio": "Todavía no hay reseñas de este producto",
+      "vacioDetalle": "Las reseñas las escriben clientes que ya recibieron su pedido.",
+      "basadoEn_one": "Basado en {{count}} reseña",
+      "basadoEn_other": "Basado en {{count}} reseñas",
+      "distribucion": "Distribución de calificaciones",
+      "barra_one": "{{estrellas}} estrellas: {{count}} reseña",
+      "barra_other": "{{estrellas}} estrellas: {{count}} reseñas"
+    },
+    "ficha": {
+      "titulo": "Ficha técnica",
+      "sku": "Código",
+      "peso": "Peso neto",
+      "categoria": "Categoría",
+      "certificaciones": "Certificaciones",
+      "emitidaPor": "Emitida por {{entidad}}"
+    },
+    "origen": {
+      "eyebrow": "Comunidad productora",
+      "ubicacion": "Ubicación",
+      "altitud": "Altitud",
+      "familias": "Familias beneficiadas",
+      "razonSocial": "Razón social",
+      "verProductos": "Ver todos los productos de esta comunidad",
+      "mapa": "Mapa con la ubicación de {{comunidad}}"
+    },
+    "tabs": {
+      "descripcion": "Descripción",
+      "origen": "Origen",
+      "resenas": "Reseñas ({{count}})"
+    },
+    "trayecto": {
+      "eyebrow": "Del origen a tu puerta",
+      "titulo": "El recorrido de este producto",
+      "paso": "Paso {{n}}",
+      "pasos": {
+        "cosecha": "Cosecha",
+        "proceso": "Proceso",
+        "envio": "Envío"
+      },
+      "envio": "Empacado en Cusco con material reciclable y despachado a todo el mundo: nacional en 1–5 días, internacional estándar en 12–18 días o express en 4–7 días.",
+      "cafe": {
+        "cosecha": "Cerezas maduras recogidas a mano, una por una, en los cafetales de {{comunidad}} a {{altitud}}.",
+        "proceso": "Despulpado, fermentado y secado al sol en camas elevadas; se tuesta en origen en lotes pequeños."
+      },
+      "superalimentos": {
+        "cosecha": "Granos y raíces cosechados en chacras familiares de {{comunidad}} a {{altitud}}.",
+        "proceso": "Trillado, lavado para retirar la saponina y secado natural; selección manual antes de envasar."
+      },
+      "textiles": {
+        "cosecha": "Esquila responsable de alpacas criadas en libertad por {{comunidad}} a {{altitud}}.",
+        "proceso": "Fibra hilada a mano, teñida con tintes naturales como cochinilla y chilca, y tejida en telar."
+      },
+      "artesania": {
+        "cosecha": "Arcilla y materiales locales recolectados por los talleres de {{comunidad}} a {{altitud}}.",
+        "proceso": "Modelado y pintado a mano, secado lento y quemado en horno artesanal."
+      },
+      "general": {
+        "cosecha": "Materia prima obtenida por {{comunidad}} a {{altitud}}.",
+        "proceso": "Elaborado a mano por la comunidad con técnicas tradicionales."
+      }
+    },
+    "relacionados": {
+      "eyebrow": "Sigue explorando",
+      "titulo": "También te puede gustar"
+    },
+    "noEncontrado": {
+      "titulo": "Este producto ya no está en la tienda",
+      "descripcion": "Puede que haya terminado su temporada o que el enlace esté mal escrito.",
+      "accion": "Ver el catálogo"
+    }
+  },
+  "catalogo": {
+    "categorias": {
+      "cafe": {
+        "nombre": "Café",
+        "descripcion": "Cafés de altura de los valles cusqueños, tostados en origen."
+      },
+      "superalimentos": {
+        "nombre": "Superalimentos",
+        "descripcion": "Quinua, kiwicha, cañihua y maca del Valle Sagrado."
+      },
+      "textiles": {
+        "nombre": "Textiles",
+        "descripcion": "Prendas y accesorios en fibra de alpaca tejidos a mano."
+      },
+      "artesania": {
+        "nombre": "Artesanía",
+        "descripcion": "Cerámica y tallado de talleres comunitarios andinos."
+      }
+    },
+    "eyebrow": "Catálogo",
+    "titulo": "Todo el catálogo",
+    "descripcion": "Productos de la biodiversidad andina, cada uno con la comunidad que lo produce.",
+    "descripcionComunidad": "Productos de la comunidad, en {{provincia}}, {{region}}.",
+    "buscar": "Buscar productos",
+    "buscarPlaceholder": "Café, quinua, alpaca…",
+    "filtros": "Filtros",
+    "filtrosDescripcion": "Los resultados se actualizan al instante.",
+    "filtrosActivos": "Filtros activos",
+    "quitarFiltro": "Quitar filtro {{nombre}}",
+    "limpiar": "Limpiar filtros",
+    "mostrando": "Mostrando {{desde}}–{{hasta}} de {{total}} productos",
+    "resultados_one": "{{count}} producto",
+    "resultados_other": "{{count}} productos",
+    "verResultados_one": "Ver {{count}} producto",
+    "verResultados_other": "Ver {{count}} productos",
+    "filtro": {
+      "categoria": "Categoría",
+      "precio": "Precio ({{moneda}})",
+      "comunidad": "Comunidad",
+      "certificacion": "Certificación",
+      "minimo": "Mínimo",
+      "maximo": "Máximo",
+      "aplicarPrecio": "Aplicar rango en {{moneda}}",
+      "desde": "Desde {{monto}}",
+      "hasta": "Hasta {{monto}}"
+    },
+    "orden": {
+      "label": "Ordenar por",
+      "destacados": "Destacados",
+      "precio_asc": "Precio: menor a mayor",
+      "precio_desc": "Precio: mayor a menor",
+      "nombre": "Nombre (A–Z)",
+      "recientes": "Novedades",
+      "valoracion": "Mejor valorados"
+    },
+    "vacio": {
+      "titulo": "No encontramos productos con estos filtros",
+      "descripcion": "Prueba otra combinación o quita algún filtro: nuestras comunidades tienen mucho más que ofrecer."
+    },
+    "paginacion": {
+      "label": "Paginación del catálogo",
+      "anterior": "Anterior",
+      "siguiente": "Siguiente",
+      "pagina": "Página {{page}}"
+    }
+  },
+  "estado": {
+    "error": "No pudimos cargar esta sección.",
+    "reintentar": "Reintentar"
+  },
+  "certificaciones": {
+    "organico": "Orgánico",
+    "comercio-justo": "Comercio justo",
+    "hecho-a-mano": "Hecho a mano",
+    "libre-de-gluten": "Libre de gluten"
+  },
+  "validacion": {
+    "requerido": "Este campo es obligatorio",
+    "largo": "El texto es demasiado largo",
+    "correoRequerido": "Ingresa tu correo",
+    "correo": "Ingresa un correo válido, por ejemplo nombre@correo.com",
+    "passwordRequerida": "Ingresa tu contraseña",
+    "passwordMin": "La contraseña debe tener al menos 8 caracteres",
+    "passwordMax": "La contraseña admite como máximo 72 caracteres",
+    "passwordLetra": "La contraseña debe incluir al menos una letra",
+    "passwordNumero": "La contraseña debe incluir al menos un número",
+    "passwordNoCoincide": "Las contraseñas no coinciden",
+    "pais": "Elige un país",
+    "nombre": "Escribe el nombre de quien recibe",
+    "ciudad": "Escribe la ciudad",
+    "direccion": "Escribe la dirección completa (calle y número)",
+    "tarjetaNumero": "Revisa el número de la tarjeta",
+    "titular": "Escribe el nombre como aparece en la tarjeta",
+    "vencimiento": "Usa una fecha MM/AA que no haya pasado",
+    "cvv": "Revisa el código de seguridad (3 dígitos, 4 en American Express)",
+    "celular": "Ingresa un celular peruano de 9 dígitos que empiece por 9"
+  },
+  "errores": {
+    "generico": "Algo salió mal. Inténtalo de nuevo.",
+    "red": "No pudimos conectar con la tienda. Revisa tu conexión e inténtalo de nuevo.",
+    "servidor": "Tuvimos un problema en el servidor. Inténtalo en unos minutos.",
+    "CREDENCIALES_INVALIDAS": "Correo o contraseña incorrectos",
+    "CORREO_EN_USO": "Ya existe una cuenta con ese correo. Inicia sesión.",
+    "RATE_LIMITED": "Demasiados intentos. Espera unos minutos antes de volver a intentarlo.",
+    "CUENTA_INACTIVA": "Esta cuenta está desactivada",
+    "NO_AUTENTICADO": "Tu sesión expiró. Vuelve a iniciar sesión.",
+    "PAGO_RECHAZADO": "Tu banco rechazó la tarjeta (fondos insuficientes). No se realizó ningún cobro.",
+    "STOCK_INSUFICIENTE": "Algún producto se agotó mientras comprabas. Revisa tu carrito.",
+    "PRODUCTO_NO_ENCONTRADO": "Algún producto ya no está disponible. Revisa tu carrito.",
+    "CARRITO_VACIO": "Tu carrito está vacío",
+    "METODO_PAGO_NO_DISPONIBLE": "Yape y Plin solo están disponibles para pagos en soles",
+    "ENVIO_NO_DISPONIBLE": "Ese método de envío no está disponible para tu país",
+    "DIRECCION_NO_ENCONTRADA": "Esa dirección ya no está en tu cuenta",
+    "LIMITE_DIRECCIONES": "Puedes guardar hasta 10 direcciones",
+    "VALIDATION_ERROR": "Revisa los datos marcados"
+  },
+  "auth": {
+    "lema": "Tu cuenta te conecta con las comunidades que producen lo que compras.",
+    "ventajas": {
+      "trazabilidad": "Historial de pedidos con el origen de cada producto",
+      "seguimiento": "Seguimiento del envío paso a paso",
+      "pago": "Direcciones guardadas para comprar en menos pasos"
+    },
+    "login": {
+      "eyebrow": "Bienvenida de vuelta",
+      "titulo": "Iniciar sesión",
+      "descripcion": "Entra para ver tus pedidos y comprar más rápido.",
+      "descripcionCheckout": "Inicia sesión para terminar tu compra. Tu carrito se guarda en tu cuenta.",
+      "ayudaCredenciales": "Revisa que el correo esté bien escrito y que no tengas activadas las mayúsculas.",
+      "enviar": "Iniciar sesión",
+      "sinCuenta": "¿Aún no tienes cuenta?",
+      "crearCuenta": "Crear una cuenta"
+    },
+    "registro": {
+      "eyebrow": "Únete a Kuski",
+      "titulo": "Crear cuenta",
+      "descripcion": "Solo te pedimos lo necesario para enviarte tus pedidos.",
+      "enviar": "Crear cuenta",
+      "conCuenta": "¿Ya tienes cuenta?",
+      "iniciarSesion": "Iniciar sesión"
+    },
+    "campos": {
+      "nombre": "Nombre",
+      "apellido": "Apellido",
+      "correo": "Correo electrónico",
+      "password": "Contraseña",
+      "confirmacion": "Repite la contraseña",
+      "pais": "País"
+    },
+    "requisitos": {
+      "titulo": "Requisitos de la contraseña",
+      "largo": "Al menos 8 caracteres",
+      "letra": "Al menos una letra",
+      "numero": "Al menos un número",
+      "cumplido": "(cumplido)"
+    }
+  },
+  "cuenta": {
+    "abrir": "Mi cuenta ({{nombre}})",
+    "eyebrow": "Mi cuenta",
+    "saludo": "Hola, {{nombre}}",
+    "salir": "Cerrar sesión",
+    "sesionCerrada": "Cerraste sesión",
+    "nav": {
+      "label": "Secciones de mi cuenta",
+      "pedidos": "Mis pedidos",
+      "direcciones": "Mis direcciones"
+    },
+    "pedidos": {
+      "verDetalle": "Ver detalle",
+      "verDetalleDe": "Ver detalle del pedido {{codigo}}",
+      "vacio": "Aún no tienes pedidos",
+      "vacioDetalle": "Cuando compres, aquí verás cada pedido con su seguimiento.",
+      "pagina": "Página {{page}} de {{total}}"
+    },
+    "direcciones": {
+      "principal": "Principal",
+      "nueva": "Agregar dirección",
+      "nuevaDescripcion": "La usarás para tus próximos envíos.",
+      "guardar": "Guardar dirección",
+      "guardada": "Dirección guardada",
+      "eliminar": "Eliminar",
+      "eliminarDe": "Eliminar la dirección {{direccion}}",
+      "eliminarTitulo": "¿Eliminar esta dirección?",
+      "eliminada": "Dirección eliminada",
+      "marcarPrincipal": "Usar como principal",
+      "vacio": "No tienes direcciones guardadas",
+      "vacioDetalle": "Guarda una dirección para completar el checkout en menos pasos."
+    }
+  },
+  "pedidos": {
+    "estados": {
+      "pendiente": "Pendiente",
+      "pagado": "Confirmado",
+      "preparando": "Preparando",
+      "en_transito": "En tránsito",
+      "entregado": "Entregado",
+      "cancelado": "Cancelado"
+    },
+    "cancelado": "Este pedido fue cancelado",
+    "tracking": {
+      "titulo": "Seguimiento del pedido",
+      "confirmado": "Confirmado",
+      "preparando": "Preparando",
+      "en_transito": "En tránsito",
+      "entregado": "Entregado",
+      "completado": "completado",
+      "pendiente": "pendiente"
+    },
+    "verMisPedidos": "Ver mis pedidos",
+    "noEncontrado": {
+      "titulo": "No encontramos ese pedido",
+      "descripcion": "Revisa el código o búscalo en tu historial de pedidos."
+    },
+    "confirmacion": {
+      "eyebrow": "Pedido confirmado",
+      "titulo": "¡Gracias, {{nombre}}! Tu pedido está confirmado",
+      "correo": "Te enviamos la confirmación a {{correo}}."
+    },
+    "detalle": {
+      "eyebrow": "Detalle del pedido",
+      "pedido": "Pedido {{codigo}}",
+      "codigo": "Código del pedido",
+      "copiar": "Copiar código del pedido",
+      "copiado": "Código copiado",
+      "llegada": "Llegada estimada: {{fecha}}",
+      "productos": "Productos",
+      "totalPagado": "Total pagado",
+      "tipoCambio": "Tipo de cambio aplicado: 1 {{moneda}} = S/ {{valor}}",
+      "pago": "Pago",
+      "codigoAprobacion": "Código de aprobación:",
+      "operacion": "Operación {{numero}}",
+      "envio": "Envío",
+      "seguimiento": "Código de seguimiento:",
+      "direccion": "Dirección de entrega"
+    }
+  }
+}

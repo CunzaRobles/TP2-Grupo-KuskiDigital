@@ -35,3 +35,7 @@ lerna-debug.log*
 Thumbs.db
 .vite/
 .eslintcache
+# Cypress
+frontend/cypress/screenshots/
+frontend/cypress/videos/
+frontend/cypress/downloads/

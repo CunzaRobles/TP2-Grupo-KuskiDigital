@@ -1,0 +1,1004 @@
+{
+  "marca": {
+    "nombre": "Kuski",
+    "lema": "Andine Artenvielfalt mit nachvollziehbarer Herkunft"
+  },
+  "nav": {
+    "principal": "Hauptnavigation",
+    "inicio": "Start",
+    "catalogo": "Shop",
+    "origen": "Herkunft",
+    "nosotros": "Über uns",
+    "abrirMenu": "Menü öffnen",
+    "saltarContenido": "Zum Inhalt springen",
+    "menu": "Menü",
+    "preferencias": "Sprache und Währung"
+  },
+  "preferencias": {
+    "idioma": "Sprache",
+    "moneda": "Währung",
+    "idiomas": {
+      "es": "Español",
+      "en": "English",
+      "de": "Deutsch"
+    },
+    "monedas": {
+      "PEN": "Soles",
+      "USD": "US-Dollar",
+      "EUR": "Euro"
+    }
+  },
+  "carrito": {
+    "titulo": "Dein Warenkorb",
+    "abrir_one": "Warenkorb öffnen, {{count}} Artikel",
+    "abrir_other": "Warenkorb öffnen, {{count}} Artikel",
+    "vacio": "Dein Warenkorb ist leer",
+    "agregado": "In den Warenkorb gelegt",
+    "agregarProducto": "{{nombre}} in den Warenkorb legen",
+    "sinMasStock": "Du hast bereits den gesamten verfügbaren Bestand im Warenkorb",
+    "verCarrito": "Warenkorb ansehen",
+    "vacioDescripcion": "Entdecke Hochlandkaffee, Superfoods und Alpaka-Textilien unserer Gemeinschaften.",
+    "explorar": "Katalog entdecken",
+    "unidades_one": "{{count}} Artikel",
+    "unidades_other": "{{count}} Artikel",
+    "subtotal": "Zwischensumme",
+    "notaEnvio": "Versand und Mehrwertsteuer (IGV, nur bei Lieferung innerhalb Perus) werden an der Kasse je nach Land berechnet. Du siehst sie vor der Zahlung.",
+    "irCheckout": "Zur Kasse",
+    "ajustaAvisos": "Passe die markierten Artikel an, um fortzufahren.",
+    "verResumen": "Warenkorb-Übersicht",
+    "precioUnitario": "Stückpreis",
+    "aviso": {
+      "NO_DISPONIBLE": "Nicht mehr verfügbar: bitte entfernen",
+      "STOCK_INSUFICIENTE_one": "Nur noch {{count}} Stück",
+      "STOCK_INSUFICIENTE_other": "Nur noch {{count}} Stück"
+    },
+    "cantidadDe": "Menge von {{nombre}}",
+    "quitar": "{{nombre}} aus dem Warenkorb entfernen",
+    "quitarCorto": "Entfernen",
+    "fusionado": "Die Artikel aus deinem Gast-Warenkorb wurden deinem Konto hinzugefügt",
+    "ajustado": "Einige Mengen wurden an den verfügbaren Bestand angepasst.",
+    "error": "Der Warenkorb konnte nicht aktualisiert werden. Bitte versuche es erneut.",
+    "pagina": {
+      "eyebrow": "Bestellübersicht"
+    },
+    "productos": "Artikel im Warenkorb",
+    "seguirComprando": "Weiter einkaufen",
+    "resumen": "Übersicht",
+    "subtotalProductos_one": "Zwischensumme ({{count}} Artikel)",
+    "subtotalProductos_other": "Zwischensumme ({{count}} Artikel)",
+    "envio": "Versand",
+    "igv": "MwSt. (IGV 18 %, nur Peru)",
+    "enCheckout": "Wird an der Kasse berechnet",
+    "totalProvisional": "Summe ohne Versand",
+    "garantias": {
+      "envio": "Weltweiter Versand aus Cusco",
+      "pasos": "Nur 4 Schritte bis zur Bestellung",
+      "pago": "100 % sichere Zahlung: Karte, PayPal, Yape oder Plin"
+    }
+  },
+  "ui": {
+    "cerrar": "Schließen",
+    "cargando": "Wird geladen…",
+    "cantidad": "Menge",
+    "disminuir": "Menge verringern",
+    "aumentar": "Menge erhöhen",
+    "paso": "Schritt {{actual}} von {{total}}",
+    "completado": "abgeschlossen",
+    "actual": "aktueller Schritt",
+    "mostrarPassword": "Passwort anzeigen",
+    "ocultarPassword": "Passwort verbergen",
+    "cancelar": "Abbrechen"
+  },
+  "checkout": {
+    "pasos": {
+      "envio": "Adresse",
+      "metodo": "Versandart",
+      "pago": "Zahlung",
+      "confirmar": "Prüfen"
+    },
+    "eyebrow": "Sicherer Checkout",
+    "titulo": "Kasse",
+    "volver": "Zurück",
+    "continuar": "Weiter",
+    "vacio": {
+      "titulo": "Noch nichts zu bezahlen",
+      "descripcion": "Dein Warenkorb ist leer. Füge Produkte aus dem Katalog hinzu."
+    },
+    "avisos": {
+      "titulo": "Einige Artikel brauchen deine Aufmerksamkeit",
+      "detalle": "Der Bestand eines Artikels hat sich geändert oder er ist nicht mehr verfügbar. Passe deinen Warenkorb vor dem Bezahlen an."
+    },
+    "envio": {
+      "titulo": "Wohin sollen wir deine Bestellung schicken?",
+      "descripcion": "Wähle das Land, um Versandkosten und Gesamtbetrag sofort zu sehen.",
+      "continuar": "Weiter zur Versandart",
+      "destinatario": "Name der empfangenden Person",
+      "pais": "Land",
+      "paisAyuda": "Versand und Steuern hängen vom Land ab.",
+      "elegirPais": "Zielland wählen",
+      "direccion": "Adresse",
+      "ciudad": "Stadt",
+      "codigoPostal": "Postleitzahl (optional)",
+      "telefono": "Telefon (optional)",
+      "telefonoAyuda": "Wird nur vom Kurier zur Abstimmung der Lieferung verwendet.",
+      "guardar": "Diese Adresse in meinem Konto speichern",
+      "otra": "An eine andere Adresse senden"
+    },
+    "metodo": {
+      "titulo": "Wähle, wie du es erhalten möchtest",
+      "descripcion": "Der angezeigte Preis ist der, den du zahlst. Tage sind Werktage ab Versand.",
+      "estandar": "Standard",
+      "express": "Express",
+      "detalle": "{{transportista}} · {{min}}–{{max}} Tage",
+      "llegada": "Ankunft zwischen {{rango}}"
+    },
+    "pago": {
+      "titulo": "Wie möchtest du bezahlen?",
+      "descripcion": "Simulierte Zahlung für die Demo: Es wird nichts belastet.",
+      "continuar": "Bestellung prüfen",
+      "elegir": "Zahlungsart",
+      "soloPen": "Nur in Soles",
+      "seguro": "Deine Daten werden verschlüsselt übertragen. Wir speichern deine Kartennummer nicht.",
+      "metodos": {
+        "tarjeta": "Karte",
+        "paypal": "PayPal",
+        "yape": "Yape",
+        "plin": "Plin"
+      },
+      "marcas": {
+        "visa": "Visa",
+        "mastercard": "Mastercard",
+        "amex": "American Express"
+      },
+      "tarjeta": {
+        "numero": "Kartennummer",
+        "titular": "Karteninhaber/in",
+        "titularEjemplo": "Vorname Nachname",
+        "vence": "Gültig bis",
+        "vencimiento": "Ablaufdatum",
+        "cvv": "CVV",
+        "marca": "{{marca}}-Karte",
+        "prueba": "Demo: 4111 1111 1111 1111 wird akzeptiert; eine Karte, die auf 0002 endet (z. B. 4000 0000 0000 0002), wird abgelehnt. Verwende ein zukünftiges Datum und einen beliebigen CVV."
+      },
+      "paypal": {
+        "correo": "E-Mail deines PayPal-Kontos",
+        "nota": "Nach der Bestätigung genehmigt PayPal die Zahlung (simuliert) und du kehrst zum Shop zurück."
+      },
+      "celular": {
+        "label": "In {{app}} registrierte Handynummer",
+        "ayuda": "9 Ziffern, ohne +51.",
+        "nota": "Nach der Bestätigung erhältst du die Zahlungsanfrage in {{app}} (simuliert) und wir zeigen dir den Genehmigungscode."
+      },
+      "yapeSoles": {
+        "titulo": "Mit Yape oder Plin bezahlen?",
+        "detalle": "Sie akzeptieren nur Soles. Du siehst die Preise gerade in {{moneda}}; wechsle zu Soles und der Gesamtbetrag wird neu berechnet.",
+        "accion": "In Soles (PEN) bezahlen"
+      },
+      "rechazado": {
+        "titulo": "Die Zahlung wurde nicht genehmigt",
+        "operacion": "Vorgang {{numero}}",
+        "ayuda": "Versuche es mit einer anderen Karte oder wähle eine andere Zahlungsart."
+      }
+    },
+    "confirmar": {
+      "titulo": "Bestellung prüfen und bestätigen",
+      "descripcion": "Das ist der Endbetrag: inklusive Produkte, Versand und Steuern.",
+      "editar": "Bearbeiten",
+      "envioA": "Lieferung an",
+      "metodo": "Versandart",
+      "pago": "Zahlung",
+      "pagar": "{{total}} bezahlen",
+      "pagarSinTotal": "Bezahlen",
+      "revisarCarrito": "Warenkorb prüfen",
+      "simulado": "Simulierte Zahlung zu Studienzwecken: Es wird nichts belastet."
+    },
+    "procesando": {
+      "titulo": "Deine Zahlung wird verarbeitet",
+      "descripcion": "Bitte schließe dieses Fenster nicht, es dauert nur wenige Sekunden.",
+      "app": "Zahlung wird in {{app}} genehmigt … Bitte schließe dieses Fenster nicht.",
+      "etapas": {
+        "conectando": "Verbindung zum Zahlungsdienst",
+        "verificando": "Daten werden geprüft",
+        "confirmando": "Bestellung wird bestätigt"
+      }
+    },
+    "resumen": {
+      "titulo": "Deine Bestellung",
+      "subtotal": "Zwischensumme",
+      "envio": "Versand",
+      "igv": "MwSt. (IGV 18 %)",
+      "igvNoAplica": "MwSt. (IGV)",
+      "igvNoAplicaDetalle": "Entfällt bei Lieferungen außerhalb Perus",
+      "total": "Gesamt",
+      "totalPendiente": "Wähle das Land, um den Gesamtbetrag zu sehen",
+      "eligePais": "Land wählen",
+      "tipoCambio": "Wechselkurs: 1 {{moneda}} = S/ {{valor}} · entspricht {{totalPen}}",
+      "sinCostosOcultos": "Keine versteckten Kosten: Der Gesamtbetrag enthält Versand und Steuern. Genau das zahlst du."
+    }
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Cusco · 1.050 bis 3.760 m ü. M.",
+      "titulo": "Das Beste der Anden – mit Namen und Gemeinde",
+      "descripcion": "Bio-Kaffee, Superfoods, Alpaka-Textilien und Kunsthandwerk, rückverfolgbar bis zur Gemeinde, die sie herstellt.",
+      "cta": "Katalog entdecken",
+      "imagenAlt": "Machu Picchu und die Berge von Cusco bei Sonnenuntergang"
+    },
+    "categorias": {
+      "eyebrow": "Vier Linien, ein Ursprung",
+      "titulo": "Nach Kategorie stöbern",
+      "descripcion": "Von der Kaffeefinca am Nebelwald bis zum Webstuhl im Hochland: Jede Linie stammt aus einer anderen Gemeinde.",
+      "productos_one": "{{count}} Produkt",
+      "productos_other": "{{count}} Produkte"
+    },
+    "destacados": {
+      "eyebrow": "Saisonale Auswahl",
+      "titulo": "Highlights unserer Gemeinden",
+      "descripcion": "Erfahre, woher jedes Produkt stammt und in welcher Höhe es angebaut wird.",
+      "verTodo": "Gesamten Katalog ansehen"
+    },
+    "trazabilidad": {
+      "eyebrow": "Rückverfolgbarkeit",
+      "titulo": "Jedes Produkt hat einen Ort auf der Karte",
+      "descripcion": "Wir arbeiten direkt mit Erzeugergemeinden in Cusco. Tippe auf eine Markierung, um zu sehen, wer anbaut oder webt, was du kaufst.",
+      "cifras": {
+        "comunidades": "Erzeugergemeinden",
+        "familias": "Begünstigte Familien",
+        "paises": "Zielländer",
+        "productos": "Rückverfolgbare Produkte"
+      },
+      "altitud": "Angebaut und gewebt zwischen {{min}} und {{max}} Metern über dem Meeresspiegel.",
+      "mapa": "Karte der Erzeugergemeinden in Cusco",
+      "popup": {
+        "productos_one": "{{count}} Produkt im Shop",
+        "productos_other": "{{count}} Produkte im Shop",
+        "familias_one": "{{count}} begünstigte Familie",
+        "familias_other": "{{count}} begünstigte Familien",
+        "verProductos": "Ihre Produkte ansehen"
+      }
+    }
+  },
+  "footer": {
+    "derechos": "© {{year}} Kuski Agroindustria S.A. · Cusco, Peru",
+    "descripcion": "Der Shop der Kuski Agroindustria S.A.: Produkte der Andenbiodiversität, rückverfolgbar bis zur Gemeinde, die sie herstellt.",
+    "ubicacion": "Cusco, Peru",
+    "redes": "Folge uns",
+    "columnas": {
+      "tienda": "Shop",
+      "ayuda": "Hilfe",
+      "empresa": "Kuski"
+    },
+    "enlaces": {
+      "catalogo": "Gesamter Katalog",
+      "envios": "Internationaler Versand",
+      "seguimiento": "Sendungsverfolgung",
+      "preguntas": "Häufige Fragen",
+      "contacto": "Kontakt",
+      "origen": "Herkunft und Rückverfolgbarkeit",
+      "terminos": "AGB",
+      "privacidad": "Datenschutz"
+    },
+    "pagoSeguro": "100 % sichere Zahlung",
+    "pagoSeguroDetalle": "SSL-verschlüsselte Verbindung",
+    "metodosPago": "Akzeptierte Zahlungsmethoden"
+  },
+  "admin": {
+    "titulo": "Verwaltungsbereich",
+    "menu": "Menü des Verwaltungsbereichs",
+    "abrirMenu": "Menü öffnen",
+    "colapsarMenu": "Seitenleiste einklappen",
+    "expandirMenu": "Seitenleiste ausklappen",
+    "modoOscuro": "Dunkelmodus",
+    "modoClaro": "Hellmodus",
+    "volverTienda": "Zurück zum Shop",
+    "secciones": {
+      "dashboard": "Dashboard",
+      "ventas": "Verkäufe",
+      "pedidos": "Bestellungen",
+      "inventario": "Lagerbestand",
+      "productos": "Produkte",
+      "categorias": "Kategorien",
+      "usuarios": "Benutzer",
+      "estadisticas": "Statistiken"
+    },
+    "grupos": {
+      "general": "Überblick",
+      "operacion": "Betrieb",
+      "catalogo": "Katalog",
+      "equipo": "Team"
+    },
+    "roles": {
+      "admin_gerente": "Geschäftsführung",
+      "admin_ventas": "Vertrieb",
+      "admin_logistica": "Logistik",
+      "cliente": "Kunde"
+    },
+    "metodosPago": {
+      "tarjeta": "Karte",
+      "paypal": "PayPal",
+      "yape": "Yape",
+      "plin": "Plin"
+    },
+    "estadosPago": {
+      "pendiente": "ausstehend",
+      "aprobado": "genehmigt",
+      "rechazado": "abgelehnt",
+      "reembolsado": "erstattet"
+    },
+    "sesion": {
+      "salir": "Abmelden",
+      "cambiarCuenta": "Mit anderem Konto anmelden"
+    },
+    "login": {
+      "eyebrow": "Kuski-Team",
+      "titulo": "Anmeldung zum Verwaltungsbereich",
+      "descripcion": "Melde dich mit deinem Konto aus Geschäftsführung, Vertrieb oder Logistik an.",
+      "lema": "Von den Feldern Cuscos in 31 Länder, Bestellung für Bestellung.",
+      "punto1": "Verkäufe, Umsatz und Märkte in Echtzeit",
+      "punto2": "Lagerbestand mit Lagerbuch und Warnungen bei niedrigem Bestand",
+      "punto3": "Jede Bestellung bis zur Zustellung verfolgt",
+      "enviar": "Zum Verwaltungsbereich",
+      "sinAcceso": "Dieses Konto hat keinen Zugang",
+      "sinAccesoDetalle": "{{correo}} ist ein Kundenkonto. Melde dich mit einem Teamkonto an."
+    },
+    "sinPermiso": {
+      "titulo": "Kein Zugriff auf diesen Bereich",
+      "descripcion": "Deine Rolle umfasst diesen Bereich nicht. Wende dich bei Bedarf an die Geschäftsführung.",
+      "cliente": "Dies ist ein Kundenkonto: Der Verwaltungsbereich ist nur für das Kuski-Team.",
+      "volver": "Zu meiner Startseite"
+    },
+    "buscar": {
+      "titulo": "Schnellsuche",
+      "placeholder": "Produkte, Bestellungen, Benutzer suchen…",
+      "ayuda": "↑ ↓ zum Bewegen · Enter zum Öffnen · Esc zum Schließen",
+      "minimo": "Gib mindestens 2 Buchstaben ein oder wähle einen Bereich.",
+      "sinResultados": "Nichts gefunden für „{{q}}“.",
+      "irA": "Zum Bereich",
+      "grupos": {
+        "secciones": "Bereiche",
+        "productos": "Produkte",
+        "pedidos": "Bestellungen",
+        "usuarios": "Benutzer"
+      }
+    },
+    "acciones": {
+      "editar": "Bearbeiten",
+      "eliminar": "Löschen",
+      "guardar": "Speichern"
+    },
+    "filtros": {
+      "buscar": "Suchen",
+      "buscarPedido": "Nummer, Kunde oder E-Mail",
+      "desde": "Von",
+      "hasta": "Bis",
+      "pais": "Land",
+      "estado": "Status",
+      "metodoPago": "Zahlungsart",
+      "todos": "Alle",
+      "todas": "Alle",
+      "limpiar": "Zurücksetzen"
+    },
+    "tabla": {
+      "paginacion": "Seitennavigation der Tabelle",
+      "rango": "{{desde}}–{{hasta}} von {{total}}",
+      "pagina": "Seite {{page}} von {{totalPages}}",
+      "sinResultados": "Keine Ergebnisse mit diesen Filtern.",
+      "acciones": "Aktionen",
+      "pedido": "Bestellung",
+      "fecha": "Datum",
+      "cliente": "Kunde",
+      "pais": "Land",
+      "pago": "Zahlung",
+      "estado": "Status",
+      "totalPen": "Summe (S/)",
+      "destino": "Ziel",
+      "envio": "Versand",
+      "unidades": "Stk.",
+      "producto": "Produkt",
+      "categoria": "Kategorie",
+      "comunidad": "Gemeinschaft",
+      "precio": "Preis",
+      "stock": "Bestand",
+      "stockMinimo": "Minimum",
+      "usuario": "Benutzer"
+    },
+    "dashboardPage": {
+      "saludo": "Hallo, {{nombre}}",
+      "descripcion": "So läuft der Monat bei Kuski. Beträge in Soles; verglichen wird mit dem gleichen Zeitraum des Vormonats.",
+      "ingresosMes": "Umsatz im Monat",
+      "pedidosMes": "Bestellungen im Monat",
+      "ticketPromedio": "Durchschnittlicher Bestellwert",
+      "stockBajo": "Produkte mit niedrigem Bestand",
+      "stockBajoDetalle": "Auf oder unter ihrem Mindestbestand",
+      "stockBajoOk": "Der gesamte Katalog liegt über dem Mindestbestand.",
+      "sinComparacion": "Keine Daten zum Vormonat",
+      "vsMesAnterior": "ggü. Vormonat",
+      "ingresosMensuales": "Monatlicher Umsatz",
+      "ingresosMensualesDetalle": "Letzte 12 Monate, in Soles (ohne ausstehende und stornierte Bestellungen).",
+      "graficoAria": "Säulendiagramm des Umsatzes pro Monat der letzten 12 Monate",
+      "verTabla": "Als Tabelle anzeigen",
+      "verGrafico": "Diagramm anzeigen",
+      "mes": "Monat",
+      "ingresos": "Umsatz",
+      "pedidosN_one": "{{count}} Bestellung",
+      "pedidosN_other": "{{count}} Bestellungen",
+      "colaPedidos": "Offene Bestellungen",
+      "verPedidosEstado_one": "{{count}} Bestellung mit Status {{estado}} anzeigen",
+      "verPedidosEstado_other": "{{count}} Bestellungen mit Status {{estado}} anzeigen",
+      "reponer": "Nachzubestellen",
+      "verInventario": "Lagerbestand ansehen"
+    },
+    "ventasPage": {
+      "descripcion": "Alle Verkäufe mit Filtern. Die Zusammenfassung umfasst den ganzen Filter, nicht nur diese Seite.",
+      "resumen": {
+        "ingresos": "Umsatz",
+        "ventas": "Bestätigte Verkäufe",
+        "ticket": "Durchschnittlicher Bestellwert",
+        "pedidos": "Bestellungen (alle Status)"
+      }
+    },
+    "pedidosPage": {
+      "descripcion": "Vorbereiten, versenden, zustellen. Jede Statusänderung aktualisiert die Sendungsverfolgung des Kunden.",
+      "gestionar": "Bearbeiten",
+      "detalleDescripcion": "Details, Verlauf und Statusänderung der Bestellung.",
+      "historial": "Verlauf",
+      "montos": {
+        "subtotal": "Zwischensumme",
+        "envio": "Versand",
+        "igv": "IGV (18 %)"
+      },
+      "comentario": "Kommentar (optional)",
+      "comentarioAyuda": "Wird im Bestellverlauf gespeichert.",
+      "marcarComo": "Als {{estado}} markieren",
+      "cancelar": "Bestellung stornieren",
+      "confirmarCancelacion": "Bestellung {{codigo}} stornieren?",
+      "confirmarCancelacionDetalle": "Die Einheiten gehen zurück ins Lager (Zugang im Lagerbuch), die Zahlung wird als erstattet markiert und der Kunde benachrichtigt. Dies kann nicht rückgängig gemacht werden.",
+      "siCancelar": "Ja, stornieren",
+      "estadoActualizado": "Bestellung aktualisiert: {{estado}}",
+      "estadoFinal": "Diese Bestellung hat einen Endstatus und kann nicht mehr geändert werden."
+    },
+    "productosPage": {
+      "descripcion": "Der gesamte Katalog, einschließlich deaktivierter Produkte.",
+      "nuevo": "Neues Produkt",
+      "buscar": "Name oder SKU",
+      "activos": "Aktiv",
+      "inactivos": "Deaktiviert",
+      "activo": "Aktiv",
+      "inactivo": "Deaktiviert",
+      "destacado": "Empfohlen",
+      "desactivar": "Deaktivieren",
+      "confirmarDesactivar": "„{{nombre}}“ deaktivieren?",
+      "confirmarDesactivarDetalle": "Es verschwindet aus dem Shop, behält aber seinen Bestell- und Lagerbuchverlauf. Du kannst es beim Bearbeiten wieder aktivieren.",
+      "desactivado": "„{{nombre}}“ deaktiviert"
+    },
+    "productoForm": {
+      "tituloNuevo": "Neues Produkt",
+      "eyebrowNuevo": "Katalog",
+      "datos": "Produktdaten",
+      "nombre": "Name",
+      "sku": "SKU",
+      "skuAyuda": "Eindeutiger interner Code, z. B. CAF-012",
+      "slug": "URL (Slug)",
+      "slugAyuda": "Optional: wird aus dem Namen erzeugt.",
+      "descripcion": "Beschreibung",
+      "origen": "Herkunft und Zertifizierungen",
+      "elegir": "Option wählen",
+      "certificaciones": "Zertifizierungen",
+      "fotos": "Fotos",
+      "fotosDetalle": "Werden sofort nach der Auswahl hochgeladen. Das Hauptfoto erscheint im Katalog.",
+      "fotosNuevo": "Werden beim Anlegen des Produkts hochgeladen. Das erste wird das Hauptfoto.",
+      "precioStock": "Preis und Bestand",
+      "precio": "Grundpreis (S/)",
+      "peso": "Gewicht (g)",
+      "pesoAyuda": "Wird für die Versandkosten verwendet.",
+      "stockMinimo": "Mindestbestand",
+      "stockInicial": "Anfangsbestand",
+      "stockInicialAyuda": "Wird im Lagerbuch als „Anfangsbestand“ erfasst.",
+      "ajustarStock": "Im Lagerbestand anpassen",
+      "visibilidad": "Sichtbarkeit",
+      "activo": "Im Shop sichtbar",
+      "activoAyuda": "Deaktiviert wird es nicht mehr verkauft.",
+      "destacado": "Auf der Startseite empfehlen",
+      "destacadoAyuda": "Erscheint im Block „Empfohlen“ der Startseite.",
+      "crear": "Produkt anlegen",
+      "guardar": "Änderungen speichern",
+      "creado": "Produkt „{{nombre}}“ angelegt",
+      "guardado": "Änderungen gespeichert",
+      "verEnTienda": "Im Shop ansehen"
+    },
+    "imagenes": {
+      "elegir": "Fotos auswählen oder hierher ziehen",
+      "ayuda": "JPG, PNG oder WebP · max. 5 MB pro Foto · {{total}} von {{max}}",
+      "principal": "Hauptfoto",
+      "hacerPrincipal": "Als Hauptfoto verwenden",
+      "eliminar": "Foto löschen",
+      "eliminada": "Foto gelöscht",
+      "quitar": "{{nombre}} entfernen",
+      "tipoInvalido": "{{nombre}}: nur JPG, PNG oder WebP",
+      "muyGrande": "{{nombre}} ist größer als 5 MB",
+      "limite": "Ein Produkt kann höchstens {{max}} Fotos haben",
+      "fallos_one": "{{count}} Foto konnte nicht hochgeladen werden: versuche es auf der Produktseite erneut",
+      "fallos_other": "{{count}} Fotos konnten nicht hochgeladen werden: versuche es auf der Produktseite erneut",
+      "estados": {
+        "pendiente": "Ausstehend",
+        "subiendo": "Wird hochgeladen…",
+        "error": "Fehler"
+      }
+    },
+    "inventarioPage": {
+      "descripcion": "Klicke auf den Bestand, um ihn zu korrigieren (wird als Korrektur im Lagerbuch erfasst). Zu- und Abgänge werden mit Grund erfasst.",
+      "stockN_one": "{{count}} Stück",
+      "stockN_other": "{{count}} Stück",
+      "soloStockBajo": "Nur niedriger Bestand",
+      "editarStock": "Bestand von {{nombre}} bearbeiten (aktuell {{stock}})",
+      "stockContado": "Gezählter Bestand von {{nombre}}",
+      "stockInvalido": "Der Bestand muss eine ganze Zahl ab 0 sein",
+      "stockActualizado": "{{nombre}}: Bestand {{stock}}",
+      "movimiento": "Buchung",
+      "kardex": "Lagerbuch",
+      "registrarMovimiento": "Lagerbuchung erfassen",
+      "stockActual_one": "aktueller Bestand: {{count}} Stück",
+      "stockActual_other": "aktueller Bestand: {{count}} Stück",
+      "tipo": "Art der Buchung",
+      "tipos": {
+        "entrada": "Zugang",
+        "salida": "Abgang",
+        "ajuste": "Korrektur"
+      },
+      "cantidad": "Menge",
+      "resultante_one": "Es bleibt {{count}} Stück",
+      "resultante_other": "Es bleiben {{count}} Stück",
+      "sinStock": "Nicht genug Bestand für diesen Abgang",
+      "motivo": "Grund (optional)",
+      "motivoEjemplo": {
+        "entrada": "z. B. Oktoberernte",
+        "salida": "z. B. Schwund, Messemuster"
+      },
+      "kardexDe": "Lagerbuch · {{nombre}}",
+      "kardexDetalle": "Alle Buchungen: Verkäufe, Stornierungen, Zugänge, Abgänge und Korrekturen.",
+      "sinMovimientos": "Für dieses Produkt gibt es noch keine Buchungen.",
+      "quedan_one": "{{count}} übrig",
+      "quedan_other": "{{count}} übrig"
+    },
+    "categoriasPage": {
+      "descripcion": "Kategorien ordnen den Katalog und das Raster der Startseite.",
+      "nueva": "Neue Kategorie",
+      "editar": "Kategorie bearbeiten",
+      "formDescripcion": "Die Reihenfolge bestimmt die Position im Shop (niedrigste zuerst).",
+      "nombre": "Name",
+      "orden": "Reihenfolge",
+      "imagen": "Bild (URL)",
+      "imagenAyuda": "Foto für das Raster der Startseite (https://…)",
+      "productosN_one": "{{count}} ({{activos}} aktiv)",
+      "productosN_other": "{{count}} ({{activos}} aktiv)",
+      "conProductos": "Enthält Produkte: verschiebe sie vor dem Löschen in eine andere Kategorie",
+      "nota": "Nur Kategorien ohne Produkte (auch ohne deaktivierte) können gelöscht werden.",
+      "guardada": "Kategorie „{{nombre}}“ gespeichert",
+      "eliminada": "Kategorie „{{nombre}}“ gelöscht",
+      "confirmarEliminar": "„{{nombre}}“ löschen?",
+      "confirmarEliminarDetalle": "Die Kategorie verschwindet aus dem Shop. Dies kann nicht rückgängig gemacht werden."
+    },
+    "usuariosPage": {
+      "descripcion": "Kunden und Team. Ändere Rollen oder deaktiviere Konten; Änderungen gelten sofort.",
+      "nuevo": "Neues Konto",
+      "nuevoDescripcion": "Lege ein Konto für ein Teammitglied an. Teile das Anfangspasswort über einen sicheren Kanal.",
+      "buscar": "Name oder E-Mail",
+      "rol": "Rolle",
+      "rolDe": "Rolle von {{nombre}}",
+      "equipo": "Nur Team",
+      "alta": "Seit",
+      "activos": "Aktiv",
+      "inactivos": "Deaktiviert",
+      "activo": "Aktiv",
+      "inactivo": "Deaktiviert",
+      "activar": "Aktivieren",
+      "desactivar": "Deaktivieren",
+      "tu": "du",
+      "passwordInicial": "Anfangspasswort",
+      "passwordAyuda": "Mindestens 8 Zeichen, mit Buchstaben und Zahlen.",
+      "crear": "Konto anlegen",
+      "creado": "Konto {{correo}} angelegt",
+      "rolCambiado": "{{nombre}} hat jetzt die Rolle {{rol}}",
+      "activado": "Konto von {{nombre}} aktiviert",
+      "desactivado": "Konto von {{nombre}} deaktiviert"
+    },
+    "estadisticasPage": {
+      "titulo": "Marktstatistiken",
+      "descripcion": "Wo sich unsere Produkte verkaufen und welche vorne liegen. Bestätigte Bestellungen, in Soles.",
+      "totales": {
+        "ingresos": "Gesamtumsatz",
+        "pedidos": "Bestätigte Bestellungen",
+        "paises": "Zielländer",
+        "ticket": "Durchschnittlicher Bestellwert"
+      },
+      "porPais": "Verkäufe nach Land",
+      "porPaisDetalle": "Umsatz nach Zielland und sein Anteil.",
+      "top": "Top 10 Produkte",
+      "topDetalle": "Nach Umsatz, mit verkauften Stück.",
+      "unidades_one": "{{count}} Stück",
+      "unidades_other": "{{count}} Stück",
+      "sinVentas": "Noch keine bestätigten Verkäufe",
+      "sinVentasDetalle": "Sobald die ersten bezahlten Bestellungen eingehen, siehst du hier die führenden Märkte und Produkte."
+    },
+    "validacion": {
+      "numero": "Gib eine Zahl ein",
+      "entero": "Muss eine ganze Zahl sein",
+      "minimo": "Der Wert ist zu niedrig",
+      "maximo": "Der Wert ist zu hoch",
+      "sku": "3 bis 30 Buchstaben, Zahlen oder Bindestriche",
+      "slug": "Nur Kleinbuchstaben, Zahlen und Bindestriche",
+      "nombre": "Gib einen längeren Namen ein",
+      "precio": "Der Preis muss größer als 0 sein",
+      "decimales": "Höchstens 2 Dezimalstellen",
+      "categoria": "Wähle eine Kategorie",
+      "comunidad": "Wähle eine Gemeinschaft",
+      "url": "Gib eine URL ein, die mit https:// beginnt"
+    },
+    "errores": {
+      "SIN_PERMISO": "Deine Rolle erlaubt diese Aktion nicht.",
+      "STOCK_INSUFICIENTE": "Nicht genug Bestand für diesen Abgang.",
+      "SIN_CAMBIOS": "Der angegebene Bestand entspricht dem aktuellen.",
+      "TRANSICION_INVALIDA": "Der Status der Bestellung hat sich inzwischen geändert. Lade neu und versuche es erneut.",
+      "SKU_EN_USO": "Ein Produkt mit dieser SKU existiert bereits.",
+      "SLUG_EN_USO": "Diese URL (Slug) wird bereits verwendet.",
+      "CATEGORIA_NO_EXISTE": "Die gewählte Kategorie existiert nicht mehr.",
+      "COMUNIDAD_NO_EXISTE": "Die gewählte Gemeinschaft existiert nicht mehr.",
+      "CERTIFICACION_NO_EXISTE": "Eine gewählte Zertifizierung existiert nicht mehr.",
+      "CATEGORIA_DUPLICADA": "Eine Kategorie mit diesem Namen existiert bereits.",
+      "CATEGORIA_CON_PRODUCTOS": "Die Kategorie enthält Produkte: verschiebe sie vor dem Löschen.",
+      "ACCION_SOBRE_SI_MISMO": "Du kannst deine eigene Rolle nicht ändern und dein Konto nicht deaktivieren.",
+      "TIPO_ARCHIVO_INVALIDO": "Die Datei ist kein gültiges JPG-, PNG- oder WebP-Bild.",
+      "ARCHIVO_DEMASIADO_GRANDE": "Das Bild überschreitet 5 MB.",
+      "LIMITE_IMAGENES": "Das Produkt hat bereits die maximale Anzahl an Fotos.",
+      "STORAGE_NO_CONFIGURADO": "Der Bildspeicher ist auf dem Server nicht konfiguriert.",
+      "PRODUCTO_NO_ENCONTRADO": "Dieses Produkt wurde nicht gefunden.",
+      "PEDIDO_NO_ENCONTRADO": "Diese Bestellung wurde nicht gefunden.",
+      "CORREO_EN_USO": "Ein Konto mit dieser E-Mail existiert bereits."
+    }
+  },
+  "noEncontrado": {
+    "titulo": "Dieser Weg führt zu keiner Gemeinschaft",
+    "descripcion": "Die gesuchte Seite existiert nicht oder wurde verschoben.",
+    "volver": "Zur Startseite",
+    "eyebrow": "Fehler 404",
+    "catalogo": "Katalog entdecken",
+    "sugerencias": "Oder besuche eine unserer Kategorien"
+  },
+  "producto": {
+    "agotado": "Ausverkauft",
+    "altitud": "{{valor}} m ü. M.",
+    "calificacion": "{{valor}} von 5 Sternen",
+    "migas": "Brotkrümelnavigation",
+    "galeria": {
+      "ampliar": "Bild vergrößern",
+      "zoom": "Vergrößern",
+      "posicion": "Bild {{n}} von {{total}}",
+      "miniaturas": "Produktbilder",
+      "ver": "Bild {{n}} von {{total}} anzeigen",
+      "anterior": "Vorheriges Bild",
+      "siguiente": "Nächstes Bild"
+    },
+    "stock": {
+      "disponible": "Auf Lager, versandbereit",
+      "pocas_one": "Nur noch {{count}} Stück!",
+      "pocas_other": "Nur noch {{count}} Stück",
+      "enCarrito_one": "Bereits {{count}} im Warenkorb",
+      "enCarrito_other": "Bereits {{count}} im Warenkorb"
+    },
+    "agregar": "In den Warenkorb",
+    "comprarAhora": "Jetzt kaufen",
+    "envio": "Weltweiter Versand aus Cusco: Standard in 12–18 Tagen oder Express in 4–7 Tagen.",
+    "sinCostosOcultos": "Keine versteckten Kosten: Versand, MwSt. und Wechselkurs siehst du vor der Zahlung.",
+    "resenas": {
+      "total_one": "{{count}} Bewertung",
+      "total_other": "{{count}} Bewertungen",
+      "sinResenas": "Noch keine Bewertungen",
+      "vacio": "Für dieses Produkt gibt es noch keine Bewertungen",
+      "vacioDetalle": "Bewertungen schreiben Kundinnen und Kunden, die ihre Bestellung erhalten haben.",
+      "basadoEn_one": "Basierend auf {{count}} Bewertung",
+      "basadoEn_other": "Basierend auf {{count}} Bewertungen",
+      "distribucion": "Verteilung der Bewertungen",
+      "barra_one": "{{estrellas}} Sterne: {{count}} Bewertung",
+      "barra_other": "{{estrellas}} Sterne: {{count}} Bewertungen"
+    },
+    "ficha": {
+      "titulo": "Produktdetails",
+      "sku": "Artikelnummer",
+      "peso": "Nettogewicht",
+      "categoria": "Kategorie",
+      "certificaciones": "Zertifizierungen",
+      "emitidaPor": "Ausgestellt von {{entidad}}"
+    },
+    "origen": {
+      "eyebrow": "Herstellende Gemeinschaft",
+      "ubicacion": "Lage",
+      "altitud": "Höhe",
+      "familias": "Unterstützte Familien",
+      "razonSocial": "Firmenname",
+      "verProductos": "Alle Produkte dieser Gemeinschaft ansehen",
+      "mapa": "Karte mit dem Standort von {{comunidad}}"
+    },
+    "tabs": {
+      "descripcion": "Beschreibung",
+      "origen": "Herkunft",
+      "resenas": "Bewertungen ({{count}})"
+    },
+    "trayecto": {
+      "eyebrow": "Vom Ursprung bis zu dir",
+      "titulo": "Der Weg dieses Produkts",
+      "paso": "Schritt {{n}}",
+      "pasos": {
+        "cosecha": "Ernte",
+        "proceso": "Verarbeitung",
+        "envio": "Versand"
+      },
+      "envio": "In Cusco mit recycelbarem Material verpackt und weltweit versendet: innerhalb Perus in 1–5 Tagen, international Standard in 12–18 Tagen oder Express in 4–7 Tagen.",
+      "cafe": {
+        "cosecha": "Reife Kirschen, einzeln von Hand gepflückt auf den Kaffeefeldern von {{comunidad}} auf {{altitud}}.",
+        "proceso": "Entpulpt, fermentiert und auf Hochbetten in der Sonne getrocknet; in kleinen Chargen im Ursprung geröstet."
+      },
+      "superalimentos": {
+        "cosecha": "Körner und Wurzeln, geerntet auf Familienfeldern von {{comunidad}} auf {{altitud}}.",
+        "proceso": "Gedroschen, gewaschen, um das Saponin zu entfernen, und natürlich getrocknet; vor dem Abpacken von Hand sortiert."
+      },
+      "textiles": {
+        "cosecha": "Verantwortungsvolle Schur frei lebender Alpakas, gehalten von {{comunidad}} auf {{altitud}}.",
+        "proceso": "Von Hand gesponnene Faser, mit Naturfarben wie Cochenille und Chilca gefärbt und am Webstuhl gewebt."
+      },
+      "artesania": {
+        "cosecha": "Ton und lokale Materialien, gesammelt von den Werkstätten von {{comunidad}} auf {{altitud}}.",
+        "proceso": "Von Hand geformt und bemalt, langsam getrocknet und im Handwerksofen gebrannt."
+      },
+      "general": {
+        "cosecha": "Rohstoffe von {{comunidad}} auf {{altitud}}.",
+        "proceso": "Von der Gemeinschaft in traditioneller Handarbeit hergestellt."
+      }
+    },
+    "relacionados": {
+      "eyebrow": "Weiter entdecken",
+      "titulo": "Das könnte dir auch gefallen"
+    },
+    "noEncontrado": {
+      "titulo": "Dieses Produkt ist nicht mehr im Shop",
+      "descripcion": "Vielleicht ist die Saison vorbei oder der Link ist falsch geschrieben.",
+      "accion": "Zum Katalog"
+    }
+  },
+  "catalogo": {
+    "categorias": {
+      "cafe": {
+        "nombre": "Kaffee",
+        "descripcion": "Hochlandkaffee aus den Tälern von Cusco, am Ursprung geröstet."
+      },
+      "superalimentos": {
+        "nombre": "Superfoods",
+        "descripcion": "Quinoa, Kiwicha, Cañihua und Maca aus dem Heiligen Tal."
+      },
+      "textiles": {
+        "nombre": "Textilien",
+        "descripcion": "Handgewebte Kleidung und Accessoires aus Alpakafaser."
+      },
+      "artesania": {
+        "nombre": "Kunsthandwerk",
+        "descripcion": "Keramik und Schnitzereien aus Andengemeinden."
+      }
+    },
+    "eyebrow": "Katalog",
+    "titulo": "Der gesamte Katalog",
+    "descripcion": "Produkte der andinen Artenvielfalt – jedes rückverfolgbar bis zur Gemeinschaft, die es herstellt.",
+    "descripcionComunidad": "Produkte dieser Gemeinschaft in {{provincia}}, {{region}}.",
+    "buscar": "Produkte suchen",
+    "buscarPlaceholder": "Kaffee, Quinoa, Alpaka…",
+    "filtros": "Filter",
+    "filtrosDescripcion": "Die Ergebnisse werden sofort aktualisiert.",
+    "filtrosActivos": "Aktive Filter",
+    "quitarFiltro": "Filter {{nombre}} entfernen",
+    "limpiar": "Filter zurücksetzen",
+    "mostrando": "{{desde}}–{{hasta}} von {{total}} Produkten",
+    "resultados_one": "{{count}} Produkt",
+    "resultados_other": "{{count}} Produkte",
+    "verResultados_one": "{{count}} Produkt anzeigen",
+    "verResultados_other": "{{count}} Produkte anzeigen",
+    "filtro": {
+      "categoria": "Kategorie",
+      "precio": "Preis ({{moneda}})",
+      "comunidad": "Gemeinschaft",
+      "certificacion": "Zertifizierung",
+      "minimo": "Min.",
+      "maximo": "Max.",
+      "aplicarPrecio": "Preisbereich in {{moneda}} anwenden",
+      "desde": "Ab {{monto}}",
+      "hasta": "Bis {{monto}}"
+    },
+    "orden": {
+      "label": "Sortieren nach",
+      "destacados": "Empfohlen",
+      "precio_asc": "Preis: aufsteigend",
+      "precio_desc": "Preis: absteigend",
+      "nombre": "Name (A–Z)",
+      "recientes": "Neuheiten",
+      "valoracion": "Beste Bewertung"
+    },
+    "vacio": {
+      "titulo": "Keine Produkte mit diesen Filtern gefunden",
+      "descripcion": "Probiere eine andere Kombination oder entferne einen Filter – unsere Gemeinschaften haben noch viel mehr zu bieten."
+    },
+    "paginacion": {
+      "label": "Seitennavigation des Katalogs",
+      "anterior": "Zurück",
+      "siguiente": "Weiter",
+      "pagina": "Seite {{page}}"
+    }
+  },
+  "estado": {
+    "error": "Dieser Bereich konnte nicht geladen werden.",
+    "reintentar": "Erneut versuchen"
+  },
+  "certificaciones": {
+    "organico": "Bio",
+    "comercio-justo": "Fairer Handel",
+    "hecho-a-mano": "Handgemacht",
+    "libre-de-gluten": "Glutenfrei"
+  },
+  "validacion": {
+    "requerido": "Dieses Feld ist erforderlich",
+    "largo": "Der Text ist zu lang",
+    "correoRequerido": "Gib deine E-Mail-Adresse ein",
+    "correo": "Gib eine gültige E-Mail-Adresse ein, z. B. name@mail.de",
+    "passwordRequerida": "Gib dein Passwort ein",
+    "passwordMin": "Das Passwort muss mindestens 8 Zeichen haben",
+    "passwordMax": "Das Passwort darf höchstens 72 Zeichen haben",
+    "passwordLetra": "Das Passwort muss mindestens einen Buchstaben enthalten",
+    "passwordNumero": "Das Passwort muss mindestens eine Zahl enthalten",
+    "passwordNoCoincide": "Die Passwörter stimmen nicht überein",
+    "pais": "Wähle ein Land",
+    "nombre": "Gib den Namen der empfangenden Person ein",
+    "ciudad": "Gib die Stadt ein",
+    "direccion": "Gib die vollständige Adresse ein (Straße und Hausnummer)",
+    "tarjetaNumero": "Überprüfe die Kartennummer",
+    "titular": "Gib den Namen wie auf der Karte ein",
+    "vencimiento": "Verwende ein Datum MM/JJ, das noch nicht abgelaufen ist",
+    "cvv": "Überprüfe den Sicherheitscode (3 Ziffern, 4 bei American Express)",
+    "celular": "Gib eine 9-stellige peruanische Handynummer ein, die mit 9 beginnt"
+  },
+  "errores": {
+    "generico": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+    "red": "Der Shop ist nicht erreichbar. Prüfe deine Verbindung und versuche es erneut.",
+    "servidor": "Auf unserem Server ist ein Problem aufgetreten. Bitte versuche es in einigen Minuten erneut.",
+    "CREDENCIALES_INVALIDAS": "E-Mail oder Passwort ist falsch",
+    "CORREO_EN_USO": "Mit dieser E-Mail gibt es bereits ein Konto. Bitte melde dich an.",
+    "RATE_LIMITED": "Zu viele Versuche. Bitte warte einige Minuten.",
+    "CUENTA_INACTIVA": "Dieses Konto ist deaktiviert",
+    "NO_AUTENTICADO": "Deine Sitzung ist abgelaufen. Bitte melde dich erneut an.",
+    "PAGO_RECHAZADO": "Deine Bank hat die Karte abgelehnt (unzureichende Deckung). Es wurde nichts belastet.",
+    "STOCK_INSUFICIENTE": "Ein Artikel war während deines Einkaufs ausverkauft. Bitte prüfe deinen Warenkorb.",
+    "PRODUCTO_NO_ENCONTRADO": "Ein Artikel ist nicht mehr verfügbar. Bitte prüfe deinen Warenkorb.",
+    "CARRITO_VACIO": "Dein Warenkorb ist leer",
+    "METODO_PAGO_NO_DISPONIBLE": "Yape und Plin sind nur für Zahlungen in Soles verfügbar",
+    "ENVIO_NO_DISPONIBLE": "Diese Versandart ist für dein Land nicht verfügbar",
+    "DIRECCION_NO_ENCONTRADA": "Diese Adresse ist nicht mehr in deinem Konto",
+    "LIMITE_DIRECCIONES": "Du kannst bis zu 10 Adressen speichern",
+    "VALIDATION_ERROR": "Bitte prüfe die markierten Felder"
+  },
+  "auth": {
+    "lema": "Dein Konto verbindet dich mit den Gemeinschaften, die herstellen, was du kaufst.",
+    "ventajas": {
+      "trazabilidad": "Bestellverlauf mit der Herkunft jedes Produkts",
+      "seguimiento": "Sendungsverfolgung Schritt für Schritt",
+      "pago": "Gespeicherte Adressen für einen schnelleren Checkout"
+    },
+    "login": {
+      "eyebrow": "Willkommen zurück",
+      "titulo": "Anmelden",
+      "descripcion": "Melde dich an, um deine Bestellungen zu sehen und schneller zu bezahlen.",
+      "descripcionCheckout": "Melde dich an, um deinen Einkauf abzuschließen. Dein Warenkorb wird in deinem Konto gespeichert.",
+      "ayudaCredenciales": "Prüfe, ob die E-Mail richtig geschrieben und die Feststelltaste aus ist.",
+      "enviar": "Anmelden",
+      "sinCuenta": "Noch kein Konto?",
+      "crearCuenta": "Konto erstellen"
+    },
+    "registro": {
+      "eyebrow": "Werde Teil von Kuski",
+      "titulo": "Konto erstellen",
+      "descripcion": "Wir fragen nur, was wir für den Versand deiner Bestellungen brauchen.",
+      "enviar": "Konto erstellen",
+      "conCuenta": "Du hast schon ein Konto?",
+      "iniciarSesion": "Anmelden"
+    },
+    "campos": {
+      "nombre": "Vorname",
+      "apellido": "Nachname",
+      "correo": "E-Mail",
+      "password": "Passwort",
+      "confirmacion": "Passwort wiederholen",
+      "pais": "Land"
+    },
+    "requisitos": {
+      "titulo": "Anforderungen an das Passwort",
+      "largo": "Mindestens 8 Zeichen",
+      "letra": "Mindestens ein Buchstabe",
+      "numero": "Mindestens eine Zahl",
+      "cumplido": "(erfüllt)"
+    }
+  },
+  "cuenta": {
+    "abrir": "Mein Konto ({{nombre}})",
+    "eyebrow": "Mein Konto",
+    "saludo": "Hallo, {{nombre}}",
+    "salir": "Abmelden",
+    "sesionCerrada": "Du hast dich abgemeldet",
+    "nav": {
+      "label": "Bereiche meines Kontos",
+      "pedidos": "Meine Bestellungen",
+      "direcciones": "Meine Adressen"
+    },
+    "pedidos": {
+      "verDetalle": "Details ansehen",
+      "verDetalleDe": "Details der Bestellung {{codigo}} ansehen",
+      "vacio": "Du hast noch keine Bestellungen",
+      "vacioDetalle": "Nach deinem ersten Einkauf siehst du hier jede Bestellung mit Sendungsverfolgung.",
+      "pagina": "Seite {{page}} von {{total}}"
+    },
+    "direcciones": {
+      "principal": "Standard",
+      "nueva": "Adresse hinzufügen",
+      "nuevaDescripcion": "Du verwendest sie für deine nächsten Lieferungen.",
+      "guardar": "Adresse speichern",
+      "guardada": "Adresse gespeichert",
+      "eliminar": "Löschen",
+      "eliminarDe": "Adresse {{direccion}} löschen",
+      "eliminarTitulo": "Diese Adresse löschen?",
+      "eliminada": "Adresse gelöscht",
+      "marcarPrincipal": "Als Standard festlegen",
+      "vacio": "Du hast keine gespeicherten Adressen",
+      "vacioDetalle": "Speichere eine Adresse, um den Checkout schneller abzuschließen."
+    }
+  },
+  "pedidos": {
+    "estados": {
+      "pendiente": "Ausstehend",
+      "pagado": "Bestätigt",
+      "preparando": "In Vorbereitung",
+      "en_transito": "Unterwegs",
+      "entregado": "Zugestellt",
+      "cancelado": "Storniert"
+    },
+    "cancelado": "Diese Bestellung wurde storniert",
+    "tracking": {
+      "titulo": "Sendungsverfolgung",
+      "confirmado": "Bestätigt",
+      "preparando": "In Vorbereitung",
+      "en_transito": "Unterwegs",
+      "entregado": "Zugestellt",
+      "completado": "abgeschlossen",
+      "pendiente": "ausstehend"
+    },
+    "verMisPedidos": "Meine Bestellungen",
+    "noEncontrado": {
+      "titulo": "Diese Bestellung haben wir nicht gefunden",
+      "descripcion": "Prüfe die Nummer oder suche sie in deinem Bestellverlauf."
+    },
+    "confirmacion": {
+      "eyebrow": "Bestellung bestätigt",
+      "titulo": "Danke, {{nombre}}! Deine Bestellung ist bestätigt",
+      "correo": "Wir haben die Bestätigung an {{correo}} gesendet."
+    },
+    "detalle": {
+      "eyebrow": "Bestelldetails",
+      "pedido": "Bestellung {{codigo}}",
+      "codigo": "Bestellnummer",
+      "copiar": "Bestellnummer kopieren",
+      "copiado": "Bestellnummer kopiert",
+      "llegada": "Voraussichtliche Ankunft: {{fecha}}",
+      "productos": "Produkte",
+      "totalPagado": "Bezahlter Betrag",
+      "tipoCambio": "Angewandter Wechselkurs: 1 {{moneda}} = S/ {{valor}}",
+      "pago": "Zahlung",
+      "codigoAprobacion": "Genehmigungscode:",
+      "operacion": "Vorgang {{numero}}",
+      "envio": "Versand",
+      "seguimiento": "Sendungsnummer:",
+      "direccion": "Lieferadresse"
+    }
+  }
+}
