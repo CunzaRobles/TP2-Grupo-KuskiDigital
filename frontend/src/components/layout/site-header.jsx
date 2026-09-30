@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, NavLink } from 'react-router';
 import { Button } from '@/components/ui/button';
+import { esAdmin } from '@/features/admin/permisos';
 import { useSesion } from '@/features/auth/api';
 import { useCarrito } from '@/features/carrito/carrito-context';
 import { useScrolled } from '@/lib/hooks/use-scrolled';
@@ -91,9 +92,13 @@ export function SiteHeader({ transparente = false }) {
           <CurrencySelect className={control} />
           <Button asChild variant="ghost" size="icon" className={cn('relative', control)}>
             <Link
-              to={usuario ? '/cuenta' : '/login'}
+              to={!usuario ? '/login' : esAdmin(usuario.rol) ? '/admin' : '/cuenta'}
               aria-label={
-                usuario ? t('cuenta.abrir', { nombre: usuario.nombre }) : t('auth.login.titulo')
+                !usuario
+                  ? t('auth.login.titulo')
+                  : esAdmin(usuario.rol)
+                    ? t('admin.titulo')
+                    : t('cuenta.abrir', { nombre: usuario.nombre })
               }
             >
               <UserRound className="size-5" aria-hidden="true" />

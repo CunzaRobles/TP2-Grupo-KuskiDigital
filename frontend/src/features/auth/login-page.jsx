@@ -6,6 +6,7 @@ import { Field } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 import { mensajeError } from '@/lib/errores';
+import { esAdmin } from '@/features/admin/permisos';
 import { useFormulario } from '@/lib/formulario';
 import { useLogin, useSesion } from './api';
 import { AuthLayout } from './auth-layout';
@@ -19,16 +20,21 @@ export function LoginPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [params] = useSearchParams();
+  const hayRedirect = Boolean(params.get('redirect'));
   const destino = destinoSeguro(params.get('redirect'));
+  // Sin destino pedido, el equipo va a su panel y los clientes a su cuenta.
+  const destinoDe = (u) => (!hayRedirect && esAdmin(u?.rol) ? '/admin' : destino);
   const { data: usuario } = useSesion();
   const login = useLogin();
   const { errores, enviar, campo } = useFormulario(loginSchema, { correo: '', password: '' });
 
   // Ya había sesión (p. ej. volvió con "atrás"): no tiene sentido mostrar el formulario.
-  if (usuario && !login.isSuccess) return <Navigate to={destino} replace />;
+  if (usuario && !login.isSuccess) return <Navigate to={destinoDe(usuario)} replace />;
 
   const alEnviar = enviar((datos) =>
-    login.mutate(datos, { onSuccess: () => navigate(destino, { replace: true }) }),
+    login.mutate(datos, {
+      onSuccess: ({ usuario: u }) => navigate(destinoDe(u), { replace: true }),
+    }),
   );
 
   const enlaceRegistro = `/registro${params.get('redirect') ? `?redirect=${encodeURIComponent(destino)}` : ''}`;
@@ -64,6 +70,12 @@ export function LoginPage() {
         {t('auth.login.sinCuenta')}{' '}
         <Link to={enlaceRegistro} className="font-semibold text-link hover:underline">
           {t('auth.login.crearCuenta')}
+        </Link>
+      </p>
+      <p className="border-t pt-5 text-center text-sm text-muted-foreground">
+        {t('auth.login.equipo')}{' '}
+        <Link to="/admin/login" className="font-semibold text-link hover:underline">
+          {t('auth.login.accesoPanel')}
         </Link>
       </p>
     </AuthLayout>

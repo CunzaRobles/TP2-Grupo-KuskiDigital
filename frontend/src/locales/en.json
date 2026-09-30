@@ -276,7 +276,8 @@
       "contacto": "Contact",
       "origen": "Origin and traceability",
       "terminos": "Terms and conditions",
-      "privacidad": "Privacy"
+      "privacidad": "Privacy",
+      "equipo": "Team access"
     },
     "pagoSeguro": "100% secure payment",
     "pagoSeguroDetalle": "SSL-encrypted connection",
@@ -895,7 +896,9 @@
       "ayudaCredenciales": "Check that your email is spelled correctly and Caps Lock is off.",
       "enviar": "Sign in",
       "sinCuenta": "Don’t have an account yet?",
-      "crearCuenta": "Create an account"
+      "crearCuenta": "Create an account",
+      "equipo": "Part of the Kuski team?",
+      "accesoPanel": "Sign in to the admin panel"
     },
     "registro": {
       "eyebrow": "Join Kuski",

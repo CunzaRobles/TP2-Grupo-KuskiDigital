@@ -276,7 +276,8 @@
       "contacto": "Kontakt",
       "origen": "Herkunft und Rückverfolgbarkeit",
       "terminos": "AGB",
-      "privacidad": "Datenschutz"
+      "privacidad": "Datenschutz",
+      "equipo": "Zugang für das Team"
     },
     "pagoSeguro": "100 % sichere Zahlung",
     "pagoSeguroDetalle": "SSL-verschlüsselte Verbindung",
@@ -895,7 +896,9 @@
       "ayudaCredenciales": "Prüfe, ob die E-Mail richtig geschrieben und die Feststelltaste aus ist.",
       "enviar": "Anmelden",
       "sinCuenta": "Noch kein Konto?",
-      "crearCuenta": "Konto erstellen"
+      "crearCuenta": "Konto erstellen",
+      "equipo": "Gehörst du zum Kuski-Team?",
+      "accesoPanel": "Zum Verwaltungsbereich"
     },
     "registro": {
       "eyebrow": "Werde Teil von Kuski",

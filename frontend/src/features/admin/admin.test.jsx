@@ -89,6 +89,33 @@ describe('Panel admin · acceso por rol', () => {
     expect(router.state.location.pathname).toBe('/admin/inventario');
   });
 
+  it('el login de la tienda enlaza al panel y lleva a un admin a su panel', async () => {
+    const user = userEvent.setup();
+    let conectado = false;
+    stubApi({
+      'GET /auth/me': () =>
+        conectado
+          ? { usuario: cuenta('admin_logistica') }
+          : json(401, { error: { code: 'NO_AUTENTICADO', message: '' } }),
+      'POST /auth/login': () => {
+        conectado = true;
+        return { usuario: cuenta('admin_logistica') };
+      },
+      'GET /admin/pedidos': pagina([]),
+    });
+    const { router } = renderRuta('/login');
+
+    expect(await screen.findByRole('link', { name: 'Acceso al panel' })).toHaveAttribute(
+      'href',
+      '/admin/login',
+    );
+    await user.type(screen.getByLabelText('Correo electrónico'), 'logistica@kuski.pe');
+    await user.type(screen.getByLabelText('Contraseña'), 'Kuski2026');
+    await user.click(screen.getByRole('button', { name: 'Iniciar sesión' }));
+
+    await waitFor(() => expect(router.state.location.pathname).toBe('/admin/pedidos'));
+  });
+
   it('una cuenta de cliente no entra: ve un aviso claro', async () => {
     stubApi(sesion('cliente'));
     renderRuta('/admin/dashboard');

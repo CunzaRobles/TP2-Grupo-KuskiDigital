@@ -35,6 +35,7 @@ const COLUMNAS = [
       { to: '/origen', clave: 'footer.enlaces.origen' },
       { to: '/terminos', clave: 'footer.enlaces.terminos' },
       { to: '/privacidad', clave: 'footer.enlaces.privacidad' },
+      { to: '/admin/login', clave: 'footer.enlaces.equipo' },
     ],
   },
 ];
