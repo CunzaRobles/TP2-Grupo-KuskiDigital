@@ -1,28 +1,29 @@
-import express from 'express';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import express from 'express';
+import helmet from 'helmet';
+import { env } from './config/env.js';
+import { errorHandler } from './middleware/error-handler.js';
+import { notFound } from './middleware/not-found.js';
+import { apiLimiter } from './middleware/rate-limit.js';
+import apiV1 from './routes/index.js';
 
 const app = express();
-app.use(cors());
-app.use(express.json());
 
-// Endpoint de productos de biodiversidad andina
-app.get('/api/productos', (req, res) => {
-  res.json([
-    { id: 1, nombre: 'Café Orgánico Valle Inca', precio: 28.5, stock: 40, categoria: 'Granos' },
-    { id: 2, nombre: 'Textil de Alpaca Baby', precio: 120.0, stock: 12, categoria: 'Artesanía' },
-    { id: 3, nombre: 'Quinua Real Roja (500g)', precio: 14.0, stock: 80, categoria: 'Granos' },
-    { id: 4, nombre: 'Miel de Penca Sagrada', precio: 32.0, stock: 25, categoria: 'Naturistas' }
-  ]);
-});
+app.use(helmet());
+app.use(
+  cors({
+    origin: env.CORS_ORIGIN.split(',').map((o) => o.trim()),
+    credentials: true,
+  }),
+);
+app.use(express.json({ limit: '100kb' }));
+app.use(cookieParser());
+app.use('/api', apiLimiter);
 
-// Endpoint simulado para recepción de pedidos
-app.post('/api/pedidos', (req, res) => {
-  const pedido = req.body;
-  res.status(201).json({
-    mensaje: 'Pedido registrado con éxito en Kuski Digital',
-    idSimulado: Math.floor(Math.random() * 1000) + 1,
-    detalle: pedido
-  });
-});
+app.use('/api/v1', apiV1);
+
+app.use(notFound);
+app.use(errorHandler);
 
 export default app;

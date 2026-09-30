@@ -1,0 +1,60 @@
+/* Ajustes de Leaflet a la marca (solo se cargan con los mapas, en diferido). */
+
+.kuski-mapa {
+  background: var(--color-crema);
+  font-family: var(--font-sans);
+}
+
+.kuski-pin {
+  background: none;
+  border: 0;
+}
+
+.kuski-pin svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 4px 6px rgb(43 29 20 / 0.3));
+  transform-origin: 50% 100%;
+  transition: transform 200ms var(--ease-andino);
+}
+
+.kuski-pin:hover svg,
+.kuski-pin:focus-visible svg {
+  transform: scale(1.15);
+}
+
+.kuski-mapa .leaflet-popup-content-wrapper {
+  border-radius: var(--radius-lg);
+  background: var(--popover);
+  box-shadow: var(--shadow-lift);
+}
+
+.kuski-mapa .leaflet-popup-content {
+  margin: 1rem 1.25rem;
+  min-width: 13rem;
+  line-height: 1.4;
+}
+
+.kuski-mapa .leaflet-popup-content p {
+  margin: 0;
+}
+
+.kuski-mapa .leaflet-popup-tip {
+  background: var(--popover);
+}
+
+.kuski-mapa .leaflet-popup-close-button {
+  top: 0.375rem;
+  right: 0.375rem;
+  color: var(--muted-foreground);
+}
+
+.kuski-mapa .leaflet-control-zoom a {
+  color: var(--foreground);
+}
+
+.kuski-mapa .leaflet-control-attribution {
+  background: rgb(251 249 245 / 0.85);
+  color: var(--muted-foreground);
+}

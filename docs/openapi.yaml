@@ -1,0 +1,2392 @@
+openapi: 3.1.0
+info:
+  title: Kuski Digital · API v1
+  version: 1.0.0
+  description: |
+    API REST de la tienda de **Kuski Agroindustria S.A.** (Cusco, Perú).
+
+    - Todas las respuestas tienen la forma `{ data }` o `{ error: { code, message, details? } }`.
+    - La sesión viaja en la cookie **httpOnly** `kuski_token` (JWT, `SameSite=Lax`, `Secure` en producción).
+      Se obtiene con `POST /auth/login` o `POST /auth/registro`; desde Swagger UI se envía sola.
+    - Los precios se guardan en soles (PEN). Con `?moneda=USD|EUR` la API convierte con la tabla
+      de tipos de cambio (simulada).
+    - Simulaciones (adapters intercambiables): pasarela de pago (tarjeta terminada en `0002` = rechazada,
+      Yape/Plin devuelven código de aprobación, 1–2 s de latencia), courier (tabla `tarifas_envio`),
+      tipo de cambio (tabla `tipos_cambio`) y correos (se imprimen en la consola del servidor).
+  contact:
+    name: Equipo Kuski Digital — Universidad Continental
+servers:
+  - url: /api/v1
+    description: Servidor actual
+  - url: http://localhost:3000/api/v1
+    description: Desarrollo local
+
+tags:
+  - name: Sistema
+  - name: Auth
+    description: Registro, inicio y cierre de sesión (cookie httpOnly)
+  - name: Catálogo
+    description: Productos, categorías, comunidades y trazabilidad (público)
+  - name: Carrito
+    description: Carrito del usuario autenticado y precios del carrito de invitado
+  - name: Checkout
+    description: Cotización de la compra (envío, IGV y tipo de cambio)
+  - name: Pedidos
+    description: Creación, historial y tracking de pedidos
+  - name: Direcciones
+    description: Libreta de direcciones del usuario (una principal)
+  - name: Admin
+    description: |
+      Panel de administración. Permisos por rol: **gerente** todo; **ventas** dashboard, ventas,
+      pedidos (solo lectura) y estadísticas; **logística** pedidos (cambiar estado) e inventario.
+
+paths:
+  /health:
+    get:
+      tags: [Sistema]
+      summary: Estado de la API y de la base de datos
+      responses:
+        '200':
+          description: API y base de datos operativas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      status: { type: string, example: ok }
+                      db: { type: string, example: ok }
+        '503': { $ref: '#/components/responses/Error' }
+
+  # ─────────────────────────── Auth ───────────────────────────
+  /auth/registro:
+    post:
+      tags: [Auth]
+      summary: Crear una cuenta de cliente e iniciar sesión
+      description: Siempre crea usuarios con rol `cliente`. Envía un correo de bienvenida simulado.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RegistroInput' }
+      responses:
+        '201':
+          description: Cuenta creada; responde con la cookie de sesión
+          headers:
+            Set-Cookie: { $ref: '#/components/headers/SetCookieSesion' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/UsuarioRespuesta' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '409':
+          description: '`CORREO_EN_USO`'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Iniciar sesión
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LoginInput' }
+      responses:
+        '200':
+          description: Sesión iniciada (el JWT solo viaja en la cookie)
+          headers:
+            Set-Cookie: { $ref: '#/components/headers/SetCookieSesion' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/UsuarioRespuesta' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401':
+          description: '`CREDENCIALES_INVALIDAS` (mismo error si el correo no existe)'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '403':
+          description: '`CUENTA_INACTIVA`'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+
+  /auth/logout:
+    post:
+      tags: [Auth]
+      summary: Cerrar sesión (borra la cookie)
+      responses:
+        '200':
+          description: Sesión cerrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      ok: { type: boolean, example: true }
+
+  /auth/me:
+    get:
+      tags: [Auth]
+      summary: Usuario de la sesión actual
+      security: [{ cookieSesion: [] }]
+      responses:
+        '200':
+          description: Perfil del usuario
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/UsuarioRespuesta' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+
+  # ───────────────────────── Catálogo ─────────────────────────
+  /productos:
+    get:
+      tags: [Catálogo]
+      summary: Catálogo con filtros, orden y paginación
+      description: |
+        Los filtros de lista aceptan valores separados por comas (`categoria=cafe,textiles`) o
+        repetidos (`comunidad=1&comunidad=3`); dentro de un mismo filtro se combinan con **O**.
+        `precio_min` y `precio_max` se expresan en la moneda indicada en `moneda`.
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Moneda'
+        - name: categoria
+          in: query
+          description: Slugs de categoría
+          schema: { type: string, example: cafe, superalimentos }
+        - name: comunidad
+          in: query
+          description: Ids de comunidad productora
+          schema: { type: string, example: '1,3' }
+        - name: certificacion
+          in: query
+          description: Ids de certificación (ver `GET /certificaciones`)
+          schema: { type: string, example: '1' }
+        - name: precio_min
+          in: query
+          schema: { type: number, minimum: 0, example: 10 }
+        - name: precio_max
+          in: query
+          schema: { type: number, minimum: 0, example: 100 }
+        - name: q
+          in: query
+          description: Búsqueda en nombre y descripción
+          schema: { type: string, maxLength: 100, example: alpaca }
+        - name: orden
+          in: query
+          schema:
+            type: string
+            enum: [destacados, precio_asc, precio_desc, nombre, recientes, valoracion]
+            default: destacados
+      responses:
+        '200':
+          description: Página de productos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items: { $ref: '#/components/schemas/ProductoTarjeta' }
+                      pagination: { $ref: '#/components/schemas/Pagination' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+
+  /productos/destacados:
+    get:
+      tags: [Catálogo]
+      summary: Productos destacados del home
+      parameters:
+        - $ref: '#/components/parameters/Moneda'
+        - name: limit
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 24, default: 8 }
+      responses:
+        '200':
+          description: Lista de destacados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/ProductoTarjeta' }
+
+  /productos/{slug}:
+    get:
+      tags: [Catálogo]
+      summary: Ficha del producto
+      description: Incluye imágenes, comunidad de origen (con coordenadas), certificaciones y las 20 reseñas más recientes con su promedio y distribución.
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string, example: cafe-organico-kuski-250g }
+        - $ref: '#/components/parameters/Moneda'
+      responses:
+        '200':
+          description: Ficha del producto
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/ProductoDetalle' }
+        '404':
+          description: '`PRODUCTO_NO_ENCONTRADO`'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /productos/{slug}/relacionados:
+    get:
+      tags: [Catálogo]
+      summary: Productos relacionados (misma categoría primero)
+      description: |
+        Productos activos de la misma categoría (destacados primero). Si no alcanzan, completa
+        con destacados de otras categorías. Nunca incluye al propio producto.
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string, example: cafe-organico-kuski-250g }
+        - $ref: '#/components/parameters/Moneda'
+        - name: limit
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 12, default: 4 }
+      responses:
+        '200':
+          description: Lista de productos relacionados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/ProductoTarjeta' }
+        '404':
+          description: '`PRODUCTO_NO_ENCONTRADO`'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /categorias:
+    get:
+      tags: [Catálogo]
+      summary: Categorías con número de productos activos
+      responses:
+        '200':
+          description: Categorías ordenadas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Categoria' }
+
+  /comunidades:
+    get:
+      tags: [Catálogo]
+      summary: Comunidades productoras (con coordenadas para el mapa)
+      responses:
+        '200':
+          description: Comunidades
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Comunidad' }
+
+  /certificaciones:
+    get:
+      tags: [Catálogo]
+      summary: Certificaciones (para el filtro del catálogo)
+      responses:
+        '200':
+          description: Certificaciones
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Certificacion' }
+
+  /estadisticas/trazabilidad:
+    get:
+      tags: [Catálogo]
+      summary: Cifras del bloque de trazabilidad del home
+      description: |
+        `paises` = países a los que Kuski ya exportaba (lista histórica de la empresa) más los
+        países con pedidos confirmados en la tienda, sin contar Perú.
+      responses:
+        '200':
+          description: Totales
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Trazabilidad' }
+
+  # ────────────────────────── Carrito ─────────────────────────
+  /carrito:
+    get:
+      tags: [Carrito]
+      summary: Carrito del usuario (se crea vacío si no existe)
+      security: [{ cookieSesion: [] }]
+      parameters:
+        - $ref: '#/components/parameters/Moneda'
+      responses:
+        '200': { $ref: '#/components/responses/Carrito' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+
+  /carrito/items:
+    post:
+      tags: [Carrito]
+      summary: Agregar un producto (suma si ya estaba)
+      security: [{ cookieSesion: [] }]
+      parameters:
+        - $ref: '#/components/parameters/Moneda'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [productoId]
+              properties:
+                productoId: { type: integer, example: 1 }
+                cantidad: { type: integer, minimum: 1, maximum: 99, default: 1 }
+      responses:
+        '201': { $ref: '#/components/responses/Carrito' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '404':
+          description: '`PRODUCTO_NO_ENCONTRADO`'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '409': { $ref: '#/components/responses/StockInsuficiente' }
+        '422':
+          description: '`CANTIDAD_MAXIMA` (99 unidades por producto)'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /carrito/items/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Id del ítem del carrito (no del producto)
+        schema: { type: integer }
+      - $ref: '#/components/parameters/Moneda'
+    patch:
+      tags: [Carrito]
+      summary: Cambiar la cantidad de un ítem
+      security: [{ cookieSesion: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [cantidad]
+              properties:
+                cantidad: { type: integer, minimum: 1, maximum: 99 }
+      responses:
+        '200': { $ref: '#/components/responses/Carrito' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '404': { $ref: '#/components/responses/ItemNoEncontrado' }
+        '409': { $ref: '#/components/responses/StockInsuficiente' }
+    delete:
+      tags: [Carrito]
+      summary: Quitar un ítem
+      security: [{ cookieSesion: [] }]
+      responses:
+        '200': { $ref: '#/components/responses/Carrito' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '404': { $ref: '#/components/responses/ItemNoEncontrado' }
+
+  /carrito/fusionar:
+    post:
+      tags: [Carrito]
+      summary: Unir el carrito de invitado (localStorage) al iniciar sesión
+      description: |
+        Suma las cantidades a las del carrito guardado, en una transacción. No falla por stock:
+        ajusta al disponible (máx. 99) y omite los productos que ya no existen; cada cambio se
+        informa en `ajustes`.
+      security: [{ cookieSesion: [] }]
+      parameters:
+        - $ref: '#/components/parameters/Moneda'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [items]
+              properties:
+                items:
+                  type: array
+                  maxItems: 50
+                  items: { $ref: '#/components/schemas/ItemInput' }
+      responses:
+        '200':
+          description: Carrito resultante y ajustes realizados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      carrito: { $ref: '#/components/schemas/Carrito' }
+                      ajustes:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            productoId: { type: integer }
+                            motivo:
+                              type: string
+                              enum: [STOCK_INSUFICIENTE, CANTIDAD_MAXIMA, NO_DISPONIBLE]
+                            cantidadFinal: { type: integer }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+
+  /carrito/invitado:
+    post:
+      tags: [Carrito]
+      summary: Precios del carrito de invitado (público, no guarda nada)
+      description: |
+        El carrito de invitado vive en localStorage; este endpoint devuelve sus líneas con los
+        precios convertidos a la moneda pedida, el stock actual y los avisos, con el mismo
+        formato que `GET /carrito` (con `id: null`). Los productos que ya no existen se omiten.
+      parameters:
+        - $ref: '#/components/parameters/Moneda'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [items]
+              properties:
+                items:
+                  type: array
+                  maxItems: 50
+                  items: { $ref: '#/components/schemas/ItemInput' }
+      responses:
+        '200': { $ref: '#/components/responses/Carrito' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+
+  # ────────────────────────── Checkout ────────────────────────
+  /checkout/cotizar:
+    post:
+      tags: [Checkout]
+      summary: Cotizar la compra (subtotal, envío, IGV, tipo de cambio y total)
+      description: |
+        - Envío según la zona del país (nacional, latam, norteamérica, europa, resto del mundo) y
+          el peso: `costo_base + costo_por_kg × kg` (tabla `tarifas_envio`).
+        - IGV 18 % sobre productos + envío, **solo** si `paisCodigo` es `PE`.
+        - Cada monto se convierte a la moneda elegida y el total es la suma de lo convertido,
+          así el desglose que ve el cliente cuadra al céntimo.
+        - Público: un invitado envía `items`; con sesión y sin `items` se cotiza su carrito.
+      security: [{}, { cookieSesion: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [paisCodigo]
+              properties:
+                paisCodigo: { type: string, example: DE, description: ISO 3166-1 alfa-2 }
+                moneda: { $ref: '#/components/schemas/Moneda' }
+                metodoEnvio: { $ref: '#/components/schemas/MetodoEnvio' }
+                items:
+                  type: array
+                  minItems: 1
+                  maxItems: 50
+                  items: { $ref: '#/components/schemas/ItemInput' }
+            examples:
+              anna:
+                summary: Anna (Alemania, EUR)
+                value:
+                  paisCodigo: DE
+                  moneda: EUR
+                  metodoEnvio: express
+                  items: [{ productoId: 26, cantidad: 1 }, { productoId: 1, cantidad: 2 }]
+              maria:
+                summary: María (Cusco, PEN)
+                value:
+                  paisCodigo: PE
+                  items: [{ productoId: 1, cantidad: 2 }]
+      responses:
+        '200':
+          description: Cotización
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Cotizacion' }
+        '400':
+          description: '`VALIDATION_ERROR` o `CARRITO_VACIO`'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '404':
+          description: '`PRODUCTO_NO_ENCONTRADO` (details: productos)'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '409': { $ref: '#/components/responses/StockInsuficiente' }
+
+  # ────────────────────────── Pedidos ─────────────────────────
+  /pedidos:
+    post:
+      tags: [Pedidos]
+      summary: Crear el pedido con el carrito actual (una transacción)
+      description: |
+        En **una sola transacción**: bloquea y valida el stock (`SELECT … FOR UPDATE`), crea el
+        pedido con el snapshot de la dirección y de los precios, descuenta el stock y registra la
+        salida en el kardex, procesa el pago con la pasarela (simulada), crea el envío con su código
+        de seguimiento, registra el historial de estados (`pendiente` → `pagado`), asigna el código
+        `KD-000001` y vacía el carrito. Después envía el correo de confirmación (simulado).
+
+        Si el pago se rechaza (tarjeta terminada en `0002`) se deshace todo y responde `402`.
+        Yape y Plin solo se aceptan en PEN. Envía `direccionId` **o** `direccion`.
+      security: [{ cookieSesion: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CrearPedidoInput' }
+            examples:
+              yape:
+                summary: María paga con Yape
+                value:
+                  direccion:
+                    nombreDestinatario: María Quispe
+                    paisCodigo: PE
+                    ciudad: Cusco
+                    direccion: Av. de la Cultura 1520, Wanchaq
+                  metodoEnvio: estandar
+                  moneda: PEN
+                  pago: { metodo: yape, telefono: '987654321' }
+              tarjeta:
+                summary: Anna paga con tarjeta en EUR
+                value:
+                  direccion:
+                    nombreDestinatario: Anna Becker
+                    paisCodigo: DE
+                    ciudad: Berlin
+                    direccion: Kastanienallee 12
+                    codigoPostal: '10435'
+                  metodoEnvio: express
+                  moneda: EUR
+                  pago:
+                    metodo: tarjeta
+                    tarjeta:
+                      {
+                        numero: '4111 1111 1111 1111',
+                        titular: Anna Becker,
+                        vencimiento: '12/29',
+                        cvv: '123',
+                      }
+              rechazada:
+                summary: Tarjeta rechazada (termina en 0002)
+                value:
+                  direccionId: 1
+                  metodoEnvio: estandar
+                  moneda: USD
+                  pago:
+                    metodo: tarjeta
+                    tarjeta:
+                      {
+                        numero: '4000000000000002',
+                        titular: Test,
+                        vencimiento: '12/29',
+                        cvv: '123',
+                      }
+      responses:
+        '201':
+          description: Pedido pagado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/PedidoDetalle' }
+        '400':
+          description: '`VALIDATION_ERROR` o `CARRITO_VACIO`'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '402':
+          description: '`PAGO_RECHAZADO` (details: numeroOperacion, metodo). No se crea nada.'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '404':
+          description: '`DIRECCION_NO_ENCONTRADA` o `PRODUCTO_NO_ENCONTRADO`'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '409': { $ref: '#/components/responses/StockInsuficiente' }
+        '422':
+          description: '`METODO_PAGO_NO_DISPONIBLE` (Yape/Plin fuera de PEN)'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+    get:
+      tags: [Pedidos]
+      summary: Mis pedidos (más recientes primero)
+      security: [{ cookieSesion: [] }]
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Página de pedidos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items: { $ref: '#/components/schemas/PedidoResumen' }
+                      pagination: { $ref: '#/components/schemas/Pagination' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+
+  /pedidos/{codigo}:
+    get:
+      tags: [Pedidos]
+      summary: Detalle y tracking de un pedido
+      description: El cliente solo ve sus pedidos (otro código responde 404); los roles admin ven todos.
+      security: [{ cookieSesion: [] }]
+      parameters:
+        - name: codigo
+          in: path
+          required: true
+          schema: { type: string, example: KD-000001 }
+      responses:
+        '200':
+          description: Pedido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/PedidoDetalle' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '404':
+          description: '`PEDIDO_NO_ENCONTRADO`'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  # ──────────────────────── Direcciones ───────────────────────
+  /direcciones:
+    get:
+      tags: [Direcciones]
+      summary: Mis direcciones (la principal primero)
+      security: [{ cookieSesion: [] }]
+      responses:
+        '200': { $ref: '#/components/responses/Direcciones' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+    post:
+      tags: [Direcciones]
+      summary: Guardar una dirección
+      description: |
+        La primera dirección de la cuenta es la principal. Con `esPrincipal: true`, la anterior
+        deja de serlo. Máximo 10 direcciones por cuenta.
+      security: [{ cookieSesion: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/DireccionInput'
+                - type: object
+                  properties:
+                    esPrincipal: { type: boolean }
+      responses:
+        '201':
+          description: Dirección guardada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Direccion' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '422':
+          description: '`LIMITE_DIRECCIONES`'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /direcciones/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: integer }
+    patch:
+      tags: [Direcciones]
+      summary: Editar una dirección o marcarla como principal
+      description: Siempre queda una principal, por eso `esPrincipal` solo admite `true`.
+      security: [{ cookieSesion: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombreDestinatario: { type: string }
+                paisCodigo: { type: string }
+                ciudad: { type: string }
+                direccion: { type: string }
+                codigoPostal: { type: string }
+                telefono: { type: string }
+                esPrincipal: { type: boolean, enum: [true] }
+      responses:
+        '200':
+          description: Dirección actualizada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Direccion' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '404': { $ref: '#/components/responses/DireccionNoEncontrada' }
+    delete:
+      tags: [Direcciones]
+      summary: Borrar una dirección
+      description: Si era la principal, la más reciente de las restantes pasa a serlo. Devuelve las restantes.
+      security: [{ cookieSesion: [] }]
+      responses:
+        '200': { $ref: '#/components/responses/Direcciones' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '404': { $ref: '#/components/responses/DireccionNoEncontrada' }
+
+  # ──────────────────────── Panel admin ───────────────────────
+  # Todas exigen sesión con rol admin vigente en la base (un cambio de rol o una cuenta
+  # desactivada surten efecto al instante) y el permiso de su sección.
+  /admin/dashboard:
+    get:
+      tags: [Admin]
+      summary: KPIs del mes, sparklines y serie mensual
+      description: |
+        **Roles:** gerente, ventas. Ingresos en PEN (pedidos que no están pendientes ni cancelados),
+        variación frente al mismo tramo del mes anterior, serie diaria de 30 días para los sparklines
+        y serie de 12 meses para el gráfico. Fechas en la hora de Lima.
+      security: [{ cookieSesion: [] }]
+      responses:
+        '200':
+          description: Dashboard
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Dashboard' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+
+  /admin/ventas:
+    get:
+      tags: [Admin]
+      summary: Tabla de ventas con filtros, paginación y resumen
+      description: '**Roles:** gerente, ventas. El resumen suma todo el filtro (no solo la página).'
+      security: [{ cookieSesion: [] }]
+      parameters: &filtrosPedidos
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/LimitAdmin'
+        - {
+            name: desde,
+            in: query,
+            schema: { type: string, format: date },
+            description: 'Desde (incluido), hora de Lima',
+          }
+        - {
+            name: hasta,
+            in: query,
+            schema: { type: string, format: date },
+            description: 'Hasta (incluido), hora de Lima',
+          }
+        - {
+            name: pais,
+            in: query,
+            schema: { type: string, example: 'PE,DE' },
+            description: 'Códigos ISO separados por comas',
+          }
+        - { name: estado, in: query, schema: { type: string, example: 'pagado,preparando' } }
+        - { name: metodo_pago, in: query, schema: { type: string, example: 'yape,tarjeta' } }
+        - {
+            name: q,
+            in: query,
+            schema: { type: string },
+            description: 'Código, destinatario o correo del cliente',
+          }
+      responses:
+        '200':
+          description: Ventas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      items: { type: array, items: { $ref: '#/components/schemas/PedidoAdmin' } }
+                      pagination: { $ref: '#/components/schemas/Pagination' }
+                      resumen:
+                        type: object
+                        properties:
+                          pedidos: { type: integer }
+                          ventas: { type: integer, description: Sin pendientes ni cancelados }
+                          ingresosPen: { type: number }
+                          ticketPromedioPen: { type: number }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+
+  /admin/estadisticas:
+    get:
+      tags: [Admin]
+      summary: Ventas por país y top 10 de productos
+      description: '**Roles:** gerente, ventas. Usa las vistas `v_ventas_por_pais` y `v_productos_mas_vendidos`.'
+      security: [{ cookieSesion: [] }]
+      responses:
+        '200':
+          description: Estadísticas de mercado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Estadisticas' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+
+  /admin/pedidos:
+    get:
+      tags: [Admin]
+      summary: Cola de pedidos
+      description: '**Roles:** gerente, ventas, logística. Mismos filtros que /admin/ventas.'
+      security: [{ cookieSesion: [] }]
+      parameters: *filtrosPedidos
+      responses:
+        '200':
+          description: Pedidos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      items: { type: array, items: { $ref: '#/components/schemas/PedidoAdmin' } }
+                      pagination: { $ref: '#/components/schemas/Pagination' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+
+  /admin/pedidos/{codigo}:
+    get:
+      tags: [Admin]
+      summary: Detalle del pedido con cliente y transiciones posibles
+      description: '**Roles:** gerente, ventas, logística.'
+      security: [{ cookieSesion: [] }]
+      parameters:
+        - { name: codigo, in: path, required: true, schema: { type: string, example: KD-000001 } }
+      responses:
+        '200': { $ref: '#/components/responses/PedidoAdminDetalle' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '404': { $ref: '#/components/responses/Error' }
+
+  /admin/pedidos/{codigo}/estado:
+    patch:
+      tags: [Admin]
+      summary: Cambiar el estado del pedido (tracking simulado)
+      description: |
+        **Roles:** gerente, logística. Transiciones: pagado → preparando → en_transito → entregado;
+        se puede cancelar desde pendiente, pagado o preparando. Registra `pedido_estados` con el admin.
+        `entregado` guarda la fecha de entrega; `cancelado` devuelve el stock (entrada en el kardex) y
+        marca el pago como `reembolsado`. Avisa al cliente con un correo simulado.
+      security: [{ cookieSesion: [] }]
+      parameters:
+        - { name: codigo, in: path, required: true, schema: { type: string, example: KD-000001 } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [estado]
+              properties:
+                estado:
+                  {
+                    type: string,
+                    enum: [pendiente, pagado, preparando, en_transito, entregado, cancelado],
+                  }
+                comentario: { type: string, maxLength: 255 }
+      responses:
+        '200': { $ref: '#/components/responses/PedidoAdminDetalle' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409':
+          description: '`TRANSICION_INVALIDA` (details: estadoActual y permitidas)'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /admin/productos:
+    get:
+      tags: [Admin]
+      summary: Productos del panel (incluye inactivos)
+      description: '**Roles:** gerente.'
+      security: [{ cookieSesion: [] }]
+      parameters: &filtrosProductos
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/LimitAdmin'
+        - { name: q, in: query, schema: { type: string }, description: Nombre o SKU }
+        - { name: categoria, in: query, schema: { type: integer } }
+        - { name: comunidad, in: query, schema: { type: integer } }
+        - { name: activo, in: query, schema: { type: boolean } }
+        - {
+            name: stock_bajo,
+            in: query,
+            schema: { type: boolean },
+            description: 'stock <= stock mínimo',
+          }
+        - {
+            name: orden,
+            in: query,
+            schema: { type: string, enum: [recientes, nombre, stock_asc, precio_desc] },
+          }
+      responses:
+        '200': { $ref: '#/components/responses/ProductosAdmin' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+    post:
+      tags: [Admin]
+      summary: Crear producto
+      description: |
+        **Roles:** gerente. El slug se genera del nombre si no se envía. `stockInicial` se registra
+        como entrada en el kardex dentro de la misma transacción.
+      security: [{ cookieSesion: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/ProductoInput'
+                - type: object
+                  required: [sku, nombre, precioBasePen, pesoG, categoriaId, comunidadId]
+                  properties:
+                    stockInicial: { type: integer, minimum: 0, default: 0 }
+      responses:
+        '201': { $ref: '#/components/responses/ProductoAdmin' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '409':
+          description: '`SKU_EN_USO` o `SLUG_EN_USO`'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '422':
+          description: '`CATEGORIA_NO_EXISTE`, `COMUNIDAD_NO_EXISTE` o `CERTIFICACION_NO_EXISTE`'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /admin/productos/{id}:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: integer } }
+    get:
+      tags: [Admin]
+      summary: Ficha del producto para editar
+      description: '**Roles:** gerente.'
+      security: [{ cookieSesion: [] }]
+      responses:
+        '200': { $ref: '#/components/responses/ProductoAdmin' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '404': { $ref: '#/components/responses/Error' }
+    put:
+      tags: [Admin]
+      summary: Actualizar producto
+      description: '**Roles:** gerente. Campos parciales. El stock no se edita aquí (usa /admin/inventario/movimientos).'
+      security: [{ cookieSesion: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ProductoInput' }
+      responses:
+        '200': { $ref: '#/components/responses/ProductoAdmin' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+    delete:
+      tags: [Admin]
+      summary: Desactivar producto (baja lógica)
+      description: '**Roles:** gerente. Pone `activo=false`: los pedidos históricos lo siguen referenciando.'
+      security: [{ cookieSesion: [] }]
+      responses:
+        '200': { $ref: '#/components/responses/ProductoAdmin' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '404': { $ref: '#/components/responses/Error' }
+
+  /admin/productos/{id}/imagenes:
+    post:
+      tags: [Admin]
+      summary: Subir una imagen a Supabase Storage
+      description: |
+        **Roles:** gerente. `multipart/form-data` con el archivo en `imagen` (JPG, PNG o WebP, máx. 5 MB;
+        se comprueba el contenido real del archivo). Se guarda en el bucket `productos` y su URL
+        pública en `producto_imagenes`. La primera imagen queda como principal. Máximo 8 por producto.
+      security: [{ cookieSesion: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: integer } }
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [imagen]
+              properties:
+                imagen: { type: string, format: binary }
+                textoAlt: { type: string, maxLength: 200 }
+      responses:
+        '201':
+          description: Imagen guardada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/ImagenAdmin' }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '404': { $ref: '#/components/responses/Error' }
+        '413':
+          description: '`ARCHIVO_DEMASIADO_GRANDE`'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '415':
+          description: '`TIPO_ARCHIVO_INVALIDO`'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '422': { $ref: '#/components/responses/Error' }
+        '503':
+          description: '`STORAGE_NO_CONFIGURADO`: faltan SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /admin/productos/{id}/imagenes/{imagenId}:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: integer } }
+      - { name: imagenId, in: path, required: true, schema: { type: integer } }
+    patch:
+      tags: [Admin]
+      summary: Marcar como principal, cambiar orden o texto alternativo
+      description: '**Roles:** gerente. Devuelve todas las imágenes del producto.'
+      security: [{ cookieSesion: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                esPrincipal: { type: boolean, enum: [true] }
+                orden: { type: integer, minimum: 0, maximum: 99 }
+                textoAlt: { type: string, maxLength: 200 }
+      responses:
+        '200': { $ref: '#/components/responses/ImagenesAdmin' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '404': { $ref: '#/components/responses/Error' }
+    delete:
+      tags: [Admin]
+      summary: Eliminar imagen
+      description: '**Roles:** gerente. Si era la principal, pasa a serlo la siguiente. Borra el archivo del bucket si es propio.'
+      security: [{ cookieSesion: [] }]
+      responses:
+        '200': { $ref: '#/components/responses/ImagenesAdmin' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '404': { $ref: '#/components/responses/Error' }
+
+  /admin/inventario:
+    get:
+      tags: [Admin]
+      summary: Inventario (productos por stock ascendente)
+      description: '**Roles:** gerente, logística. Mismos filtros que /admin/productos.'
+      security: [{ cookieSesion: [] }]
+      parameters: *filtrosProductos
+      responses:
+        '200': { $ref: '#/components/responses/ProductosAdmin' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+
+  /admin/inventario/movimientos:
+    post:
+      tags: [Admin]
+      summary: Registrar un movimiento de inventario (kardex)
+      description: |
+        **Roles:** gerente, logística. En una transacción: bloquea el producto, valida que el stock no
+        quede negativo, actualiza el stock y guarda el movimiento con el admin responsable.
+        `entrada`/`salida` reciben `cantidad`; `ajuste` recibe `stockNuevo` (stock contado) y se guarda la diferencia.
+      security: [{ cookieSesion: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: object
+                  required: [tipo, productoId, cantidad]
+                  properties:
+                    tipo: { type: string, enum: [entrada, salida] }
+                    productoId: { type: integer }
+                    cantidad: { type: integer, minimum: 1 }
+                    motivo: { type: string, maxLength: 255 }
+                - type: object
+                  required: [tipo, productoId, stockNuevo]
+                  properties:
+                    tipo: { type: string, enum: [ajuste] }
+                    productoId: { type: integer }
+                    stockNuevo: { type: integer, minimum: 0 }
+                    motivo: { type: string, maxLength: 255 }
+      responses:
+        '201':
+          description: Movimiento registrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      producto:
+                        type: object
+                        properties:
+                          id: { type: integer }
+                          stock: { type: integer }
+                          stockMinimo: { type: integer }
+                          stockBajo: { type: boolean }
+                      movimiento: { $ref: '#/components/schemas/Movimiento' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409':
+          description: '`STOCK_INSUFICIENTE`'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '422':
+          description: '`SIN_CAMBIOS`: el ajuste deja el mismo stock'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /admin/inventario/{id}/movimientos:
+    get:
+      tags: [Admin]
+      summary: Historial kardex de un producto
+      description: '**Roles:** gerente, logística. Más recientes primero.'
+      security: [{ cookieSesion: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: integer } }
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/LimitAdmin'
+      responses:
+        '200':
+          description: Kardex
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      producto:
+                        type: object
+                        properties:
+                          id: { type: integer }
+                          sku: { type: string }
+                          nombre: { type: string }
+                          stock: { type: integer }
+                          stockMinimo: { type: integer }
+                      items: { type: array, items: { $ref: '#/components/schemas/Movimiento' } }
+                      pagination: { $ref: '#/components/schemas/Pagination' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '404': { $ref: '#/components/responses/Error' }
+
+  /admin/categorias:
+    get:
+      tags: [Admin]
+      summary: Categorías con su número de productos
+      description: '**Roles:** gerente.'
+      security: [{ cookieSesion: [] }]
+      responses:
+        '200':
+          description: Categorías
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { type: array, items: { $ref: '#/components/schemas/CategoriaAdmin' } }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+    post:
+      tags: [Admin]
+      summary: Crear categoría
+      description: '**Roles:** gerente. El slug se genera del nombre si no se envía.'
+      security: [{ cookieSesion: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CategoriaInput' }
+      responses:
+        '201': { $ref: '#/components/responses/CategoriaAdmin' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '409':
+          description: '`CATEGORIA_DUPLICADA` o `SLUG_EN_USO`'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /admin/categorias/{id}:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: integer } }
+    put:
+      tags: [Admin]
+      summary: Actualizar categoría
+      description: '**Roles:** gerente. Campos parciales.'
+      security: [{ cookieSesion: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CategoriaInput' }
+      responses:
+        '200': { $ref: '#/components/responses/CategoriaAdmin' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+    delete:
+      tags: [Admin]
+      summary: Eliminar categoría vacía
+      description: '**Roles:** gerente. Con productos (aunque estén inactivos) responde 409 `CATEGORIA_CON_PRODUCTOS`.'
+      security: [{ cookieSesion: [] }]
+      responses:
+        '204': { description: Eliminada }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+
+  /admin/usuarios:
+    get:
+      tags: [Admin]
+      summary: Usuarios con filtros
+      description: '**Roles:** gerente.'
+      security: [{ cookieSesion: [] }]
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/LimitAdmin'
+        - { name: q, in: query, schema: { type: string }, description: Nombre, apellido o correo }
+        - {
+            name: rol,
+            in: query,
+            schema: { type: string, example: 'admin_ventas,admin_logistica' },
+          }
+        - { name: activo, in: query, schema: { type: boolean } }
+      responses:
+        '200':
+          description: Usuarios
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      items: { type: array, items: { $ref: '#/components/schemas/UsuarioAdmin' } }
+                      pagination: { $ref: '#/components/schemas/Pagination' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+    post:
+      tags: [Admin]
+      summary: Crear una cuenta con rol
+      description: '**Roles:** gerente.'
+      security: [{ cookieSesion: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [nombre, apellido, correo, password, rol]
+              properties:
+                nombre: { type: string }
+                apellido: { type: string }
+                correo: { type: string, format: email }
+                password: { type: string, minLength: 8, maxLength: 72 }
+                telefono: { type: string }
+                paisCodigo: { type: string, example: PE }
+                rol: { $ref: '#/components/schemas/Rol' }
+      responses:
+        '201': { $ref: '#/components/responses/UsuarioAdmin' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '409': { $ref: '#/components/responses/Error' }
+
+  /admin/usuarios/{id}:
+    patch:
+      tags: [Admin]
+      summary: Cambiar rol o activar/desactivar
+      description: '**Roles:** gerente. Nadie puede cambiar su propio rol ni desactivarse (422 `ACCION_SOBRE_SI_MISMO`).'
+      security: [{ cookieSesion: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: integer } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rol: { $ref: '#/components/schemas/Rol' }
+                activo: { type: boolean }
+      responses:
+        '200': { $ref: '#/components/responses/UsuarioAdmin' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '404': { $ref: '#/components/responses/Error' }
+        '422': { $ref: '#/components/responses/Error' }
+
+  /admin/buscar:
+    get:
+      tags: [Admin]
+      summary: Búsqueda rápida (Ctrl+K)
+      description: '**Roles:** todos los admin. Hasta 5 resultados por grupo; solo los grupos que el rol puede ver.'
+      security: [{ cookieSesion: [] }]
+      parameters:
+        - { name: q, in: query, required: true, schema: { type: string, minLength: 2 } }
+      responses:
+        '200':
+          description: Resultados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      productos:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id: { type: integer }
+                            sku: { type: string }
+                            nombre: { type: string }
+                            stock: { type: integer }
+                            activo: { type: boolean }
+                      pedidos:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            codigo: { type: string }
+                            estado: { type: string }
+                            destinatario: { type: string }
+                            totalPen: { type: number }
+                      usuarios:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id: { type: integer }
+                            nombre: { type: string }
+                            correo: { type: string }
+                            rol: { $ref: '#/components/schemas/Rol' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+
+components:
+  securitySchemes:
+    cookieSesion:
+      type: apiKey
+      in: cookie
+      name: kuski_token
+      description: JWT de sesión en cookie httpOnly (se fija con /auth/login o /auth/registro).
+
+  headers:
+    SetCookieSesion:
+      description: '`kuski_token=<JWT>; Max-Age=604800; Path=/; HttpOnly; SameSite=Lax` (+ `Secure` en producción)'
+      schema: { type: string }
+
+  parameters:
+    Page:
+      name: page
+      in: query
+      schema: { type: integer, minimum: 1, default: 1 }
+    Limit:
+      name: limit
+      in: query
+      schema: { type: integer, minimum: 1, maximum: 100, default: 12 }
+    LimitAdmin:
+      name: limit
+      in: query
+      schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+    Moneda:
+      name: moneda
+      in: query
+      description: Moneda de los precios de la respuesta (acepta minúsculas)
+      schema: { $ref: '#/components/schemas/Moneda' }
+
+  responses:
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    ValidationError:
+      description: '`VALIDATION_ERROR`: details indica cada campo inválido'
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example:
+            error:
+              code: VALIDATION_ERROR
+              message: 'correo: Correo inválido'
+              details: [{ path: correo, message: Correo inválido }]
+    NoAutenticado:
+      description: '`NO_AUTENTICADO`: falta la cookie de sesión o expiró'
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    RateLimited:
+      description: '`RATE_LIMITED`: 20 intentos cada 15 minutos por IP en login y registro'
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    StockInsuficiente:
+      description: '`STOCK_INSUFICIENTE`: details indica disponible y solicitado por producto'
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example:
+            error:
+              code: STOCK_INSUFICIENTE
+              message: 'Stock insuficiente: Poncho Chinchero de Alpaca'
+              details:
+                [
+                  {
+                    productoId: 26,
+                    nombre: Poncho Chinchero de Alpaca,
+                    disponible: 6,
+                    solicitado: 7,
+                  },
+                ]
+    ItemNoEncontrado:
+      description: '`ITEM_NO_ENCONTRADO`'
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Direcciones:
+      description: Direcciones del usuario
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items: { $ref: '#/components/schemas/Direccion' }
+    DireccionNoEncontrada:
+      description: '`DIRECCION_NO_ENCONTRADA`'
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Carrito:
+      description: Carrito actualizado
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data: { $ref: '#/components/schemas/Carrito' }
+
+    SinPermiso:
+      description: '`SIN_PERMISO`: el rol no tiene acceso a esta sección'
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    PedidoAdminDetalle:
+      description: Pedido con cliente y transiciones posibles
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                allOf:
+                  - $ref: '#/components/schemas/PedidoDetalle'
+                  - type: object
+                    properties:
+                      cliente:
+                        {
+                          type: object,
+                          properties:
+                            {
+                              id: { type: integer },
+                              nombre: { type: string },
+                              correo: { type: string },
+                              telefono: { type: [string, 'null'] },
+                            },
+                        }
+                      transicionesPermitidas: { type: array, items: { type: string } }
+    ProductosAdmin:
+      description: Productos paginados
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  items: { type: array, items: { $ref: '#/components/schemas/ProductoAdmin' } }
+                  pagination: { $ref: '#/components/schemas/Pagination' }
+    ProductoAdmin:
+      description: Producto
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data: { $ref: '#/components/schemas/ProductoAdmin' }
+    ImagenesAdmin:
+      description: Imágenes del producto
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data: { type: array, items: { $ref: '#/components/schemas/ImagenAdmin' } }
+    CategoriaAdmin:
+      description: Categoría
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data: { $ref: '#/components/schemas/CategoriaAdmin' }
+    UsuarioAdmin:
+      description: Usuario
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data: { $ref: '#/components/schemas/UsuarioAdmin' }
+
+  schemas:
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code: { type: string, example: NOT_FOUND }
+            message: { type: string }
+            details: {}
+
+    Pagination:
+      type: object
+      properties:
+        page: { type: integer, example: 1 }
+        limit: { type: integer, example: 12 }
+        total: { type: integer, example: 44 }
+        totalPages: { type: integer, example: 4 }
+
+    Moneda:
+      type: string
+      enum: [PEN, USD, EUR]
+      default: PEN
+
+    MetodoEnvio:
+      type: string
+      enum: [estandar, express]
+      default: estandar
+
+    Precio:
+      type: object
+      properties:
+        moneda: { $ref: '#/components/schemas/Moneda' }
+        simbolo: { type: string, example: € }
+        monto: { type: number, example: 8.64 }
+
+    ItemInput:
+      type: object
+      required: [productoId, cantidad]
+      properties:
+        productoId: { type: integer, example: 1 }
+        cantidad: { type: integer, minimum: 1, maximum: 99, example: 2 }
+
+    RegistroInput:
+      type: object
+      required: [nombre, apellido, correo, password]
+      properties:
+        nombre: { type: string, example: Anna }
+        apellido: { type: string, example: Becker }
+        correo: { type: string, format: email, example: anna@example.com }
+        password:
+          type: string
+          minLength: 8
+          maxLength: 72
+          description: Al menos una letra y un número
+          example: Kastanie2026
+        telefono: { type: string, example: '+49 30 1234 5678' }
+        paisCodigo: { type: string, default: PE, example: DE }
+        idiomaPreferido: { type: string, enum: [es, en, de], default: es }
+        monedaPreferida: { $ref: '#/components/schemas/Moneda' }
+
+    LoginInput:
+      type: object
+      required: [correo, password]
+      properties:
+        correo: { type: string, format: email, example: maria.quispe@example.com }
+        password: { type: string, example: KuskiCliente2026! }
+
+    Usuario:
+      type: object
+      properties:
+        id: { type: integer }
+        nombre: { type: string }
+        apellido: { type: string }
+        correo: { type: string }
+        telefono: { type: [string, 'null'] }
+        paisCodigo: { type: string, example: PE }
+        idiomaPreferido: { type: string, enum: [es, en, de] }
+        monedaPreferida: { $ref: '#/components/schemas/Moneda' }
+        rol:
+          type: string
+          enum: [cliente, admin_gerente, admin_ventas, admin_logistica]
+
+    UsuarioRespuesta:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            usuario: { $ref: '#/components/schemas/Usuario' }
+
+    Imagen:
+      type: object
+      properties:
+        url: { type: string, format: uri }
+        textoAlt: { type: string }
+        orden: { type: integer }
+        esPrincipal: { type: boolean }
+
+    ProductoTarjeta:
+      type: object
+      properties:
+        id: { type: integer, example: 1 }
+        sku: { type: string, example: CAF-001 }
+        nombre: { type: string, example: Café Orgánico Kuski 250 g }
+        slug: { type: string, example: cafe-organico-kuski-250g }
+        descripcion: { type: string }
+        precioBasePen: { type: number, example: 35 }
+        precio: { $ref: '#/components/schemas/Precio' }
+        stock: { type: integer, example: 42 }
+        disponible: { type: boolean }
+        pesoG: { type: integer, example: 250 }
+        destacado: { type: boolean }
+        calificacionPromedio: { type: [number, 'null'], example: 4.5 }
+        totalResenas: { type: integer }
+        categoria:
+          type: object
+          properties:
+            id: { type: integer }
+            nombre: { type: string }
+            slug: { type: string }
+        comunidad:
+          type: object
+          properties:
+            id: { type: integer }
+            nombre: { type: string }
+            provincia: { type: string }
+            region: { type: string }
+            altitudMsnm: { type: integer }
+        imagenes:
+          type: array
+          items: { $ref: '#/components/schemas/Imagen' }
+        certificaciones:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: integer }
+              nombre: { type: string }
+
+    ProductoDetalle:
+      allOf:
+        - $ref: '#/components/schemas/ProductoTarjeta'
+        - type: object
+          properties:
+            stockMinimo: { type: integer }
+            comunidad: { $ref: '#/components/schemas/Comunidad' }
+            certificaciones:
+              type: array
+              items: { $ref: '#/components/schemas/Certificacion' }
+            resenas:
+              type: object
+              properties:
+                promedio: { type: [number, 'null'] }
+                total: { type: integer }
+                distribucion:
+                  type: object
+                  description: Número de reseñas por calificación (claves 1 a 5)
+                  additionalProperties: { type: integer }
+                  example: { '5': 3, '4': 1, '3': 0, '2': 0, '1': 0 }
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id: { type: integer }
+                      calificacion: { type: integer, minimum: 1, maximum: 5 }
+                      comentario: { type: [string, 'null'] }
+                      autor: { type: string, example: Anna B. }
+                      paisCodigo: { type: [string, 'null'] }
+                      creadoEn: { type: string, format: date-time }
+
+    Categoria:
+      type: object
+      properties:
+        id: { type: integer }
+        nombre: { type: string, example: Café }
+        slug: { type: string, example: cafe }
+        descripcion: { type: string }
+        imagenUrl: { type: [string, 'null'] }
+        orden: { type: integer }
+        totalProductos: { type: integer, example: 11 }
+
+    Comunidad:
+      type: object
+      properties:
+        id: { type: integer }
+        nombre: { type: string, example: Comunidad Cafetalera de Quillabamba }
+        razonSocial: { type: string }
+        region: { type: string, example: Cusco }
+        provincia: { type: string, example: La Convención }
+        altitudMsnm: { type: integer, example: 1050 }
+        latitud: { type: number, example: -12.863 }
+        longitud: { type: number, example: -72.693 }
+        familiasBeneficiadas: { type: integer, example: 85 }
+        descripcion: { type: string }
+        imagenUrl: { type: [string, 'null'] }
+        totalProductos: { type: integer, description: Solo en GET /comunidades }
+
+    Certificacion:
+      type: object
+      properties:
+        id: { type: integer }
+        nombre: { type: string, example: Orgánico }
+        entidadEmisora: { type: string, example: SENASA / certificadora acreditada }
+
+    Trazabilidad:
+      type: object
+      properties:
+        comunidades: { type: integer, example: 8 }
+        familias: { type: integer, example: 450 }
+        productos: { type: integer, example: 44 }
+        paises: { type: integer, example: 31 }
+        altitudMinima: { type: integer, example: 1050 }
+        altitudMaxima: { type: integer, example: 3760 }
+
+    Carrito:
+      type: object
+      properties:
+        id: { type: [integer, 'null'], description: null en el carrito de invitado }
+        moneda: { $ref: '#/components/schemas/Moneda' }
+        simbolo: { type: string }
+        totalUnidades: { type: integer }
+        subtotalPen: { type: number }
+        subtotal: { type: number, description: En la moneda pedida }
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: [integer, 'null']
+                description: Id del ítem (para PATCH/DELETE); null en el carrito de invitado
+              productoId: { type: integer }
+              cantidad: { type: integer }
+              precioUnitarioPen: { type: number }
+              precioUnitario: { type: number }
+              subtotalPen: { type: number }
+              subtotal: { type: number }
+              aviso:
+                type: [string, 'null']
+                enum: [STOCK_INSUFICIENTE, NO_DISPONIBLE, null]
+                description: Pide ajustar el ítem antes del checkout
+              producto:
+                type: object
+                properties:
+                  id: { type: integer }
+                  nombre: { type: string }
+                  slug: { type: string }
+                  stock: { type: integer }
+                  pesoG: { type: integer }
+                  imagen:
+                    type: [object, 'null']
+                    properties:
+                      url: { type: string }
+                      textoAlt: { type: string }
+
+    OpcionEnvio:
+      type: object
+      properties:
+        tarifaEnvioId: { type: integer }
+        metodo: { $ref: '#/components/schemas/MetodoEnvio' }
+        transportista: { type: string, example: DHL Express }
+        diasMin: { type: integer, example: 4 }
+        diasMax: { type: integer, example: 7 }
+        costoPen: { type: number }
+        costo: { type: number }
+        igvPen: { type: number }
+        igv: { type: number }
+        totalPen: { type: number }
+        total: { type: number, description: Total de la compra con esta opción }
+
+    Montos:
+      type: object
+      description: Montos en PEN y en la moneda del pedido/cotización
+      properties:
+        subtotal: { type: number }
+        envio: { type: number }
+        igv: { type: number }
+        total: { type: number }
+        subtotalPen: { type: number }
+        envioPen: { type: number }
+        igvPen: { type: number }
+        totalPen: { type: number }
+
+    Cotizacion:
+      type: object
+      properties:
+        paisCodigo: { type: string, example: DE }
+        zona:
+          type: string
+          enum: [nacional, latam, norteamerica, europa, resto_mundo]
+        moneda: { $ref: '#/components/schemas/Moneda' }
+        simbolo: { type: string }
+        tipoCambio: { type: number, description: Soles por 1 unidad de la moneda, example: 4.05 }
+        pesoTotalG: { type: integer }
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              productoId: { type: integer }
+              nombre: { type: string }
+              slug: { type: string }
+              cantidad: { type: integer }
+              precioUnitarioPen: { type: number }
+              subtotalPen: { type: number }
+              precioUnitario: { type: number }
+              subtotal: { type: number }
+        igv:
+          type: object
+          properties:
+            aplica: { type: boolean }
+            tasa: { type: number, example: 0.18 }
+        opcionesEnvio:
+          type: array
+          items: { $ref: '#/components/schemas/OpcionEnvio' }
+        metodoEnvio: { $ref: '#/components/schemas/MetodoEnvio' }
+        resumen:
+          allOf:
+            - $ref: '#/components/schemas/Montos'
+          description: Montos con el método de envío elegido
+
+    Tarjeta:
+      type: object
+      required: [numero, titular, vencimiento, cvv]
+      properties:
+        numero:
+          {
+            type: string,
+            description: 13–19 dígitos (se admiten espacios). Termina en 0002 → rechazada.,
+          }
+        titular: { type: string }
+        vencimiento: { type: string, pattern: '^(0[1-9]|1[0-2])/\d{2}$', example: '12/29' }
+        cvv: { type: string, example: '123' }
+
+    Pago:
+      oneOf:
+        - type: object
+          required: [metodo, tarjeta]
+          properties:
+            metodo: { const: tarjeta }
+            tarjeta: { $ref: '#/components/schemas/Tarjeta' }
+        - type: object
+          required: [metodo, correoPaypal]
+          properties:
+            metodo: { const: paypal }
+            correoPaypal: { type: string, format: email }
+        - type: object
+          required: [metodo, telefono]
+          properties:
+            metodo: { type: string, enum: [yape, plin] }
+            telefono:
+              { type: string, description: Celular peruano de 9 dígitos, example: '987654321' }
+      discriminator:
+        propertyName: metodo
+
+    DireccionInput:
+      type: object
+      required: [nombreDestinatario, paisCodigo, ciudad, direccion]
+      properties:
+        nombreDestinatario: { type: string }
+        paisCodigo: { type: string, example: PE }
+        ciudad: { type: string }
+        direccion: { type: string }
+        codigoPostal: { type: string }
+        telefono: { type: string }
+
+    Direccion:
+      allOf:
+        - $ref: '#/components/schemas/DireccionInput'
+        - type: object
+          properties:
+            id: { type: integer }
+            esPrincipal: { type: boolean }
+
+    CrearPedidoInput:
+      type: object
+      required: [metodoEnvio, pago]
+      properties:
+        direccionId: { type: integer, description: Dirección guardada del usuario }
+        direccion: { $ref: '#/components/schemas/DireccionInput' }
+        guardarDireccion:
+          type: boolean
+          default: false
+          description: Con `direccion`, la guarda en la cuenta si el pedido se completa
+        metodoEnvio: { $ref: '#/components/schemas/MetodoEnvio' }
+        moneda: { $ref: '#/components/schemas/Moneda' }
+        pago: { $ref: '#/components/schemas/Pago' }
+
+    PasoTracking:
+      type: object
+      properties:
+        clave: { type: string, enum: [confirmado, preparando, en_transito, entregado] }
+        estado: { type: string }
+        completado: { type: boolean }
+        fecha: { type: [string, 'null'], format: date-time }
+
+    PedidoResumen:
+      type: object
+      properties:
+        codigo: { type: string, example: KD-000001 }
+        estado:
+          type: string
+          enum: [pendiente, pagado, preparando, en_transito, entregado, cancelado]
+        creadoEn: { type: string, format: date-time }
+        moneda: { $ref: '#/components/schemas/Moneda' }
+        totalMoneda: { type: number }
+        totalPen: { type: number }
+        paisCodigo: { type: string }
+        totalUnidades: { type: integer }
+        productos:
+          type: array
+          items: { type: string }
+        envio:
+          type: [object, 'null']
+          properties:
+            transportista: { type: string }
+            metodo: { type: string }
+            codigoSeguimiento: { type: string }
+            fechaEstimada: { type: string, format: date }
+        tracking:
+          type: object
+          description: Pasos del tracking sin fechas (el historial está en el detalle)
+          properties:
+            estadoActual: { type: string }
+            cancelado: { type: boolean }
+            pasos:
+              type: array
+              items: { $ref: '#/components/schemas/PasoTracking' }
+
+    PedidoDetalle:
+      type: object
+      properties:
+        codigo: { type: string, example: KD-000001 }
+        estado: { type: string }
+        creadoEn: { type: string, format: date-time }
+        moneda: { $ref: '#/components/schemas/Moneda' }
+        tipoCambio: { type: number, description: Congelado al momento de la compra }
+        montos: { $ref: '#/components/schemas/Montos' }
+        direccion: { $ref: '#/components/schemas/DireccionInput' }
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              productoId: { type: integer }
+              nombreProducto: { type: string }
+              slug: { type: [string, 'null'] }
+              imagen: { type: [object, 'null'] }
+              cantidad: { type: integer }
+              precioUnitarioPen: { type: number }
+              subtotalPen: { type: number }
+              precioUnitario:
+                type: number
+                description: En la moneda del pedido, con el tipo de cambio congelado
+              subtotal: { type: number, description: En la moneda del pedido }
+        pago:
+          type: object
+          properties:
+            metodo: { type: string, enum: [tarjeta, paypal, yape, plin] }
+            estado: { type: string, enum: [pendiente, aprobado, rechazado, reembolsado] }
+            pasarela: { type: string, example: simulada }
+            monto: { type: number }
+            moneda: { $ref: '#/components/schemas/Moneda' }
+            numeroOperacion: { type: string, example: SIM-439476538054 }
+            tarjetaUltimos4: { type: [string, 'null'], example: '1111' }
+            mensaje: { type: string }
+            codigoAprobacion:
+              type: [string, 'null']
+              description: Código de 6 dígitos de Yape/Plin (null con tarjeta y PayPal)
+        envio:
+          type: object
+          properties:
+            transportista: { type: string, example: Olva Courier }
+            metodo: { $ref: '#/components/schemas/MetodoEnvio' }
+            codigoSeguimiento: { type: string, example: OLV-90633691 }
+            pesoTotalG: { type: integer }
+            fechaEstimada: { type: string, format: date }
+            fechaEntrega: { type: [string, 'null'], format: date }
+        tracking:
+          type: object
+          properties:
+            estadoActual: { type: string }
+            cancelado: { type: boolean }
+            pasos:
+              type: array
+              items: { $ref: '#/components/schemas/PasoTracking' }
+            historial:
+              type: array
+              items:
+                type: object
+                properties:
+                  estado: { type: string }
+                  comentario: { type: [string, 'null'] }
+                  fecha: { type: string, format: date-time }
+
+    # ──────────────────────── Panel admin ───────────────────────
+    Rol:
+      type: string
+      enum: [cliente, admin_gerente, admin_ventas, admin_logistica]
+
+    Kpi:
+      type: object
+      properties:
+        valorPen: { type: number, description: 'En KPIs de dinero' }
+        valor: { type: integer, description: 'En KPIs de conteo' }
+        variacionPct:
+          type: [number, 'null']
+          description: Frente al mismo tramo del mes anterior (null sin base de comparación)
+        serie: { type: array, items: { type: number }, description: Últimos 30 días (sparkline) }
+
+    Dashboard:
+      type: object
+      properties:
+        kpis:
+          type: object
+          properties:
+            ingresosMes: { $ref: '#/components/schemas/Kpi' }
+            pedidosMes: { $ref: '#/components/schemas/Kpi' }
+            ticketPromedio: { $ref: '#/components/schemas/Kpi' }
+            stockBajo:
+              type: object
+              properties:
+                valor: { type: integer }
+                productos:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id: { type: integer }
+                      sku: { type: string }
+                      nombre: { type: string }
+                      stock: { type: integer }
+                      stockMinimo: { type: integer }
+                      categoria: { type: string }
+        serieMensual:
+          type: array
+          items:
+            type: object
+            properties:
+              mes: { type: string, example: '2026-09' }
+              ingresosPen: { type: number }
+              pedidos: { type: integer }
+        serieDiaria:
+          type: array
+          items:
+            type: object
+            properties:
+              dia: { type: string, format: date }
+              ingresosPen: { type: number }
+              pedidos: { type: integer }
+        pedidosPorEstado:
+          type: object
+          additionalProperties: { type: integer }
+          example:
+            { pendiente: 0, pagado: 3, preparando: 1, en_transito: 2, entregado: 10, cancelado: 1 }
+
+    Estadisticas:
+      type: object
+      properties:
+        totales:
+          type: object
+          properties:
+            totalPen: { type: number }
+            pedidos: { type: integer }
+            paises: { type: integer }
+            ticketPromedioPen: { type: number }
+        ventasPorPais:
+          type: array
+          items:
+            type: object
+            properties:
+              pais: { type: string, example: DE }
+              pedidos: { type: integer }
+              totalPen: { type: number }
+              participacionPct: { type: number }
+        topProductos:
+          type: array
+          items:
+            type: object
+            properties:
+              posicion: { type: integer }
+              productoId: { type: integer }
+              nombre: { type: string }
+              categoria: { type: string }
+              imagen: { type: [string, 'null'] }
+              unidades: { type: integer }
+              totalPen: { type: number }
+              participacionPct: { type: number }
+
+    PedidoAdmin:
+      type: object
+      properties:
+        codigo: { type: string, example: KD-000001 }
+        estado: { type: string }
+        creadoEn: { type: string, format: date-time }
+        moneda: { $ref: '#/components/schemas/Moneda' }
+        totalMoneda: { type: number }
+        totalPen: { type: number }
+        paisCodigo: { type: string }
+        ciudad: { type: string }
+        destinatario: { type: string }
+        unidades: { type: integer }
+        cliente:
+          type: object
+          properties:
+            id: { type: integer }
+            nombre: { type: string }
+            correo: { type: string }
+        pago:
+          type: [object, 'null']
+          properties:
+            metodo: { type: string }
+            estado: { type: string }
+            numeroOperacion: { type: string }
+        envio:
+          type: [object, 'null']
+          properties:
+            transportista: { type: string }
+            metodo: { $ref: '#/components/schemas/MetodoEnvio' }
+            codigoSeguimiento: { type: string }
+        transicionesPermitidas: { type: array, items: { type: string } }
+
+    ProductoInput:
+      type: object
+      properties:
+        sku: { type: string, example: CAF-050 }
+        nombre: { type: string }
+        slug: { type: string }
+        descripcion: { type: [string, 'null'] }
+        precioBasePen: { type: number, example: 89.9 }
+        stockMinimo: { type: integer, default: 5 }
+        pesoG: { type: integer }
+        destacado: { type: boolean, default: false }
+        activo: { type: boolean, default: true }
+        categoriaId: { type: integer }
+        comunidadId: { type: integer }
+        certificacionIds: { type: array, items: { type: integer } }
+
+    ImagenAdmin:
+      type: object
+      properties:
+        id: { type: integer }
+        url: { type: string }
+        textoAlt: { type: [string, 'null'] }
+        orden: { type: integer }
+        esPrincipal: { type: boolean }
+
+    ProductoAdmin:
+      type: object
+      properties:
+        id: { type: integer }
+        sku: { type: string }
+        nombre: { type: string }
+        slug: { type: string }
+        precioBasePen: { type: number }
+        stock: { type: integer }
+        stockMinimo: { type: integer }
+        stockBajo: { type: boolean }
+        pesoG: { type: integer }
+        destacado: { type: boolean }
+        activo: { type: boolean }
+        categoria: { type: object, properties: { id: { type: integer }, nombre: { type: string } } }
+        comunidad: { type: object, properties: { id: { type: integer }, nombre: { type: string } } }
+        imagen: { $ref: '#/components/schemas/Imagen' }
+        descripcion: { type: [string, 'null'], description: Solo en el detalle }
+        imagenes:
+          {
+            type: array,
+            items: { $ref: '#/components/schemas/ImagenAdmin' },
+            description: Solo en el detalle,
+          }
+        certificacionIds: { type: array, items: { type: integer }, description: Solo en el detalle }
+
+    Movimiento:
+      type: object
+      properties:
+        id: { type: integer }
+        tipo: { type: string, enum: [entrada, salida, ajuste] }
+        cantidad: { type: integer, description: Negativa en salidas y ajustes a la baja }
+        stockResultante: { type: integer }
+        motivo: { type: [string, 'null'] }
+        creadoEn: { type: string, format: date-time }
+        usuario:
+          {
+            type: [object, 'null'],
+            properties: { id: { type: integer }, nombre: { type: string } },
+          }
+        pedidoCodigo: { type: [string, 'null'] }
+
+    CategoriaInput:
+      type: object
+      properties:
+        nombre: { type: string }
+        slug: { type: string }
+        descripcion: { type: [string, 'null'] }
+        imagenUrl: { type: [string, 'null'], format: uri }
+        orden: { type: integer, default: 0 }
+
+    CategoriaAdmin:
+      allOf:
+        - $ref: '#/components/schemas/CategoriaInput'
+        - type: object
+          properties:
+            id: { type: integer }
+            totalProductos: { type: integer }
+            productosActivos: { type: integer }
+
+    UsuarioAdmin:
+      allOf:
+        - $ref: '#/components/schemas/Usuario'
+        - type: object
+          properties:
+            activo: { type: boolean }
+            totalPedidos: { type: integer }
+            creadoEn: { type: string, format: date-time }

@@ -8,13 +8,13 @@ Kuski Digital es la tienda e-commerce de **Kuski Agroindustria S.A.** (Cusco, Pe
 
 Es un proyecto universitario (Taller de Proyectos, Universidad Continental), pero **la página web debe ser real, funcional y de calidad profesional**. Lo que está fuera de la web se **simula**:
 
-| Real (se programa de verdad) | Simulado (mock con interfaz intercambiable) |
-|---|---|
-| Frontend completo (tienda + panel admin) | Pasarela de pago (Tarjeta, PayPal, Yape/Plin) |
-| API REST en Express | Cálculo de envío internacional (courier/DHL) |
-| Base de datos PostgreSQL en Supabase con datos semilla | Tipo de cambio (tabla fija PEN/USD/EUR) |
-| Autenticación con roles | Correos de confirmación (se loguean en consola) |
-| Carrito, pedidos, inventario, reportes | Tracking del pedido (cambio de estado manual desde admin) |
+| Real (se programa de verdad)                           | Simulado (mock con interfaz intercambiable)               |
+| ------------------------------------------------------ | --------------------------------------------------------- |
+| Frontend completo (tienda + panel admin)               | Pasarela de pago (Tarjeta, PayPal, Yape/Plin)             |
+| API REST en Express                                    | Cálculo de envío internacional (courier/DHL)              |
+| Base de datos PostgreSQL en Supabase con datos semilla | Tipo de cambio (tabla fija PEN/USD/EUR)                   |
+| Autenticación con roles                                | Correos de confirmación (se loguean en consola)           |
+| Carrito, pedidos, inventario, reportes                 | Tracking del pedido (cambio de estado manual desde admin) |
 
 Las simulaciones deben verse reales en la interfaz (estados de carga, aprobado/rechazado, número de operación). Viven en `backend/src/adapters/` detrás de una interfaz, para poder cambiarse por el proveedor real sin tocar la lógica de negocio.
 
@@ -151,10 +151,28 @@ Cuentan como historias de usuario de referencia: **María Quispe** (Cusco, móvi
 - Antes de cambios grandes: proponer un plan y esperar aprobación.
 - Al terminar cada fase: correr `npm run lint` y `npm test`, y actualizar el README.
 
+## Convenciones del backend (ya implementadas)
+
+- **Config de base de datos:** `backend/src/config/database.cjs` la comparten sequelize-cli (vía `backend/.sequelizerc`) y la instancia de la API (`src/config/database.js`, pool máx. 5). `.env` se carga con una ruta absoluta, así que los scripts funcionan desde cualquier directorio. La tabla de control de migraciones es `sequelize_meta`.
+- **Migraciones:** la baseline `migrations/20260929000000-baseline-esquema-kuski.cjs` ejecuta `database/01_esquema_kuski_db.sql`. No se edita: cada cambio del esquema va en una migración nueva.
+- **Seeders:** `seeders/*.cjs` (catálogo base → usuarios → productos). Los datos del catálogo viven en `database/seed-data/catalogo.cjs` (fuera de `seeders/` para que sequelize-cli no los ejecute). Las URLs de Unsplash están verificadas: si agregas otras, comprueba que respondan 200 y que la foto corresponda a la categoría.
+- **Modelos:** atributos en camelCase (`precioBasePen`, `categoriaId`), mapeados a snake_case con `underscored`. `Usuario` oculta `passwordHash` por defecto; para leerlo, usa `Usuario.scope('conPassword')`. `pedido_items.subtotal_pen` es una columna GENERATED: el modelo nunca la escribe. Los ENUM están en `src/models/enums.js`; reutilízalos en los esquemas Zod.
+- **Repositorios:** devuelven objetos planos (`get({ plain: true })`). Los servicios convierten NUMERIC (string en pg) a número en sus DTO.
+- **Validación:** `validate({ query, body, params })` deja los datos parseados en `req.validated` (en Express 5, `req.query` es de solo lectura).
+- **Errores:** lanza `AppError(status, code, message, details?)` desde los servicios; `middleware/error-handler.js` da el formato de salida.
+- **Transacciones:** los servicios usan `withTransaction(async (tx) => ...)` de `repositories/transaction.repository.js` y pasan `tx` (opaco) a cada función de repositorio, que lo recibe como último parámetro. Así los servicios nunca importan Sequelize.
+- **Adapters:** los servicios importan la instancia de `adapters/<tipo>/index.js`, nunca la clase Mock. Montos en PEN con `utils/money.js` (`redondear`, `convertirDesdePen`).
+- **Auth:** JWT en la cookie httpOnly `kuski_token`; `requireAuth`, `optionalAuth` y `requireRol(...roles)` en `middleware/auth.js` dejan `{ id, rol }` en `req.usuario`. `ROLES_ADMIN` está en `models/enums.js`.
+- **Documentación:** cada endpoint nuevo se documenta en `docs/openapi.yaml` (Swagger UI en `/api/v1/docs`); `tests/docs.test.js` comprueba que las rutas estén documentadas.
+- **Paginación:** `{ data: { items, pagination: { page, limit, total, totalPages } } }`.
+- **Pruebas:** las unitarias (proyecto `unit` de `vitest.config.js`) usan los mocks de TODOS los repositorios de `tests/setup/mock-repositories.js` (sin base de datos; `mockReset` entre pruebas). Cada repositorio o función nueva se agrega ahí. Para las sesiones, usa `tests/helpers/sesion.js` (`cookieDe`). Las de `tests/integration/` usan Supabase y se omiten si no hay `DATABASE_URL`.
+- **Detalle de Sequelize:** las consultas crudas a `information_schema.tables` devuelven un formato especial; usa `pg_catalog.pg_tables`.
+
 ## Comandos (tras la reestructuración)
 
 - `npm install` — instala ambos workspaces
 - Configurar `backend/.env` con `DATABASE_URL` de Supabase (ver README)
-- `npm run db:migrate` / `npm run db:seed`
+- `npm run db:migrate` / `npm run db:seed` / `npm run db:reset` (undo all + migrate + seed; recrea las tablas)
+- `npm run db:test` — conexión, conteo de tablas (19/19) y de productos
 - `npm run dev` — frontend (5173) + backend (3000) en paralelo
 - `npm test` / `npm run lint`

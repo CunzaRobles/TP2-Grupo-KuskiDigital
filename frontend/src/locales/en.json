@@ -1,0 +1,1004 @@
+{
+  "marca": {
+    "nombre": "Kuski",
+    "lema": "Andean biodiversity with a traceable origin"
+  },
+  "nav": {
+    "principal": "Main navigation",
+    "inicio": "Home",
+    "catalogo": "Shop",
+    "origen": "Origin",
+    "nosotros": "About us",
+    "abrirMenu": "Open menu",
+    "saltarContenido": "Skip to content",
+    "menu": "Menu",
+    "preferencias": "Language and currency"
+  },
+  "preferencias": {
+    "idioma": "Language",
+    "moneda": "Currency",
+    "idiomas": {
+      "es": "Español",
+      "en": "English",
+      "de": "Deutsch"
+    },
+    "monedas": {
+      "PEN": "Soles",
+      "USD": "Dollars",
+      "EUR": "Euros"
+    }
+  },
+  "carrito": {
+    "titulo": "Your cart",
+    "abrir_one": "Open cart, {{count}} item",
+    "abrir_other": "Open cart, {{count}} items",
+    "vacio": "Your cart is empty",
+    "agregado": "Added to cart",
+    "agregarProducto": "Add {{nombre}} to cart",
+    "sinMasStock": "Your cart already holds all the available stock",
+    "verCarrito": "View cart",
+    "vacioDescripcion": "Discover high-altitude coffee, superfoods and alpaca textiles from our communities.",
+    "explorar": "Explore the catalog",
+    "unidades_one": "{{count}} item",
+    "unidades_other": "{{count}} items",
+    "subtotal": "Subtotal",
+    "notaEnvio": "Shipping and VAT (IGV, only for deliveries within Peru) are calculated at checkout based on your country. You will see them before paying.",
+    "irCheckout": "Proceed to checkout",
+    "ajustaAvisos": "Adjust the flagged items to continue.",
+    "verResumen": "View cart summary",
+    "precioUnitario": "Unit price",
+    "aviso": {
+      "NO_DISPONIBLE": "No longer available: remove it to continue",
+      "STOCK_INSUFICIENTE_one": "Only {{count}} unit left",
+      "STOCK_INSUFICIENTE_other": "Only {{count}} units left"
+    },
+    "cantidadDe": "Quantity of {{nombre}}",
+    "quitar": "Remove {{nombre}} from cart",
+    "quitarCorto": "Remove",
+    "fusionado": "We added the items from your guest cart to your account",
+    "ajustado": "Some quantities were adjusted to the available stock.",
+    "error": "We couldn’t update your cart. Please try again.",
+    "pagina": {
+      "eyebrow": "Order summary"
+    },
+    "productos": "Items in your cart",
+    "seguirComprando": "Continue shopping",
+    "resumen": "Summary",
+    "subtotalProductos_one": "Subtotal ({{count}} item)",
+    "subtotalProductos_other": "Subtotal ({{count}} items)",
+    "envio": "Shipping",
+    "igv": "VAT (IGV 18%, Peru only)",
+    "enCheckout": "Calculated at checkout",
+    "totalProvisional": "Total before shipping",
+    "garantias": {
+      "envio": "We ship worldwide from Cusco",
+      "pasos": "Just 4 steps to confirm your order",
+      "pago": "100% secure payment: card, PayPal, Yape or Plin"
+    }
+  },
+  "ui": {
+    "cerrar": "Close",
+    "cargando": "Loading…",
+    "cantidad": "Quantity",
+    "disminuir": "Decrease quantity",
+    "aumentar": "Increase quantity",
+    "paso": "Step {{actual}} of {{total}}",
+    "completado": "completed",
+    "actual": "current step",
+    "mostrarPassword": "Show password",
+    "ocultarPassword": "Hide password",
+    "cancelar": "Cancel"
+  },
+  "checkout": {
+    "pasos": {
+      "envio": "Shipping",
+      "metodo": "Delivery",
+      "pago": "Payment",
+      "confirmar": "Review"
+    },
+    "eyebrow": "Secure checkout",
+    "titulo": "Checkout",
+    "volver": "Back",
+    "continuar": "Continue",
+    "vacio": {
+      "titulo": "Nothing to pay for yet",
+      "descripcion": "Your cart is empty. Add products from the catalog to continue."
+    },
+    "avisos": {
+      "titulo": "Some items need your attention",
+      "detalle": "An item’s stock changed or it’s no longer available. Adjust your cart before paying."
+    },
+    "envio": {
+      "titulo": "Where should we ship your order?",
+      "descripcion": "Choose the country to see the shipping cost and total instantly.",
+      "continuar": "Continue to shipping method",
+      "destinatario": "Recipient’s name",
+      "pais": "Country",
+      "paisAyuda": "Shipping and taxes depend on the country.",
+      "elegirPais": "Choose the destination country",
+      "direccion": "Address",
+      "ciudad": "City",
+      "codigoPostal": "Postal code (optional)",
+      "telefono": "Phone (optional)",
+      "telefonoAyuda": "Only used by the courier to arrange delivery.",
+      "guardar": "Save this address to my account",
+      "otra": "Ship to another address"
+    },
+    "metodo": {
+      "titulo": "Choose how you’d like to receive it",
+      "descripcion": "The price you see is what you’ll pay. Days are business days after dispatch.",
+      "estandar": "Standard",
+      "express": "Express",
+      "detalle": "{{transportista}} · {{min}}–{{max}} days",
+      "llegada": "Arrives between {{rango}}"
+    },
+    "pago": {
+      "titulo": "How would you like to pay?",
+      "descripcion": "Simulated payment for the demo: no real charge is made.",
+      "continuar": "Review order",
+      "elegir": "Payment method",
+      "soloPen": "Soles only",
+      "seguro": "Your data is encrypted in transit. We don’t store your card number.",
+      "metodos": {
+        "tarjeta": "Card",
+        "paypal": "PayPal",
+        "yape": "Yape",
+        "plin": "Plin"
+      },
+      "marcas": {
+        "visa": "Visa",
+        "mastercard": "Mastercard",
+        "amex": "American Express"
+      },
+      "tarjeta": {
+        "numero": "Card number",
+        "titular": "Cardholder",
+        "titularEjemplo": "Name Surname",
+        "vence": "Expires",
+        "vencimiento": "Expiry date",
+        "cvv": "CVV",
+        "marca": "{{marca}} card",
+        "prueba": "Demo: 4111 1111 1111 1111 is approved; a card ending in 0002 (e.g. 4000 0000 0000 0002) is declined. Use a future date and any CVV."
+      },
+      "paypal": {
+        "correo": "Your PayPal email",
+        "nota": "When you confirm, PayPal will approve the payment (simulated) and you’ll return to the store."
+      },
+      "celular": {
+        "label": "Mobile number registered in {{app}}",
+        "ayuda": "9 digits, without +51.",
+        "nota": "When you confirm, you’ll receive the payment request in {{app}} (simulated) and we’ll show you the approval code."
+      },
+      "yapeSoles": {
+        "titulo": "Want to pay with Yape or Plin?",
+        "detalle": "They only accept soles. You’re seeing prices in {{moneda}}; switch to soles and the total will be recalculated.",
+        "accion": "Pay in soles (PEN)"
+      },
+      "rechazado": {
+        "titulo": "The payment wasn’t approved",
+        "operacion": "Transaction {{numero}}",
+        "ayuda": "Try another card or choose a different payment method."
+      }
+    },
+    "confirmar": {
+      "titulo": "Review and confirm your order",
+      "descripcion": "This is the final total: it includes products, shipping and taxes.",
+      "editar": "Edit",
+      "envioA": "Ship to",
+      "metodo": "Shipping method",
+      "pago": "Payment",
+      "pagar": "Pay {{total}}",
+      "pagarSinTotal": "Pay",
+      "revisarCarrito": "Review my cart",
+      "simulado": "Simulated payment for academic purposes: no real charge will be made."
+    },
+    "procesando": {
+      "titulo": "Processing your payment",
+      "descripcion": "Please don’t close this window, it only takes a few seconds.",
+      "app": "Approving the payment in {{app}}… Please don’t close this window.",
+      "etapas": {
+        "conectando": "Connecting to the payment gateway",
+        "verificando": "Verifying your details",
+        "confirmando": "Confirming your order"
+      }
+    },
+    "resumen": {
+      "titulo": "Your order",
+      "subtotal": "Subtotal",
+      "envio": "Shipping",
+      "igv": "VAT (IGV 18%)",
+      "igvNoAplica": "VAT (IGV)",
+      "igvNoAplicaDetalle": "Not applicable outside Peru",
+      "total": "Total",
+      "totalPendiente": "Choose the country to see the total",
+      "eligePais": "Choose the country",
+      "tipoCambio": "Exchange rate: 1 {{moneda}} = S/ {{valor}} · equals {{totalPen}}",
+      "sinCostosOcultos": "No hidden costs: the total includes shipping and taxes. It’s exactly what you’ll pay."
+    }
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Cusco · 1,050 to 3,760 m a.s.l.",
+      "titulo": "The best of the Andes, with a name and a community",
+      "descripcion": "Organic coffee, superfoods, alpaca textiles and crafts, traceable to the community that makes them.",
+      "cta": "Explore the catalogue",
+      "imagenAlt": "Machu Picchu and the mountains of Cusco at sunset"
+    },
+    "categorias": {
+      "eyebrow": "Four lines, one origin",
+      "titulo": "Shop by category",
+      "descripcion": "From cloud-forest coffee farms to high-altitude looms: each line is born in a different community.",
+      "productos_one": "{{count}} product",
+      "productos_other": "{{count}} products"
+    },
+    "destacados": {
+      "eyebrow": "Seasonal selection",
+      "titulo": "Highlights from our communities",
+      "descripcion": "See where each product comes from and the altitude at which it is grown.",
+      "verTodo": "View the full catalogue"
+    },
+    "trazabilidad": {
+      "eyebrow": "Traceability",
+      "titulo": "Every product has a place on the map",
+      "descripcion": "We work directly with producer communities in Cusco. Tap a pin to meet the people who grow or weave what you buy.",
+      "cifras": {
+        "comunidades": "Producer communities",
+        "familias": "Families benefited",
+        "paises": "Destination countries",
+        "productos": "Traceable products"
+      },
+      "altitud": "Grown and woven between {{min}} and {{max}} metres above sea level.",
+      "mapa": "Map of the producer communities in Cusco",
+      "popup": {
+        "productos_one": "{{count}} product in the shop",
+        "productos_other": "{{count}} products in the shop",
+        "familias_one": "{{count}} family benefited",
+        "familias_other": "{{count}} families benefited",
+        "verProductos": "See their products"
+      }
+    }
+  },
+  "footer": {
+    "derechos": "© {{year}} Kuski Agroindustria S.A. · Cusco, Peru",
+    "descripcion": "The shop of Kuski Agroindustria S.A.: products of Andean biodiversity, traceable to the community that makes them.",
+    "ubicacion": "Cusco, Peru",
+    "redes": "Follow us",
+    "columnas": {
+      "tienda": "Shop",
+      "ayuda": "Help",
+      "empresa": "Kuski"
+    },
+    "enlaces": {
+      "catalogo": "Full catalogue",
+      "envios": "International shipping",
+      "seguimiento": "Order tracking",
+      "preguntas": "FAQ",
+      "contacto": "Contact",
+      "origen": "Origin and traceability",
+      "terminos": "Terms and conditions",
+      "privacidad": "Privacy"
+    },
+    "pagoSeguro": "100% secure payment",
+    "pagoSeguroDetalle": "SSL-encrypted connection",
+    "metodosPago": "Accepted payment methods"
+  },
+  "admin": {
+    "titulo": "Admin panel",
+    "menu": "Admin menu",
+    "abrirMenu": "Open menu",
+    "colapsarMenu": "Collapse sidebar",
+    "expandirMenu": "Expand sidebar",
+    "modoOscuro": "Dark mode",
+    "modoClaro": "Light mode",
+    "volverTienda": "Back to the store",
+    "secciones": {
+      "dashboard": "Dashboard",
+      "ventas": "Sales",
+      "pedidos": "Orders",
+      "inventario": "Inventory",
+      "productos": "Products",
+      "categorias": "Categories",
+      "usuarios": "Users",
+      "estadisticas": "Statistics"
+    },
+    "grupos": {
+      "general": "Overview",
+      "operacion": "Operations",
+      "catalogo": "Catalog",
+      "equipo": "Team"
+    },
+    "roles": {
+      "admin_gerente": "Management",
+      "admin_ventas": "Sales",
+      "admin_logistica": "Logistics",
+      "cliente": "Customer"
+    },
+    "metodosPago": {
+      "tarjeta": "Card",
+      "paypal": "PayPal",
+      "yape": "Yape",
+      "plin": "Plin"
+    },
+    "estadosPago": {
+      "pendiente": "pending",
+      "aprobado": "approved",
+      "rechazado": "declined",
+      "reembolsado": "refunded"
+    },
+    "sesion": {
+      "salir": "Sign out",
+      "cambiarCuenta": "Use another account"
+    },
+    "login": {
+      "eyebrow": "Kuski team",
+      "titulo": "Panel sign-in",
+      "descripcion": "Sign in with your management, sales or logistics account.",
+      "lema": "From the fields of Cusco to 31 countries, one order at a time.",
+      "punto1": "Live sales, revenue and markets",
+      "punto2": "Inventory with stock ledger and low-stock alerts",
+      "punto3": "Every order tracked until delivery",
+      "enviar": "Enter the panel",
+      "sinAcceso": "This account cannot access the panel",
+      "sinAccesoDetalle": "{{correo}} is a customer account. Sign in with a team account."
+    },
+    "sinPermiso": {
+      "titulo": "No access to this section",
+      "descripcion": "Your role does not include this section. Ask management if you need it.",
+      "cliente": "This is a customer account: the panel is only for the Kuski team.",
+      "volver": "Go to my home"
+    },
+    "buscar": {
+      "titulo": "Quick search",
+      "placeholder": "Search products, orders, users…",
+      "ayuda": "↑ ↓ to move · Enter to open · Esc to close",
+      "minimo": "Type at least 2 letters or pick a section.",
+      "sinResultados": "Nothing found for “{{q}}”.",
+      "irA": "Go to section",
+      "grupos": {
+        "secciones": "Sections",
+        "productos": "Products",
+        "pedidos": "Orders",
+        "usuarios": "Users"
+      }
+    },
+    "acciones": {
+      "editar": "Edit",
+      "eliminar": "Delete",
+      "guardar": "Save"
+    },
+    "filtros": {
+      "buscar": "Search",
+      "buscarPedido": "Code, customer or email",
+      "desde": "From",
+      "hasta": "To",
+      "pais": "Country",
+      "estado": "Status",
+      "metodoPago": "Payment method",
+      "todos": "All",
+      "todas": "All",
+      "limpiar": "Clear"
+    },
+    "tabla": {
+      "paginacion": "Table pagination",
+      "rango": "{{desde}}–{{hasta}} of {{total}}",
+      "pagina": "Page {{page}} of {{totalPages}}",
+      "sinResultados": "No results with these filters.",
+      "acciones": "Actions",
+      "pedido": "Order",
+      "fecha": "Date",
+      "cliente": "Customer",
+      "pais": "Country",
+      "pago": "Payment",
+      "estado": "Status",
+      "totalPen": "Total (S/)",
+      "destino": "Destination",
+      "envio": "Shipping",
+      "unidades": "Units",
+      "producto": "Product",
+      "categoria": "Category",
+      "comunidad": "Community",
+      "precio": "Price",
+      "stock": "Stock",
+      "stockMinimo": "Minimum",
+      "usuario": "User"
+    },
+    "dashboardPage": {
+      "saludo": "Hello, {{nombre}}",
+      "descripcion": "How the month is going at Kuski. Amounts in soles; the month is compared with the same stretch of last month.",
+      "ingresosMes": "Revenue this month",
+      "pedidosMes": "Orders this month",
+      "ticketPromedio": "Average order value",
+      "stockBajo": "Low-stock products",
+      "stockBajoDetalle": "At or below their minimum stock",
+      "stockBajoOk": "The whole catalog is above its minimum stock.",
+      "sinComparacion": "No data for last month",
+      "vsMesAnterior": "vs. last month",
+      "ingresosMensuales": "Monthly revenue",
+      "ingresosMensualesDetalle": "Last 12 months, in soles (excluding pending and cancelled orders).",
+      "graficoAria": "Column chart of revenue per month over the last 12 months",
+      "verTabla": "View as table",
+      "verGrafico": "View chart",
+      "mes": "Month",
+      "ingresos": "Revenue",
+      "pedidosN_one": "{{count}} order",
+      "pedidosN_other": "{{count}} orders",
+      "colaPedidos": "Orders to handle",
+      "verPedidosEstado_one": "View {{count}} {{estado}} order",
+      "verPedidosEstado_other": "View {{count}} {{estado}} orders",
+      "reponer": "To restock",
+      "verInventario": "View inventory"
+    },
+    "ventasPage": {
+      "descripcion": "Every sale, with filters. The summary adds up the whole filter, not just this page.",
+      "resumen": {
+        "ingresos": "Revenue",
+        "ventas": "Confirmed sales",
+        "ticket": "Average order value",
+        "pedidos": "Orders (all statuses)"
+      }
+    },
+    "pedidosPage": {
+      "descripcion": "Prepare, ship and deliver. Each status change updates the tracking the customer sees.",
+      "gestionar": "Manage",
+      "detalleDescripcion": "Order details, history and status changes.",
+      "historial": "History",
+      "montos": {
+        "subtotal": "Subtotal",
+        "envio": "Shipping",
+        "igv": "IGV (18%)"
+      },
+      "comentario": "Comment (optional)",
+      "comentarioAyuda": "Saved in the order history.",
+      "marcarComo": "Mark as {{estado}}",
+      "cancelar": "Cancel order",
+      "confirmarCancelacion": "Cancel order {{codigo}}?",
+      "confirmarCancelacionDetalle": "Units go back to inventory (a ledger entry), the payment is marked as refunded and the customer is notified. This cannot be undone.",
+      "siCancelar": "Yes, cancel order",
+      "estadoActualizado": "Order updated: {{estado}}",
+      "estadoFinal": "This order is in a final status and cannot change anymore."
+    },
+    "productosPage": {
+      "descripcion": "The full catalog, including deactivated products.",
+      "nuevo": "New product",
+      "buscar": "Name or SKU",
+      "activos": "Active",
+      "inactivos": "Deactivated",
+      "activo": "Active",
+      "inactivo": "Deactivated",
+      "destacado": "Featured",
+      "desactivar": "Deactivate",
+      "confirmarDesactivar": "Deactivate “{{nombre}}”?",
+      "confirmarDesactivarDetalle": "It disappears from the store but keeps its order and ledger history. You can reactivate it by editing it.",
+      "desactivado": "“{{nombre}}” deactivated"
+    },
+    "productoForm": {
+      "tituloNuevo": "New product",
+      "eyebrowNuevo": "Catalog",
+      "datos": "Product details",
+      "nombre": "Name",
+      "sku": "SKU",
+      "skuAyuda": "Unique internal code, e.g. CAF-012",
+      "slug": "URL (slug)",
+      "slugAyuda": "Optional: generated from the name.",
+      "descripcion": "Description",
+      "origen": "Origin and certifications",
+      "elegir": "Choose an option",
+      "certificaciones": "Certifications",
+      "fotos": "Photos",
+      "fotosDetalle": "Uploaded as soon as you pick them. The main photo is the one shown in the catalog.",
+      "fotosNuevo": "Uploaded when the product is created. The first one becomes the main photo.",
+      "precioStock": "Price and stock",
+      "precio": "Base price (S/)",
+      "peso": "Weight (g)",
+      "pesoAyuda": "Used to calculate shipping.",
+      "stockMinimo": "Minimum stock",
+      "stockInicial": "Initial stock",
+      "stockInicialAyuda": "Recorded in the ledger as “Initial stock”.",
+      "ajustarStock": "Adjust in inventory",
+      "visibilidad": "Visibility",
+      "activo": "Visible in the store",
+      "activoAyuda": "If deactivated, it stops selling.",
+      "destacado": "Featured on the home page",
+      "destacadoAyuda": "Shown in the home page “Featured” block.",
+      "crear": "Create product",
+      "guardar": "Save changes",
+      "creado": "Product “{{nombre}}” created",
+      "guardado": "Changes saved",
+      "verEnTienda": "View in store"
+    },
+    "imagenes": {
+      "elegir": "Choose photos or drop them here",
+      "ayuda": "JPG, PNG or WebP · max. 5 MB each · {{total}} of {{max}}",
+      "principal": "Main",
+      "hacerPrincipal": "Use as main photo",
+      "eliminar": "Delete photo",
+      "eliminada": "Photo deleted",
+      "quitar": "Remove {{nombre}}",
+      "tipoInvalido": "{{nombre}}: only JPG, PNG or WebP are accepted",
+      "muyGrande": "{{nombre}} is larger than 5 MB",
+      "limite": "A product can have at most {{max}} photos",
+      "fallos_one": "{{count}} photo could not be uploaded: try again from the product page",
+      "fallos_other": "{{count}} photos could not be uploaded: try again from the product page",
+      "estados": {
+        "pendiente": "To upload",
+        "subiendo": "Uploading…",
+        "error": "Error"
+      }
+    },
+    "inventarioPage": {
+      "descripcion": "Click the stock to correct it (saved as an adjustment in the ledger). Receipts and issues are recorded with a reason.",
+      "stockN_one": "{{count}} unit",
+      "stockN_other": "{{count}} units",
+      "soloStockBajo": "Low stock only",
+      "editarStock": "Edit stock of {{nombre}} (currently {{stock}})",
+      "stockContado": "Counted stock of {{nombre}}",
+      "stockInvalido": "Stock must be a whole number, 0 or more",
+      "stockActualizado": "{{nombre}}: stock at {{stock}}",
+      "movimiento": "Movement",
+      "kardex": "Ledger",
+      "registrarMovimiento": "Record movement",
+      "stockActual_one": "current stock: {{count}} unit",
+      "stockActual_other": "current stock: {{count}} units",
+      "tipo": "Movement type",
+      "tipos": {
+        "entrada": "Receipt",
+        "salida": "Issue",
+        "ajuste": "Adjustment"
+      },
+      "cantidad": "Quantity",
+      "resultante_one": "{{count}} unit will remain",
+      "resultante_other": "{{count}} units will remain",
+      "sinStock": "Not enough stock for that issue",
+      "motivo": "Reason (optional)",
+      "motivoEjemplo": {
+        "entrada": "E.g. October harvest",
+        "salida": "E.g. shrinkage, trade-fair sample"
+      },
+      "kardexDe": "Ledger · {{nombre}}",
+      "kardexDetalle": "Every movement: sales, cancellations, receipts, issues and adjustments.",
+      "sinMovimientos": "This product has no movements yet.",
+      "quedan_one": "{{count}} left",
+      "quedan_other": "{{count}} left"
+    },
+    "categoriasPage": {
+      "descripcion": "Categories organise the catalog and the home page grid.",
+      "nueva": "New category",
+      "editar": "Edit category",
+      "formDescripcion": "Order sets the position in the store (lowest first).",
+      "nombre": "Name",
+      "orden": "Order",
+      "imagen": "Image (URL)",
+      "imagenAyuda": "Photo for the home page grid (https://…)",
+      "productosN_one": "{{count}} ({{activos}} active)",
+      "productosN_other": "{{count}} ({{activos}} active)",
+      "conProductos": "It has products: move them to another category before deleting it",
+      "nota": "Only categories without products (not even deactivated ones) can be deleted.",
+      "guardada": "Category “{{nombre}}” saved",
+      "eliminada": "Category “{{nombre}}” deleted",
+      "confirmarEliminar": "Delete “{{nombre}}”?",
+      "confirmarEliminarDetalle": "The category disappears from the store. This cannot be undone."
+    },
+    "usuariosPage": {
+      "descripcion": "Customers and team. Change roles or deactivate accounts; changes apply immediately.",
+      "nuevo": "New account",
+      "nuevoDescripcion": "Create an account for a team member. Share the initial password through a secure channel.",
+      "buscar": "Name or email",
+      "rol": "Role",
+      "rolDe": "Role of {{nombre}}",
+      "equipo": "Team only",
+      "alta": "Joined",
+      "activos": "Active",
+      "inactivos": "Deactivated",
+      "activo": "Active",
+      "inactivo": "Deactivated",
+      "activar": "Activate",
+      "desactivar": "Deactivate",
+      "tu": "you",
+      "passwordInicial": "Initial password",
+      "passwordAyuda": "At least 8 characters, with letters and numbers.",
+      "crear": "Create account",
+      "creado": "Account {{correo}} created",
+      "rolCambiado": "{{nombre}} is now {{rol}}",
+      "activado": "{{nombre}}'s account activated",
+      "desactivado": "{{nombre}}'s account deactivated"
+    },
+    "estadisticasPage": {
+      "titulo": "Market statistics",
+      "descripcion": "Where our products sell and which ones lead. Confirmed orders, in soles.",
+      "totales": {
+        "ingresos": "Total revenue",
+        "pedidos": "Confirmed orders",
+        "paises": "Destination countries",
+        "ticket": "Average order value"
+      },
+      "porPais": "Sales by country",
+      "porPaisDetalle": "Revenue by destination country and its share.",
+      "top": "Top 10 products",
+      "topDetalle": "By revenue, with units sold.",
+      "unidades_one": "{{count}} unit",
+      "unidades_other": "{{count}} units",
+      "sinVentas": "No confirmed sales yet",
+      "sinVentasDetalle": "Once the first paid orders come in, you will see the leading markets and products here."
+    },
+    "validacion": {
+      "numero": "Enter a number",
+      "entero": "Must be a whole number",
+      "minimo": "The value is too low",
+      "maximo": "The value is too high",
+      "sku": "3 to 30 letters, numbers or hyphens",
+      "slug": "Lowercase letters, numbers and hyphens only",
+      "nombre": "Enter a longer name",
+      "precio": "Price must be greater than 0",
+      "decimales": "Use at most 2 decimals",
+      "categoria": "Choose a category",
+      "comunidad": "Choose a community",
+      "url": "Enter a URL starting with https://"
+    },
+    "errores": {
+      "SIN_PERMISO": "Your role does not allow this action.",
+      "STOCK_INSUFICIENTE": "Not enough stock for that issue.",
+      "SIN_CAMBIOS": "The stock entered is the same as the current one.",
+      "TRANSICION_INVALIDA": "The order changed status while you were viewing it. Reload and try again.",
+      "SKU_EN_USO": "A product with that SKU already exists.",
+      "SLUG_EN_USO": "Another item already uses that URL (slug).",
+      "CATEGORIA_NO_EXISTE": "The selected category no longer exists.",
+      "COMUNIDAD_NO_EXISTE": "The selected community no longer exists.",
+      "CERTIFICACION_NO_EXISTE": "A selected certification no longer exists.",
+      "CATEGORIA_DUPLICADA": "A category with that name already exists.",
+      "CATEGORIA_CON_PRODUCTOS": "The category has products: move them before deleting it.",
+      "ACCION_SOBRE_SI_MISMO": "You cannot change your own role or deactivate your account.",
+      "TIPO_ARCHIVO_INVALIDO": "The file is not a valid JPG, PNG or WebP image.",
+      "ARCHIVO_DEMASIADO_GRANDE": "The image exceeds the 5 MB limit.",
+      "LIMITE_IMAGENES": "The product already has the maximum number of photos.",
+      "STORAGE_NO_CONFIGURADO": "Image storage is not configured on the server.",
+      "PRODUCTO_NO_ENCONTRADO": "We could not find that product.",
+      "PEDIDO_NO_ENCONTRADO": "We could not find that order.",
+      "CORREO_EN_USO": "An account with that email already exists."
+    }
+  },
+  "noEncontrado": {
+    "titulo": "This path leads to no community",
+    "descripcion": "The page you are looking for does not exist or has moved.",
+    "volver": "Back to home",
+    "eyebrow": "Error 404",
+    "catalogo": "Explore the catalog",
+    "sugerencias": "Or visit one of our categories"
+  },
+  "producto": {
+    "agotado": "Sold out",
+    "altitud": "{{valor}} m a.s.l.",
+    "calificacion": "{{valor}} out of 5 stars",
+    "migas": "Breadcrumb",
+    "galeria": {
+      "ampliar": "Enlarge image",
+      "zoom": "Zoom",
+      "posicion": "Image {{n}} of {{total}}",
+      "miniaturas": "Product images",
+      "ver": "View image {{n}} of {{total}}",
+      "anterior": "Previous image",
+      "siguiente": "Next image"
+    },
+    "stock": {
+      "disponible": "In stock, ready to ship",
+      "pocas_one": "Only {{count}} unit left!",
+      "pocas_other": "Only {{count}} units left",
+      "enCarrito_one": "You already have {{count}} in your cart",
+      "enCarrito_other": "You already have {{count}} in your cart"
+    },
+    "agregar": "Add to cart",
+    "comprarAhora": "Buy now",
+    "envio": "Worldwide shipping from Cusco: standard in 12–18 days or express in 4–7 days.",
+    "sinCostosOcultos": "No hidden costs: you will see shipping, VAT and the exchange rate before paying.",
+    "resenas": {
+      "total_one": "{{count}} review",
+      "total_other": "{{count}} reviews",
+      "sinResenas": "No reviews yet",
+      "vacio": "This product has no reviews yet",
+      "vacioDetalle": "Reviews are written by customers who have received their order.",
+      "basadoEn_one": "Based on {{count}} review",
+      "basadoEn_other": "Based on {{count}} reviews",
+      "distribucion": "Rating distribution",
+      "barra_one": "{{estrellas}} stars: {{count}} review",
+      "barra_other": "{{estrellas}} stars: {{count}} reviews"
+    },
+    "ficha": {
+      "titulo": "Product details",
+      "sku": "SKU",
+      "peso": "Net weight",
+      "categoria": "Category",
+      "certificaciones": "Certifications",
+      "emitidaPor": "Issued by {{entidad}}"
+    },
+    "origen": {
+      "eyebrow": "Producer community",
+      "ubicacion": "Location",
+      "altitud": "Altitude",
+      "familias": "Families supported",
+      "razonSocial": "Legal name",
+      "verProductos": "See all products from this community",
+      "mapa": "Map showing the location of {{comunidad}}"
+    },
+    "tabs": {
+      "descripcion": "Description",
+      "origen": "Origin",
+      "resenas": "Reviews ({{count}})"
+    },
+    "trayecto": {
+      "eyebrow": "From origin to your door",
+      "titulo": "This product’s journey",
+      "paso": "Step {{n}}",
+      "pasos": {
+        "cosecha": "Harvest",
+        "proceso": "Craft",
+        "envio": "Shipping"
+      },
+      "envio": "Packed in Cusco with recyclable materials and shipped worldwide: within Peru in 1–5 days, international standard in 12–18 days or express in 4–7 days.",
+      "cafe": {
+        "cosecha": "Ripe cherries hand-picked one by one in the coffee farms of {{comunidad}} at {{altitud}}.",
+        "proceso": "Pulped, fermented and sun-dried on raised beds; roasted at origin in small batches."
+      },
+      "superalimentos": {
+        "cosecha": "Grains and roots harvested on family plots of {{comunidad}} at {{altitud}}.",
+        "proceso": "Threshed, washed to remove saponin and naturally dried; hand-sorted before packing."
+      },
+      "textiles": {
+        "cosecha": "Responsible shearing of free-roaming alpacas raised by {{comunidad}} at {{altitud}}.",
+        "proceso": "Hand-spun fiber, dyed with natural dyes such as cochineal and chilca, and woven on the loom."
+      },
+      "artesania": {
+        "cosecha": "Clay and local materials gathered by the workshops of {{comunidad}} at {{altitud}}.",
+        "proceso": "Hand-shaped and hand-painted, slowly dried and fired in an artisan kiln."
+      },
+      "general": {
+        "cosecha": "Raw materials sourced by {{comunidad}} at {{altitud}}.",
+        "proceso": "Handcrafted by the community using traditional techniques."
+      }
+    },
+    "relacionados": {
+      "eyebrow": "Keep exploring",
+      "titulo": "You may also like"
+    },
+    "noEncontrado": {
+      "titulo": "This product is no longer in the store",
+      "descripcion": "Its season may have ended, or the link may be mistyped.",
+      "accion": "Browse the catalog"
+    }
+  },
+  "catalogo": {
+    "categorias": {
+      "cafe": {
+        "nombre": "Coffee",
+        "descripcion": "High-altitude coffee from the valleys of Cusco, roasted at origin."
+      },
+      "superalimentos": {
+        "nombre": "Superfoods",
+        "descripcion": "Quinoa, kiwicha, cañihua and maca from the Sacred Valley."
+      },
+      "textiles": {
+        "nombre": "Textiles",
+        "descripcion": "Hand-woven garments and accessories in alpaca fibre."
+      },
+      "artesania": {
+        "nombre": "Crafts",
+        "descripcion": "Ceramics and carvings from Andean community workshops."
+      }
+    },
+    "eyebrow": "Catalog",
+    "titulo": "The full catalog",
+    "descripcion": "Products of Andean biodiversity, each one traceable to the community that makes it.",
+    "descripcionComunidad": "Products from this community in {{provincia}}, {{region}}.",
+    "buscar": "Search products",
+    "buscarPlaceholder": "Coffee, quinoa, alpaca…",
+    "filtros": "Filters",
+    "filtrosDescripcion": "Results update instantly.",
+    "filtrosActivos": "Active filters",
+    "quitarFiltro": "Remove filter {{nombre}}",
+    "limpiar": "Clear filters",
+    "mostrando": "Showing {{desde}}–{{hasta}} of {{total}} products",
+    "resultados_one": "{{count}} product",
+    "resultados_other": "{{count}} products",
+    "verResultados_one": "Show {{count}} product",
+    "verResultados_other": "Show {{count}} products",
+    "filtro": {
+      "categoria": "Category",
+      "precio": "Price ({{moneda}})",
+      "comunidad": "Community",
+      "certificacion": "Certification",
+      "minimo": "Min",
+      "maximo": "Max",
+      "aplicarPrecio": "Apply range in {{moneda}}",
+      "desde": "From {{monto}}",
+      "hasta": "Up to {{monto}}"
+    },
+    "orden": {
+      "label": "Sort by",
+      "destacados": "Featured",
+      "precio_asc": "Price: low to high",
+      "precio_desc": "Price: high to low",
+      "nombre": "Name (A–Z)",
+      "recientes": "New arrivals",
+      "valoracion": "Top rated"
+    },
+    "vacio": {
+      "titulo": "No products match these filters",
+      "descripcion": "Try another combination or remove a filter: our communities have much more to offer."
+    },
+    "paginacion": {
+      "label": "Catalog pagination",
+      "anterior": "Previous",
+      "siguiente": "Next",
+      "pagina": "Page {{page}}"
+    }
+  },
+  "estado": {
+    "error": "We could not load this section.",
+    "reintentar": "Try again"
+  },
+  "certificaciones": {
+    "organico": "Organic",
+    "comercio-justo": "Fair trade",
+    "hecho-a-mano": "Handmade",
+    "libre-de-gluten": "Gluten-free"
+  },
+  "validacion": {
+    "requerido": "This field is required",
+    "largo": "The text is too long",
+    "correoRequerido": "Enter your email",
+    "correo": "Enter a valid email, e.g. name@email.com",
+    "passwordRequerida": "Enter your password",
+    "passwordMin": "The password must be at least 8 characters",
+    "passwordMax": "The password can be at most 72 characters",
+    "passwordLetra": "The password must include at least one letter",
+    "passwordNumero": "The password must include at least one number",
+    "passwordNoCoincide": "The passwords don’t match",
+    "pais": "Choose a country",
+    "nombre": "Enter the recipient’s name",
+    "ciudad": "Enter the city",
+    "direccion": "Enter the full address (street and number)",
+    "tarjetaNumero": "Check the card number",
+    "titular": "Enter the name as it appears on the card",
+    "vencimiento": "Use an MM/YY date that hasn’t passed",
+    "cvv": "Check the security code (3 digits, 4 for American Express)",
+    "celular": "Enter a 9-digit Peruvian mobile number starting with 9"
+  },
+  "errores": {
+    "generico": "Something went wrong. Please try again.",
+    "red": "We couldn’t reach the store. Check your connection and try again.",
+    "servidor": "We had a problem on our server. Please try again in a few minutes.",
+    "CREDENCIALES_INVALIDAS": "Incorrect email or password",
+    "CORREO_EN_USO": "An account with this email already exists. Please sign in.",
+    "RATE_LIMITED": "Too many attempts. Please wait a few minutes and try again.",
+    "CUENTA_INACTIVA": "This account is deactivated",
+    "NO_AUTENTICADO": "Your session expired. Please sign in again.",
+    "PAGO_RECHAZADO": "Your bank declined the card (insufficient funds). You were not charged.",
+    "STOCK_INSUFICIENTE": "An item sold out while you were shopping. Please review your cart.",
+    "PRODUCTO_NO_ENCONTRADO": "An item is no longer available. Please review your cart.",
+    "CARRITO_VACIO": "Your cart is empty",
+    "METODO_PAGO_NO_DISPONIBLE": "Yape and Plin are only available for payments in soles",
+    "ENVIO_NO_DISPONIBLE": "That shipping method isn’t available for your country",
+    "DIRECCION_NO_ENCONTRADA": "That address is no longer in your account",
+    "LIMITE_DIRECCIONES": "You can save up to 10 addresses",
+    "VALIDATION_ERROR": "Please check the highlighted fields"
+  },
+  "auth": {
+    "lema": "Your account connects you with the communities that make what you buy.",
+    "ventajas": {
+      "trazabilidad": "Order history with the origin of every product",
+      "seguimiento": "Step-by-step shipment tracking",
+      "pago": "Saved addresses for a faster checkout"
+    },
+    "login": {
+      "eyebrow": "Welcome back",
+      "titulo": "Sign in",
+      "descripcion": "Sign in to see your orders and check out faster.",
+      "descripcionCheckout": "Sign in to complete your purchase. Your cart is saved to your account.",
+      "ayudaCredenciales": "Check that your email is spelled correctly and Caps Lock is off.",
+      "enviar": "Sign in",
+      "sinCuenta": "Don’t have an account yet?",
+      "crearCuenta": "Create an account"
+    },
+    "registro": {
+      "eyebrow": "Join Kuski",
+      "titulo": "Create account",
+      "descripcion": "We only ask for what we need to ship your orders.",
+      "enviar": "Create account",
+      "conCuenta": "Already have an account?",
+      "iniciarSesion": "Sign in"
+    },
+    "campos": {
+      "nombre": "First name",
+      "apellido": "Last name",
+      "correo": "Email",
+      "password": "Password",
+      "confirmacion": "Repeat password",
+      "pais": "Country"
+    },
+    "requisitos": {
+      "titulo": "Password requirements",
+      "largo": "At least 8 characters",
+      "letra": "At least one letter",
+      "numero": "At least one number",
+      "cumplido": "(met)"
+    }
+  },
+  "cuenta": {
+    "abrir": "My account ({{nombre}})",
+    "eyebrow": "My account",
+    "saludo": "Hello, {{nombre}}",
+    "salir": "Sign out",
+    "sesionCerrada": "You signed out",
+    "nav": {
+      "label": "Account sections",
+      "pedidos": "My orders",
+      "direcciones": "My addresses"
+    },
+    "pedidos": {
+      "verDetalle": "View details",
+      "verDetalleDe": "View details of order {{codigo}}",
+      "vacio": "You have no orders yet",
+      "vacioDetalle": "When you shop, you’ll see each order and its tracking here.",
+      "pagina": "Page {{page}} of {{total}}"
+    },
+    "direcciones": {
+      "principal": "Default",
+      "nueva": "Add address",
+      "nuevaDescripcion": "You’ll use it for your next deliveries.",
+      "guardar": "Save address",
+      "guardada": "Address saved",
+      "eliminar": "Delete",
+      "eliminarDe": "Delete address {{direccion}}",
+      "eliminarTitulo": "Delete this address?",
+      "eliminada": "Address deleted",
+      "marcarPrincipal": "Set as default",
+      "vacio": "You have no saved addresses",
+      "vacioDetalle": "Save an address to complete checkout in fewer steps."
+    }
+  },
+  "pedidos": {
+    "estados": {
+      "pendiente": "Pending",
+      "pagado": "Confirmed",
+      "preparando": "Preparing",
+      "en_transito": "In transit",
+      "entregado": "Delivered",
+      "cancelado": "Cancelled"
+    },
+    "cancelado": "This order was cancelled",
+    "tracking": {
+      "titulo": "Order tracking",
+      "confirmado": "Confirmed",
+      "preparando": "Preparing",
+      "en_transito": "In transit",
+      "entregado": "Delivered",
+      "completado": "completed",
+      "pendiente": "pending"
+    },
+    "verMisPedidos": "View my orders",
+    "noEncontrado": {
+      "titulo": "We couldn’t find that order",
+      "descripcion": "Check the code or look it up in your order history."
+    },
+    "confirmacion": {
+      "eyebrow": "Order confirmed",
+      "titulo": "Thank you, {{nombre}}! Your order is confirmed",
+      "correo": "We sent the confirmation to {{correo}}."
+    },
+    "detalle": {
+      "eyebrow": "Order details",
+      "pedido": "Order {{codigo}}",
+      "codigo": "Order number",
+      "copiar": "Copy order number",
+      "copiado": "Order number copied",
+      "llegada": "Estimated arrival: {{fecha}}",
+      "productos": "Products",
+      "totalPagado": "Total paid",
+      "tipoCambio": "Exchange rate applied: 1 {{moneda}} = S/ {{valor}}",
+      "pago": "Payment",
+      "codigoAprobacion": "Approval code:",
+      "operacion": "Transaction {{numero}}",
+      "envio": "Shipping",
+      "seguimiento": "Tracking number:",
+      "direccion": "Delivery address"
+    }
+  }
+}
