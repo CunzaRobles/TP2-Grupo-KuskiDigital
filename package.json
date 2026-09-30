@@ -1,0 +1,22 @@
+{
+  "name": "kuski-digital",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Tienda e-commerce de Kuski Agroindustria S.A. (monorepo frontend + backend)",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "concurrently -n frontend,backend -c magenta,cyan \"npm run dev -w frontend\" \"npm run dev -w backend\"",
+    "build": "npm run build -w frontend",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5"
+  }
+}
