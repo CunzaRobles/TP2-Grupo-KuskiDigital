@@ -19,10 +19,10 @@ app.get('/api/productos', (req, res) => {
 app.post('/api/pedidos', (req, res) => {
   const pedido = req.body;
   res.status(201).json({
-    mensaje: 'Pedido registrado con éxito en PachaMarket',
+    mensaje: 'Pedido registrado con éxito en Kuski Digital',
     idSimulado: Math.floor(Math.random() * 1000) + 1,
     detalle: pedido
   });
 });
 
-app.listen(3000, () => console.log('Servidor Mock activo en http://localhost:3000'));
+export default app;
