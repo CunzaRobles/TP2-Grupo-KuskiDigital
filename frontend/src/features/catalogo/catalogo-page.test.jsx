@@ -41,7 +41,7 @@ describe('CatalogoPage', () => {
   it('lee los filtros de la URL y los envía a la API en la moneda elegida', async () => {
     window.localStorage.setItem('kuski.moneda', 'USD');
     const fetchMock = api();
-    renderRuta('/catalogo?categoria=cafe&comunidad=1&orden=precio_asc&page=2');
+    await renderRuta('/catalogo?categoria=cafe&comunidad=1&orden=precio_asc&page=2');
 
     // Con dos filtros combinados el título es el genérico
     expect(
@@ -67,7 +67,7 @@ describe('CatalogoPage', () => {
   it('sincroniza los filtros con la URL y vuelve a la página 1', async () => {
     const user = userEvent.setup();
     const fetchMock = api();
-    const { router } = renderRuta('/catalogo?page=2');
+    const { router } = await renderRuta('/catalogo?page=2');
 
     const barra = screen.getByRole('complementary', { name: 'Filtros' });
     await user.click(await within(barra).findByRole('checkbox', { name: /Textiles/ }));
@@ -98,7 +98,7 @@ describe('CatalogoPage', () => {
   it('ordena y busca desde la barra de herramientas', async () => {
     const user = userEvent.setup();
     api();
-    const { router } = renderRuta('/catalogo');
+    const { router } = await renderRuta('/catalogo');
 
     await user.type(screen.getByRole('searchbox', { name: 'Buscar productos' }), 'alpaca{Enter}');
     expect(router.state.location.search).toBe('?q=alpaca');
@@ -110,12 +110,12 @@ describe('CatalogoPage', () => {
   it('muestra skeletons mientras carga y un estado vacío con salida', async () => {
     const user = userEvent.setup();
     api(() => new Promise(() => {}));
-    const { unmount } = renderRuta('/catalogo');
+    const { unmount } = await renderRuta('/catalogo');
     expect(screen.getByRole('list', { busy: true })).toBeInTheDocument();
     unmount();
 
     api(() => pagina([], 0));
-    const { router } = renderRuta('/catalogo?categoria=cafe&q=nada');
+    const { router } = await renderRuta('/catalogo?categoria=cafe&q=nada');
     expect(
       await screen.findByRole('heading', { name: 'No encontramos productos con estos filtros' }),
     ).toBeInTheDocument();
@@ -126,7 +126,7 @@ describe('CatalogoPage', () => {
   it('en móvil abre los filtros en un drawer', async () => {
     const user = userEvent.setup();
     api();
-    renderRuta('/catalogo?categoria=cafe');
+    await renderRuta('/catalogo?categoria=cafe');
 
     await user.click(screen.getByRole('button', { name: /^Filtros/ }));
     const drawer = await screen.findByRole('dialog', { name: 'Filtros' });
@@ -138,7 +138,7 @@ describe('CatalogoPage', () => {
 
 it('toma el nombre de la categoría como título si es el único filtro', async () => {
   api();
-  renderRuta('/catalogo?categoria=cafe');
+  await renderRuta('/catalogo?categoria=cafe');
   expect(await screen.findByRole('heading', { level: 1, name: 'Café' })).toBeInTheDocument();
   expect(screen.getByText(/Cafés de altura/)).toBeInTheDocument();
 });

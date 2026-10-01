@@ -234,7 +234,7 @@ export function CatalogoPage() {
             >
               {isPending
                 ? Array.from({ length: 6 }, (_, i) => (
-                    <li key={i}>
+                    <li key={`skeleton-${i}`}>
                       <ProductCardSkeleton />
                     </li>
                   ))

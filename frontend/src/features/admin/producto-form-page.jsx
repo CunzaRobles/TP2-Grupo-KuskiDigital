@@ -144,7 +144,7 @@ function Formulario({ producto }) {
     <form
       noValidate
       onSubmit={alEnviar}
-      className="grid gap-6 xl:grid-cols-[1fr_22rem] xl:items-start"
+      className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_22rem] xl:items-start"
     >
       <div className="grid gap-6">
         {guardar.isError && <Alert variante="error" titulo={mensajeError(t, guardar.error)} />}

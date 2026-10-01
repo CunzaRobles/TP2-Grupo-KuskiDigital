@@ -78,7 +78,7 @@ describe('ProductoPage', () => {
   it('muestra la ficha: migas, precio en la moneda elegida, certificaciones, stock y relacionados', async () => {
     window.localStorage.setItem('kuski.moneda', 'EUR');
     api();
-    renderRuta('/producto/cafe-geisha');
+    await renderRuta('/producto/cafe-geisha');
 
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Café Geisha de Quillabamba' }),
@@ -107,7 +107,7 @@ describe('ProductoPage', () => {
   it('cambia de foto con las miniaturas', async () => {
     const user = userEvent.setup();
     api();
-    renderRuta('/producto/cafe-geisha');
+    await renderRuta('/producto/cafe-geisha');
 
     const segunda = await screen.findByRole('button', { name: 'Ver imagen 2 de 2' });
     await user.click(segunda);
@@ -118,7 +118,7 @@ describe('ProductoPage', () => {
   it('muestra las pestañas Origen y Reseñas', async () => {
     const user = userEvent.setup();
     api();
-    renderRuta('/producto/cafe-geisha');
+    await renderRuta('/producto/cafe-geisha');
 
     await user.click(await screen.findByRole('tab', { name: 'Origen' }));
     const origen = screen.getByRole('tabpanel');
@@ -139,7 +139,7 @@ describe('ProductoPage', () => {
   it('agrega la cantidad elegida al carrito y abre el drawer', async () => {
     const user = userEvent.setup();
     const fetchMock = api();
-    renderRuta('/producto/cafe-geisha');
+    await renderRuta('/producto/cafe-geisha');
 
     await user.click(await screen.findByRole('button', { name: 'Aumentar cantidad' }));
     await user.click(screen.getByRole('button', { name: 'Agregar al carrito' }));
@@ -164,7 +164,7 @@ describe('ProductoPage', () => {
 
   it('no permite comprar un producto agotado', async () => {
     api(detalle({ stock: 0, disponible: false }));
-    renderRuta('/producto/cafe-geisha');
+    await renderRuta('/producto/cafe-geisha');
 
     expect(await screen.findByRole('button', { name: 'Agregar al carrito' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Comprar ahora' })).toBeDisabled();
@@ -177,7 +177,7 @@ describe('ProductoPage', () => {
         error: { code: 'PRODUCTO_NO_ENCONTRADO', message: 'El producto no existe' },
       }),
     });
-    renderRuta('/producto/no-existe');
+    await renderRuta('/producto/no-existe');
 
     expect(
       await screen.findByRole('heading', {

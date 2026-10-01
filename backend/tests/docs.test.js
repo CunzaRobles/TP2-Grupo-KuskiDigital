@@ -10,6 +10,7 @@ const RUTAS = {
   '/auth/login': ['post'],
   '/auth/logout': ['post'],
   '/auth/me': ['get'],
+  '/auth/sesion': ['get'],
   '/productos': ['get'],
   '/productos/destacados': ['get'],
   '/productos/{slug}': ['get'],

@@ -12,7 +12,7 @@ const cuenta = (rol, extra = {}) => ({
   ...extra,
 });
 
-const sesion = (rol) => ({ 'GET /auth/me': { usuario: cuenta(rol) } });
+const sesion = (rol) => ({ 'GET /auth/sesion': { usuario: cuenta(rol) } });
 
 const dashboard = {
   kpis: {
@@ -67,7 +67,7 @@ describe('Panel admin · acceso por rol', () => {
     const user = userEvent.setup();
     let conectado = false;
     stubApi({
-      'GET /auth/me': () =>
+      'GET /auth/sesion': () =>
         conectado
           ? { usuario: cuenta('admin_logistica') }
           : json(401, { error: { code: 'NO_AUTENTICADO', message: '' } }),
@@ -77,7 +77,7 @@ describe('Panel admin · acceso por rol', () => {
       },
       'GET /admin/inventario': pagina([productoInventario]),
     });
-    const { router } = renderRuta('/admin/inventario');
+    const { router } = await renderRuta('/admin/inventario');
 
     await user.type(await screen.findByLabelText('Correo electrónico'), 'logistica@kuski.pe');
     await user.type(screen.getByLabelText('Contraseña'), 'Kuski2026');
@@ -91,7 +91,7 @@ describe('Panel admin · acceso por rol', () => {
 
   it('una cuenta de cliente no entra: ve un aviso claro', async () => {
     stubApi(sesion('cliente'));
-    renderRuta('/admin/dashboard');
+    await renderRuta('/admin/dashboard');
     expect(
       await screen.findByText(/Tu cuenta es de cliente/, {}, { timeout: 4000 }),
     ).toBeInTheDocument();
@@ -102,7 +102,7 @@ describe('Panel admin · acceso por rol', () => {
     const user = userEvent.setup();
     let conectado = false;
     stubApi({
-      'GET /auth/me': () =>
+      'GET /auth/sesion': () =>
         conectado
           ? { usuario: cuenta('cliente') }
           : json(401, { error: { code: 'NO_AUTENTICADO', message: '' } }),
@@ -111,7 +111,7 @@ describe('Panel admin · acceso por rol', () => {
         return { usuario: cuenta('cliente') };
       },
     });
-    renderRuta('/admin/login');
+    await renderRuta('/admin/login');
 
     await user.type(await screen.findByLabelText('Correo electrónico'), 'maria@example.com');
     await user.type(screen.getByLabelText('Contraseña'), 'Cliente2026');
@@ -122,7 +122,7 @@ describe('Panel admin · acceso por rol', () => {
 
   it('/admin lleva a la primera sección del rol (logística no tiene dashboard)', async () => {
     stubApi({ ...sesion('admin_logistica'), 'GET /admin/pedidos': pagina([]) });
-    const { router } = renderRuta('/admin');
+    const { router } = await renderRuta('/admin');
     expect(await screen.findByRole('heading', { level: 1, name: 'Pedidos' })).toBeInTheDocument();
     expect(router.state.location.pathname).toBe('/admin/pedidos');
   });
@@ -158,7 +158,7 @@ describe('Panel admin · acceso por rol', () => {
       'GET /admin/dashboard': dashboard,
       'GET /admin/pedidos': pagina([]),
     });
-    renderRuta('/admin');
+    await renderRuta('/admin');
     const menu = await screen.findByRole('navigation', { name: 'Menú del panel' });
     for (const nombre of visibles)
       expect(within(menu).getByRole('link', { name: nombre })).toBeInTheDocument();
@@ -168,7 +168,7 @@ describe('Panel admin · acceso por rol', () => {
 
   it('una sección sin permiso muestra el aviso 403 dentro del panel (ruta protegida)', async () => {
     const fetchMock = stubApi(sesion('admin_ventas'));
-    renderRuta('/admin/usuarios');
+    await renderRuta('/admin/usuarios');
     expect(
       await screen.findByRole('heading', { name: 'Sin acceso a esta sección' }),
     ).toBeInTheDocument();
@@ -179,7 +179,7 @@ describe('Panel admin · acceso por rol', () => {
 describe('Dashboard', () => {
   it('muestra los KPIs con su variación y el stock bajo', async () => {
     stubApi({ ...sesion('admin_gerente'), 'GET /admin/dashboard': dashboard });
-    renderRuta('/admin/dashboard');
+    await renderRuta('/admin/dashboard');
 
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Hola, Rosa' }),
@@ -197,7 +197,7 @@ describe('Dashboard', () => {
   it('el gráfico mensual también se puede leer como tabla', async () => {
     const user = userEvent.setup();
     stubApi({ ...sesion('admin_gerente'), 'GET /admin/dashboard': dashboard });
-    renderRuta('/admin/dashboard');
+    await renderRuta('/admin/dashboard');
 
     await user.click(await screen.findByRole('button', { name: 'Ver como tabla' }));
     const tabla = screen.getByRole('table', { name: 'Ingresos mensuales' });
@@ -216,7 +216,7 @@ describe('Inventario', () => {
         movimiento: { id: 1 },
       }),
     });
-    renderRuta('/admin/inventario');
+    await renderRuta('/admin/inventario');
 
     await user.click(
       await screen.findByRole('button', { name: 'Editar stock de Café Orgánico Kuski (ahora 10)' }),
@@ -241,7 +241,7 @@ describe('Inventario', () => {
       ...sesion('admin_gerente'),
       'GET /admin/inventario': pagina([productoInventario]),
     });
-    renderRuta('/admin/inventario');
+    await renderRuta('/admin/inventario');
 
     await user.click(await screen.findByRole('button', { name: /Editar stock de Café/ }));
     await user.type(screen.getByLabelText(/Stock contado/), '{Escape}');
@@ -296,7 +296,7 @@ describe('Pedidos', () => {
         transicionesPermitidas: ['en_transito', 'cancelado'],
       }),
     });
-    renderRuta('/admin/pedidos?codigo=KD-000007');
+    await renderRuta('/admin/pedidos?codigo=KD-000007');
 
     await user.type(await screen.findByLabelText('Comentario (opcional)'), 'Empacado');
     await user.click(screen.getByRole('button', { name: 'Marcar como Preparando' }));
@@ -316,7 +316,7 @@ describe('Pedidos', () => {
       'GET /admin/pedidos': pagina([]),
       'GET /admin/pedidos/KD-000007': detalle,
     });
-    renderRuta('/admin/pedidos?codigo=KD-000007');
+    await renderRuta('/admin/pedidos?codigo=KD-000007');
 
     expect(await screen.findByText('maria@example.com')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /Marcar como/ })).not.toBeInTheDocument();
@@ -328,7 +328,7 @@ describe('Búsqueda rápida (Ctrl+K)', () => {
   it('se abre con Ctrl+K y solo ofrece las secciones del rol', async () => {
     const user = userEvent.setup();
     stubApi({ ...sesion('admin_logistica'), 'GET /admin/pedidos': pagina([]) });
-    const { router } = renderRuta('/admin/pedidos');
+    const { router } = await renderRuta('/admin/pedidos');
     await screen.findByRole('heading', { level: 1, name: 'Pedidos' });
 
     await user.keyboard('{Control>}k{/Control}');
@@ -353,7 +353,7 @@ describe('Formulario de producto', () => {
       'GET /comunidades': [],
       'GET /certificaciones': [],
     });
-    renderRuta('/admin/productos/nuevo');
+    await renderRuta('/admin/productos/nuevo');
 
     await user.click(await screen.findByRole('button', { name: 'Crear producto' }));
 
@@ -372,7 +372,7 @@ describe('Formulario de producto', () => {
       'GET /comunidades': [],
       'GET /certificaciones': [],
     });
-    renderRuta('/admin/productos/nuevo');
+    await renderRuta('/admin/productos/nuevo');
 
     const input = await screen.findByLabelText(/Elige fotos/);
     await user.upload(input, [

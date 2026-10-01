@@ -12,6 +12,7 @@ import { useSesion } from '@/features/auth/api';
 import { SectionError } from '@/features/home/section-heading';
 import { usePedido } from '@/features/cuenta/api';
 import { formatDate, formatNumber } from '@/lib/format';
+import { miniatura } from '@/lib/imagen';
 import { EASE_ANDINO } from '@/lib/motion';
 import { banderaPais, nombrePais } from '@/lib/paises';
 import { EstadoPedido, Tracking } from './tracking';
@@ -214,7 +215,7 @@ export function ConfirmacionPage() {
                 <span className="relative aspect-square w-16 shrink-0 overflow-hidden rounded-lg bg-muted">
                   {item.imagen ? (
                     <img
-                      src={item.imagen.url}
+                      {...miniatura(item.imagen.url)}
                       alt=""
                       loading="lazy"
                       className="size-full object-cover"

@@ -1,3 +1,4 @@
+import { ShieldCheck } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router';
 import { Alert } from '@/components/ui/alert';
@@ -66,6 +67,17 @@ export function LoginPage() {
           {t('auth.login.crearCuenta')}
         </Link>
       </p>
+
+      {/* Entrada al panel para gerencia, ventas y logística (login propio en /admin/login) */}
+      <div className="grid gap-3 border-t pt-6 text-center">
+        <p className="text-sm text-muted-foreground">{t('auth.login.equipo')}</p>
+        <Button asChild variant="secondary">
+          <Link to="/admin/login">
+            <ShieldCheck aria-hidden="true" />
+            {t('auth.login.accesoPanel')}
+          </Link>
+        </Button>
+      </div>
     </AuthLayout>
   );
 }

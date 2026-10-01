@@ -26,6 +26,8 @@ export function AuthLayout({ eyebrow, titulo, descripcion, children }) {
           src={FOTO}
           alt=""
           className="absolute inset-0 -z-20 size-full object-cover opacity-80"
+          // lazy: en móvil el panel está oculto (hidden lg:flex) y la foto no se descarga
+          loading="lazy"
           decoding="async"
         />
         <div

@@ -20,6 +20,13 @@ const entrada = {
   }),
 };
 
+// El título es el elemento LCP del home: solo se desliza, sin partir de opacidad 0 (el
+// navegador no cuenta un elemento invisible como pintado y el LCP se retrasaría).
+const entradaTitulo = {
+  oculto: { y: 24 },
+  visible: { y: 0, transition: { duration: 0.4, ease: EASE_ANDINO, delay: 0.1 } },
+};
+
 // Hero a pantalla completa (queda debajo del header transparente) con parallax leve y un solo CTA.
 export function Hero() {
   const { t } = useTranslation();
@@ -76,10 +83,9 @@ export function Hero() {
         <motion.h1
           id="hero-titulo"
           className="max-w-4xl text-display"
-          variants={entrada}
+          variants={entradaTitulo}
           initial="oculto"
           animate="visible"
-          custom={1}
         >
           {t('home.hero.titulo')}
         </motion.h1>

@@ -260,7 +260,9 @@ export function AdminLayout() {
             {tema === 'dark' ? <Sun aria-hidden="true" /> : <Moon aria-hidden="true" />}
           </Button>
         </header>
-        <main className="grid flex-1 content-start gap-6 p-4 sm:p-6 lg:p-8">
+        {/* grid-cols-1 (minmax(0,1fr)): las tablas anchas hacen scroll dentro de su caja en
+            lugar de ensanchar la página en móvil */}
+        <main className="grid flex-1 grid-cols-1 content-start gap-6 p-4 sm:p-6 lg:p-8">
           <Outlet />
         </main>
       </div>

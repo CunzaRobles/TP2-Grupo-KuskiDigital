@@ -16,11 +16,11 @@ import { destinoSeguro } from './schemas';
 beforeAll(stubNavegador);
 afterEach(() => vi.unstubAllGlobals());
 
-// /auth/me responde 401 hasta que el login (o el registro) crea la sesión.
+// /auth/sesion responde 401 hasta que el login (o el registro) crea la sesión.
 const apiConLogin = (rutas = {}) => {
   let usuario = null;
   const fetchMock = stubApi({
-    'GET /auth/me': () =>
+    'GET /auth/sesion': () =>
       usuario ? { usuario } : json(401, { error: { code: 'NO_AUTENTICADO', message: 'x' } }),
     'POST /auth/login': (_url, { correo, password }) => {
       if (password !== 'KuskiCliente2026!') {
@@ -39,10 +39,25 @@ const apiConLogin = (rutas = {}) => {
 };
 
 describe('login', () => {
+  it('ofrece al equipo el acceso al panel de administración', async () => {
+    const user = userEvent.setup();
+    apiConLogin();
+    const { router } = await renderRuta('/login');
+
+    await user.click(
+      await screen.findByRole('link', { name: 'Acceso al panel de administración' }),
+    );
+
+    await waitFor(() => expect(router.state.location.pathname).toBe('/admin/login'));
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Acceso al panel' }),
+    ).toBeInTheDocument();
+  });
+
   it('valida con Zod antes de llamar a la API y enfoca el primer error', async () => {
     const user = userEvent.setup();
     const fetchMock = apiConLogin();
-    renderRuta('/login');
+    await renderRuta('/login');
 
     await user.type(await screen.findByLabelText('Correo electrónico'), 'maria@');
     await user.click(screen.getByRole('button', { name: 'Iniciar sesión' }));
@@ -56,7 +71,7 @@ describe('login', () => {
   it('muestra el error de credenciales y, al corregir, vuelve a la página pedida', async () => {
     const user = userEvent.setup();
     const fetchMock = apiConLogin();
-    const { router } = renderRuta('/login?redirect=%2Fcuenta');
+    const { router } = await renderRuta('/login?redirect=%2Fcuenta');
 
     await user.type(
       await screen.findByLabelText('Correo electrónico'),
@@ -86,7 +101,7 @@ describe('login', () => {
     const fetchMock = apiConLogin({
       'POST /carrito/fusionar': { carrito: carritoApi([]), ajustes: [] },
     });
-    renderRuta('/login');
+    await renderRuta('/login');
 
     await user.type(await screen.findByLabelText('Correo electrónico'), USUARIO.correo);
     await user.type(screen.getByLabelText('Contraseña'), 'KuskiCliente2026!');
@@ -103,7 +118,7 @@ describe('registro', () => {
   it('muestra los requisitos de la contraseña y valida la confirmación', async () => {
     const user = userEvent.setup();
     apiConLogin();
-    renderRuta('/registro');
+    await renderRuta('/registro');
 
     const password = await screen.findByLabelText('Contraseña');
     await user.type(password, 'kuski');
@@ -123,7 +138,7 @@ describe('registro', () => {
         error: { code: 'CORREO_EN_USO', message: 'Ya existe una cuenta con ese correo' },
       }),
     });
-    renderRuta('/registro');
+    await renderRuta('/registro');
 
     await user.type(await screen.findByLabelText('Nombre'), 'Anna');
     await user.type(screen.getByLabelText('Apellido'), 'Becker');
@@ -149,7 +164,7 @@ describe('registro', () => {
 describe('rutas protegidas', () => {
   it('sin sesión, el checkout lleva al login y conserva el destino', async () => {
     apiConLogin();
-    const { router } = renderRuta('/checkout');
+    const { router } = await renderRuta('/checkout');
 
     expect(
       await screen.findByText(
@@ -169,7 +184,7 @@ describe('rutas protegidas', () => {
 
 it('la 404 ofrece volver al catálogo y a las categorías', async () => {
   stubApi();
-  renderRuta('/no-existe');
+  await renderRuta('/no-existe');
   expect(
     await screen.findByRole('heading', {
       level: 1,

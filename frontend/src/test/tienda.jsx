@@ -1,6 +1,6 @@
-import { render } from '@testing-library/react';
+import { act, render, waitFor } from '@testing-library/react';
 import { createMemoryRouter, RouterProvider } from 'react-router';
-import { vi } from 'vitest';
+import { expect, vi } from 'vitest';
 import { Providers } from '@/app/providers';
 import { routes } from '@/app/router';
 
@@ -18,7 +18,7 @@ const leerCuerpo = (body) => (typeof body === 'string' ? JSON.parse(body) : body
 /**
  * Simula fetch. `rutas` asocia "MÉTODO /ruta" (sin /api/v1 ni query) con la respuesta:
  * un valor (se envuelve en { data }) o una función (url, cuerpo) → valor | Response.
- * Las rutas no declaradas responden { data: null } (p. ej. /auth/me → invitado).
+ * Las rutas no declaradas responden { data: null } (p. ej. /auth/sesion → invitado).
  */
 export function stubApi(rutas = {}) {
   const fetchMock = vi.fn(async (url, init = {}) => {
@@ -44,16 +44,17 @@ export const llamadas = (fetchMock, ruta) =>
     }))
     .filter(({ url, metodo }) => `${metodo} ${url.pathname.replace('/api/v1', '')}` === ruta);
 
-export function renderRuta(ruta) {
+// Las páginas se cargan en diferido (lazy): espera a que el router tenga la ruta inicial lista.
+export async function renderRuta(ruta) {
   const router = createMemoryRouter(routes, { initialEntries: [ruta] });
-  return {
-    router,
-    ...render(
-      <Providers>
-        <RouterProvider router={router} />
-      </Providers>,
-    ),
-  };
+  const resultado = render(
+    <Providers>
+      <RouterProvider router={router} />
+    </Providers>,
+  );
+  await waitFor(() => expect(router.state.initialized).toBe(true));
+  await act(async () => {});
+  return { router, ...resultado };
 }
 
 // jsdom no implementa matchMedia (Motion) ni scrollTo/scrollIntoView (router, pestañas).

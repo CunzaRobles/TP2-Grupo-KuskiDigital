@@ -34,3 +34,8 @@ export const me = async (req, res) => {
   const usuario = await authService.perfil(req.usuario.id);
   res.json({ data: { usuario } });
 };
+
+export const sesion = async (req, res) => {
+  const usuario = await authService.sesionActual(req.usuario?.id);
+  res.json({ data: { usuario } });
+};

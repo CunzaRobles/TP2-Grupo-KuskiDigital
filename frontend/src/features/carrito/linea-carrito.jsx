@@ -7,6 +7,7 @@ import { QuantitySelector } from '@/components/ui/quantity-selector';
 import { Skeleton } from '@/components/ui/skeleton';
 import { transicion } from '@/lib/motion';
 import { cn } from '@/lib/utils';
+import { miniatura } from '@/lib/imagen';
 import { useCarrito } from './carrito-context';
 import { MAX_POR_PRODUCTO } from './carrito-storage';
 
@@ -51,7 +52,7 @@ export function LineaCarrito({ linea, moneda, variante = 'drawer', onNavegar }) 
       >
         {linea.imagen ? (
           <img
-            src={linea.imagen.url}
+            {...miniatura(linea.imagen.url, 128)}
             alt=""
             loading="lazy"
             decoding="async"

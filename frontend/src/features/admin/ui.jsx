@@ -32,7 +32,11 @@ export function Tabla({
   className,
 }) {
   return (
-    <div className={cn('overflow-x-auto rounded-xl border bg-card shadow-soft', className)}>
+    // relative: los textos sr-only (absolutos) de celdas fuera de vista quedan recortados por el
+    // scroll de la tabla y no ensanchan la página
+    <div
+      className={cn('relative overflow-x-auto rounded-xl border bg-card shadow-soft', className)}
+    >
       <table className="w-full min-w-[40rem] border-collapse text-sm">
         <caption className="sr-only">{caption}</caption>
         <thead>

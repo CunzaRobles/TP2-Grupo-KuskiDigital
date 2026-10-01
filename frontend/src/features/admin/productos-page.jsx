@@ -25,6 +25,7 @@ import { toast } from '@/components/ui/toast';
 import { useCategorias } from '@/features/catalogo/api';
 import { mensajeErrorAdmin as mensajeError } from './errores';
 import { formatMoney } from '@/lib/format';
+import { miniatura } from '@/lib/imagen';
 import { useDesactivarProducto, useProductosAdmin } from './api';
 import { BuscadorFiltro } from './filtros-pedidos';
 import { FilaVacia, PageHeader, PaginacionAdmin, Tabla, Td } from './ui';
@@ -35,7 +36,7 @@ const TODOS = 'todos';
 export function Miniatura({ imagen, className = 'size-11' }) {
   return imagen ? (
     <img
-      src={imagen.url}
+      {...miniatura(imagen.url, 48)}
       alt=""
       loading="lazy"
       className={`${className} shrink-0 rounded-md border object-cover`}
