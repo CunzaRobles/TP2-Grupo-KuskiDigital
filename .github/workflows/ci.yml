@@ -1,0 +1,52 @@
+name: CI
+
+# Lint y pruebas unitarias de backend y frontend en cada Pull Request a main.
+# Las pruebas unitarias no necesitan base de datos (repositorios simulados).
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint-y-pruebas:
+    name: Lint y pruebas (Node 24)
+    runs-on: ubuntu-latest
+    env:
+      # Cypress (E2E) no se ejecuta aquí: se evita descargar su binario en npm ci.
+      CYPRESS_INSTALL_BINARY: 0
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Lint backend
+        run: npm run lint -w backend
+
+      - name: Lint frontend
+        run: npm run lint -w frontend
+
+      - name: Pruebas backend
+        run: npm test -w backend
+
+      - name: Pruebas frontend
+        run: npm test -w frontend
+
+      # Pruebas contra Supabase: solo si el repositorio tiene el secreto DATABASE_URL.
+      # Sin él (o en PRs desde forks), se omiten. Solo hacen lecturas.
+      - name: Pruebas de integración (Supabase)
+        run: npm run test:integration -w backend
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}

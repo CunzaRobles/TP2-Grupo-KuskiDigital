@@ -37,7 +37,11 @@ if (hayDom) {
   };
 
   const { default: i18n } = await import('@/lib/i18n');
-  const { cleanup } = await import('@testing-library/react');
+  const { cleanup, configure } = await import('@testing-library/react');
+
+  // Las páginas cargan en diferido (rutas lazy): con la instrumentación de cobertura y las
+  // pruebas en paralelo, el segundo por defecto de findBy*/waitFor a veces no alcanza.
+  configure({ asyncUtilTimeout: 3000 });
 
   beforeEach(async () => {
     await i18n.changeLanguage('es');

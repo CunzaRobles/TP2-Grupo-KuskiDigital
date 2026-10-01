@@ -2,11 +2,9 @@ import { shippingProvider } from '../adapters/shipping/index.js';
 import * as carritoRepository from '../repositories/carrito.repository.js';
 import * as productoRepository from '../repositories/producto.repository.js';
 import { AppError } from '../utils/app-error.js';
+import { aplicaIgv, calcularTotales, TASA_IGV } from '../utils/checkout-calculos.js';
 import { convertirDesdePen, redondear } from '../utils/money.js';
 import { obtenerTasa } from './precio.service.js';
-
-export const TASA_IGV = 0.18;
-const PAIS_IGV = 'PE';
 
 // Agrupa ítems repetidos: [{ productoId, cantidad }] sin duplicados.
 export const agruparItems = (items) => {
@@ -66,12 +64,6 @@ export const construirLineas = (items, productos) => {
   });
 };
 
-// Montos de una opción de envío: IGV (18 %) sobre productos + envío, solo si el destino es Perú.
-const montosPen = (subtotalPen, envioPen, aplicaIgv) => {
-  const igvPen = aplicaIgv ? redondear((subtotalPen + envioPen) * TASA_IGV) : 0;
-  return { subtotalPen, envioPen, igvPen, totalPen: redondear(subtotalPen + envioPen + igvPen) };
-};
-
 // Convierte cada parte y suma lo convertido: lo que ve el cliente siempre cuadra al céntimo.
 const montosMoneda = ({ subtotalMoneda, envioPen, igvPen }, valorEnPen) => {
   const envio = convertirDesdePen(envioPen, valorEnPen);
@@ -90,7 +82,7 @@ export const calcular = async ({ lineas, paisCodigo, moneda, metodoEnvio = 'esta
     shippingProvider.cotizar({ paisCodigo, pesoG: pesoTotalG }),
   ]);
   const { valorEnPen } = tasa;
-  const aplicaIgv = paisCodigo === PAIS_IGV;
+  const igvAplica = aplicaIgv(paisCodigo);
 
   const items = lineas.map((l) => ({
     productoId: l.productoId,
@@ -106,7 +98,8 @@ export const calcular = async ({ lineas, paisCodigo, moneda, metodoEnvio = 'esta
   const subtotalMoneda = redondear(items.reduce((s, i) => s + i.subtotal, 0));
 
   const opcionesEnvio = opciones.map((o) => {
-    const pen = montosPen(subtotalPen, o.costoPen, aplicaIgv);
+    // IGV (18 %) sobre productos + envío, solo si el destino es Perú.
+    const pen = calcularTotales(subtotalPen, o.costoPen, paisCodigo);
     const mon = montosMoneda({ subtotalMoneda, ...pen }, valorEnPen);
     return {
       tarifaEnvioId: o.tarifaEnvioId,
@@ -140,7 +133,7 @@ export const calcular = async ({ lineas, paisCodigo, moneda, metodoEnvio = 'esta
     tipoCambio: valorEnPen,
     pesoTotalG,
     items,
-    igv: { aplica: aplicaIgv, tasa: aplicaIgv ? TASA_IGV : 0 },
+    igv: { aplica: igvAplica, tasa: igvAplica ? TASA_IGV : 0 },
     opcionesEnvio,
     metodoEnvio,
     resumen: {
