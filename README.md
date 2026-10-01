@@ -38,7 +38,7 @@ Monorepo con npm workspaces y un único `package-lock.json` en la raíz.
 │   ├── migrations/        # migraciones sequelize-cli (.cjs)
 │   ├── seeders/           # seeders sequelize-cli (.cjs)
 │   ├── scripts/test-db.js # comprueba la conexión y cuenta tablas y productos
-│   ├── tests/             # Vitest + Supertest (tests/integration usa la base real)
+│   ├── tests/             # Vitest + Supertest (tests/integration/*-db.test.js usa la base real)
 │   ├── .sequelizerc
 │   └── .env.example
 ├── docs/              # documentación técnica (openapi.yaml)
@@ -319,7 +319,7 @@ Para ejecutar un script en un solo workspace: `npm run <script> -w backend`.
 
 ### Pruebas del frontend
 
-- `frontend/src/**/*.test.{js,jsx}` usan Vitest + Testing Library en jsdom: cliente HTTP, formateo de moneda, contexto de moneda, componentes base, router, contraste AA de los tokens, carrito (invitado, con sesión, fusión y actualización optimista), home, catálogo (filtros ⇄ URL, orden, búsqueda, drawer móvil, estado vacío), ficha de producto (galería, pestañas, agregar al carrito, agotado y 404), login y registro (validación, errores, redirección, fusión del carrito), checkout (cotización por país, métodos de envío, Yape, rechazo con la tarjeta 0002, dirección nueva, volver sin perder datos), tarjeta (marca, formato, Luhn, vencimiento), Mi cuenta y 404, con la API simulada (`src/test/tienda.jsx`).
+- `frontend/src/**/*.test.{js,jsx}` usan Vitest + Testing Library en jsdom: cliente HTTP, formateo de moneda, contexto de moneda, componentes base, router, contraste AA de los tokens, carrito (invitado, con sesión, fusión y actualización optimista), home, catálogo (filtros ⇄ URL, orden, búsqueda, drawer móvil, estado vacío), ficha de producto (galería, pestañas, agregar al carrito, agotado y 404), login y registro (validación, errores, redirección, fusión del carrito), checkout (cotización por país, métodos de envío, Yape, rechazo con la tarjeta 0002, dirección nueva, volver sin perder datos), tarjeta (marca, formato, Luhn, vencimiento), Mi cuenta y 404, con la API simulada (`src/test/tienda.jsx`). `findBy*`/`waitFor` esperan hasta 3 s (`src/test/setup.js`) porque las rutas cargan en diferido.
 
 ### Pruebas E2E (Cypress)
 
@@ -331,7 +331,9 @@ Para ejecutar un script en un solo workspace: `npm run <script> -w backend`.
 ### Pruebas del backend
 
 - `backend/tests/*.test.js` (`vitest.config.js`, entorno `node`) usan Supertest con **toda** la capa de repositorios simulada en `tests/setup/mock-repositories.js`, así que **no necesitan base de datos** (sirven para CI). Si agregas un repositorio o una función de repositorio, agrégala también ahí.
-- `backend/tests/integration/` consulta la base real de Supabase. Tiene su propia config (`vitest.integration.config.js`) y **no** forma parte de `npm test`: se ejecuta con `npm run test:integration` y se omite si no existe `DATABASE_URL`.
+- `backend/tests/unit/` contiene los casos UT-01 a UT-22 de la Guía Práctica 07 (lista en `docs/pruebas/casos-de-prueba.md`); los servicios se prueban con repositorios y transacción simulados.
+- `backend/tests/integration/*.test.js` prueban la API completa (rutas → servicio) con los repositorios simulados y sí forman parte de `npm test`.
+- `backend/tests/integration/*-db.test.js` consultan la base real de Supabase. Tienen su propia config (`vitest.integration.config.js`) y **no** forman parte de `npm test`: se ejecutan con `npm run test:integration` y se omiten si no existe `DATABASE_URL`.
 
 ### Cobertura y VS Code
 

@@ -2,13 +2,14 @@ import { defineConfig } from 'vitest/config';
 
 // Pruebas unitarias de la API: los repositorios están simulados (tests/setup/mock-repositories.js),
 // así que nunca cargan los modelos de Sequelize ni se conectan a Supabase.
-// Las pruebas contra la base real tienen su propia config: vitest.integration.config.js.
+// Las pruebas contra la base real (tests/integration/*-db.test.js) tienen su propia config,
+// vitest.integration.config.js; el resto de tests/integration/ usa repositorios simulados.
 export default defineConfig({
   test: {
     name: 'unit',
     environment: 'node',
     include: ['tests/**/*.test.js'],
-    exclude: ['tests/integration/**'],
+    exclude: ['tests/integration/**/*-db.test.js'],
     setupFiles: ['tests/setup/mock-repositories.js'],
     mockReset: true,
     coverage: {
