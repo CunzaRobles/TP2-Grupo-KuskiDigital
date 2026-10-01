@@ -1,5 +1,5 @@
 import { X } from 'lucide-react';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, m as motion } from 'motion/react';
 import { Dialog as DrawerPrimitive } from 'radix-ui';
 import { createContext, useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';

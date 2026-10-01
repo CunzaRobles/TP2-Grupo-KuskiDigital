@@ -3,9 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCategorias } from '@/features/catalogo/api';
 import { formatNumber } from '@/lib/format';
+import { imagenResponsive } from '@/lib/imagenes';
 import { useReducedMotion } from '@/lib/motion';
 import { Link } from '@/lib/motion/enlaces';
-import { conMovimiento, gsap, ScrollTrigger, useGSAP } from '@/lib/motion/gsap';
+import { conMovimiento, gsap, useGSAP } from '@/lib/motion/gsap';
+import { ScrollTrigger } from '@/lib/motion/scroll-trigger';
 import { useLenisRef } from '@/lib/motion/lenis-context';
 import { useMediaQuery } from '@/lib/use-media-query';
 import { cn } from '@/lib/utils';
@@ -128,7 +130,8 @@ function FotoCategoria({ categoria, className }) {
     <div className={cn('relative overflow-hidden bg-current/10', className)}>
       {categoria.imagenUrl && (
         <img
-          src={categoria.imagenUrl}
+          {...imagenResponsive(categoria.imagenUrl)}
+          sizes="(min-width: 64rem) 32rem, 100vw"
           alt=""
           loading="lazy"
           decoding="async"

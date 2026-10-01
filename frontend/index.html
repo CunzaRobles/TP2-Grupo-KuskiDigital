@@ -11,10 +11,22 @@
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Fuentes sin bloquear el primer pintado (display=swap). Unbounded solo en 500–600. -->
     <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400..700&family=Unbounded:wght@400..700&display=swap"
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400..700&family=Unbounded:wght@500..600&display=swap"
+      onload="
+        this.onload = null;
+        this.rel = 'stylesheet';
+      "
     />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400..700&family=Unbounded:wght@500..600&display=swap"
+      />
+    </noscript>
     <title>Kuski Digital</title>
   </head>
   <body>

@@ -1,5 +1,5 @@
 import { Check, LoaderCircle } from 'lucide-react';
-import { motion } from 'motion/react';
+import { m as motion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { EASE_ANDINO } from '@/lib/motion';

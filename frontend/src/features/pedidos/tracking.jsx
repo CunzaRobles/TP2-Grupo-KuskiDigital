@@ -1,5 +1,5 @@
 import { CircleCheck, CircleX, House, Package, Truck } from 'lucide-react';
-import { motion } from 'motion/react';
+import { m as motion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 import { Badge } from '@/components/ui/badge';
 import { formatDate } from '@/lib/format';

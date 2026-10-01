@@ -8,13 +8,8 @@ import { Link } from '@/lib/motion/enlaces';
 import { conMovimiento, gsap, useGSAP } from '@/lib/motion/gsap';
 import { SplitText } from '@/lib/motion/split-text';
 import { marcasRegla, nombreCorto, ordenarPorAltitud, posicionEnRegla } from './altitud';
+import { SIZES_HERO, srcHero, srcSetHero } from './hero-foto';
 import { PerfilAltitud } from './perfil-altitud';
-
-// Placeholder de Unsplash (verificado): el valle del Urubamba con el pueblo al pie de los cerros.
-// Es el punto de partida del recorrido: el valle, antes de subir.
-const FOTO = 'https://images.unsplash.com/photo-1665819922368-33dafd456067';
-const ANCHOS = [480, 768, 1080, 1440, 1920];
-const srcDe = (ancho) => `${FOTO}?auto=format&fit=crop&w=${ancho}&q=70`;
 
 // Capa de legibilidad (no decorativa): oscurece arriba para el header transparente y abajo
 // para el titular, que van en Niebla sobre la foto.
@@ -37,8 +32,9 @@ const CURVAS = Array.from({ length: 9 }, (_, k) => {
 
 /**
  * Hero a pantalla completa con la foto del valle. Es la única animación automática de la carga:
- * el titular entra por líneas (SplitText) y luego el texto, el CTA y la indicación de scroll
- * (≤ 1.2 s en total). Con movimiento reducido no hay secuencia: todo está visible de inmediato.
+ * el titular entra por líneas (SplitText), el texto sube sin ocultarse y luego aparecen el CTA y
+ * la indicación de scroll (≤ 1.2 s en total). Con movimiento reducido no hay secuencia: todo está
+ * visible de inmediato.
  * Debajo, el perfil de altitud de las comunidades (el mapa del recorrido).
  */
 export function Hero() {
@@ -54,6 +50,10 @@ export function Hero() {
         const linea = gsap.timeline({ defaults: { ease: 'salida' } });
         linea
           .from(q('[data-hero="foto"]'), { scale: 1.04, duration: 1.2, ease: 'suave' }, 0)
+          // El texto es el elemento más grande del primer pantallazo (la foto ocupa todo el
+          // viewport y Chrome no la cuenta como LCP): se ve desde el primer pintado y solo se
+          // desplaza. El CTA y la indicación de scroll aparecen después.
+          .from(q('[data-hero="texto"]'), { y: 16, duration: 0.6 }, 0.15)
           .from(
             q('[data-hero="entra"]'),
             { autoAlpha: 0, y: 12, duration: 0.5, stagger: 0.08 },
@@ -83,9 +83,9 @@ export function Hero() {
       >
         <img
           data-hero="foto"
-          src={srcDe(1440)}
-          srcSet={ANCHOS.map((a) => `${srcDe(a)} ${a}w`).join(', ')}
-          sizes="100vw"
+          src={srcHero(1440)}
+          srcSet={srcSetHero}
+          sizes={SIZES_HERO}
           alt={t('home.hero.imagenAlt')}
           fetchPriority="high"
           decoding="async"
@@ -118,7 +118,7 @@ export function Hero() {
 
           <div className="grid gap-8 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
             <div className="grid gap-6">
-              <p data-hero="entra" className="max-w-xl text-lead text-niebla/90">
+              <p data-hero="texto" className="max-w-xl text-lead text-niebla/90">
                 {t('home.hero.descripcion')}
               </p>
               <div data-hero="entra">

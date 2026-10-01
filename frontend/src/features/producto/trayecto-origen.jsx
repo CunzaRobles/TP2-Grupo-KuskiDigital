@@ -1,12 +1,7 @@
-import { Hand, Plane, Sprout } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '@/lib/format';
 
-const PASOS = [
-  { id: 'cosecha', icono: Sprout },
-  { id: 'proceso', icono: Hand },
-  { id: 'envio', icono: Plane },
-];
+const PASOS = ['cosecha', 'proceso', 'envio'];
 
 const CATEGORIAS_CON_TEXTO = ['cafe', 'superalimentos', 'textiles', 'artesania'];
 
@@ -28,38 +23,28 @@ export function TrayectoOrigen({ producto }) {
 
   return (
     <section aria-labelledby="trayecto-titulo" className="grid gap-10">
-      <div className="grid max-w-2xl gap-3">
-        <p className="eyebrow text-link">{t('producto.trayecto.eyebrow')}</p>
-        <h2 id="trayecto-titulo" className="text-h2">
-          {t('producto.trayecto.titulo')}
-        </h2>
-      </div>
+      <h2 id="trayecto-titulo" className="max-w-2xl text-h2">
+        {t('producto.trayecto.titulo')}
+      </h2>
 
-      <ol className="relative grid gap-10 md:grid-cols-3 md:gap-8">
-        {/* Hilo que une los pasos: vertical en móvil, horizontal en escritorio */}
-        <span
-          aria-hidden="true"
-          className="absolute top-6 bottom-6 left-6 w-px bg-border md:top-6 md:right-[16.66%] md:bottom-auto md:left-[16.66%] md:h-px md:w-auto"
-        />
-        {PASOS.map(({ id, icono: Icono }, i) => (
+      {/* Tramos de una misma línea (como la regla del altímetro): cada paso cuelga de ella,
+          alineado arriba y a la izquierda, con una marca Puna al inicio de su tramo. */}
+      <ol className="grid gap-8 md:grid-cols-3 md:gap-0">
+        {PASOS.map((id, i) => (
           <li
             key={id}
-            className="relative grid grid-cols-[3rem_1fr] gap-5 md:grid-cols-1 md:justify-items-center md:text-center"
+            className="relative grid content-start gap-2 border-t border-foreground/25 pt-5 md:pr-8"
           >
-            <span className="relative z-10 flex size-12 items-center justify-center rounded-full border-4 border-background bg-puna text-ichu">
-              <Icono className="size-5" aria-hidden="true" />
-            </span>
-            <div className="grid gap-2">
-              <p className="eyebrow text-muted-foreground">
-                {t('producto.trayecto.paso', { n: i + 1 })}
-              </p>
-              <h3 className="text-h4">{t(`producto.trayecto.pasos.${id}`)}</h3>
-              <p className="max-w-xs text-muted-foreground">
-                {id === 'envio'
-                  ? t('producto.trayecto.envio')
-                  : t(`producto.trayecto.${grupo}.${id}`, valores)}
-              </p>
-            </div>
+            <span aria-hidden="true" className="absolute -top-2 left-0 h-4 w-0.5 bg-puna" />
+            <p className="text-sm text-muted-foreground tabular-nums">
+              {t('producto.trayecto.paso', { n: i + 1 })}
+            </p>
+            <h3 className="text-h4">{t(`producto.trayecto.pasos.${id}`)}</h3>
+            <p className="max-w-sm text-muted-foreground">
+              {id === 'envio'
+                ? t('producto.trayecto.envio')
+                : t(`producto.trayecto.${grupo}.${id}`, valores)}
+            </p>
           </li>
         ))}
       </ol>

@@ -16,7 +16,7 @@ import { useNombres } from './use-nombres';
 function Grupo({ titulo, children, className }) {
   return (
     <fieldset className={cn('grid gap-3 border-t pt-5 first:border-t-0 first:pt-0', className)}>
-      <legend className="eyebrow float-left mb-3 w-full text-muted-foreground">{titulo}</legend>
+      <legend className="float-left mb-3 w-full text-sm font-semibold">{titulo}</legend>
       {children}
     </fieldset>
   );

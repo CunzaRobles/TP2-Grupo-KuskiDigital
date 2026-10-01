@@ -1,5 +1,5 @@
 import { ImageOff, LoaderCircle, ShieldCheck } from 'lucide-react';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, m as motion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 import { Price } from '@/components/ui/price';
 import { MontoCarrito } from '@/features/carrito/linea-carrito';

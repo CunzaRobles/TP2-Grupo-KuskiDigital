@@ -27,8 +27,13 @@ beforeAll(() => {
 describe('router', () => {
   it('muestra el home de la tienda con header y selectores', async () => {
     renderRuta('/');
+    // La Home es una ruta diferida: la primera importación (en frío) puede pasar de 1 s
     expect(
-      await screen.findByRole('heading', { level: 1, name: 'Del valle a la puna' }),
+      await screen.findByRole(
+        'heading',
+        { level: 1, name: 'Del valle a la puna' },
+        { timeout: 5000 },
+      ),
     ).toBeInTheDocument();
     expect(screen.getByRole('combobox', { name: 'Moneda' })).toHaveTextContent('PEN');
     expect(screen.getByRole('combobox', { name: 'Idioma' })).toHaveTextContent('ES');

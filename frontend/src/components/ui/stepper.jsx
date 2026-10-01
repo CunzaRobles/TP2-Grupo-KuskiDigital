@@ -1,5 +1,5 @@
 import { Check } from 'lucide-react';
-import { motion } from 'motion/react';
+import { m as motion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 import { transicion } from '@/lib/motion';
 import { cn } from '@/lib/utils';

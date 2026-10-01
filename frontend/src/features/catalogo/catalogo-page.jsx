@@ -1,9 +1,8 @@
 import { Search, SlidersHorizontal } from 'lucide-react';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, m as motion } from 'motion/react';
 import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
-import { AndeanDivider } from '@/components/ui/andean-divider';
 import { Button } from '@/components/ui/button';
 import {
   Drawer,
@@ -107,7 +106,6 @@ function Encabezado({ filtros }) {
   return (
     <header className="grid max-w-3xl gap-4">
       <title>{`${titulo} · Kuski`}</title>
-      <p className="eyebrow text-link">{t('catalogo.eyebrow')}</p>
       <h1 className="text-h1">{titulo}</h1>
       <p className="text-lead text-muted-foreground">{descripcion}</p>
     </header>
@@ -154,9 +152,8 @@ export function CatalogoPage() {
   return (
     <div className="container-page grid gap-8 py-10 sm:py-14">
       <Encabezado filtros={filtros} />
-      <AndeanDivider />
 
-      <div className="grid gap-10 lg:grid-cols-[15rem_1fr] xl:gap-14">
+      <div className="grid gap-10 border-t pt-8 lg:grid-cols-[15rem_1fr] xl:gap-14">
         {/* Escritorio: filtros en barra lateral fija */}
         <aside aria-label={t('catalogo.filtros')} className="hidden lg:block">
           <div className="sticky top-[calc(var(--spacing-header-compact)+1.5rem)] max-h-[calc(100dvh-var(--spacing-header-compact)-3rem)] overflow-y-auto pr-2 pb-4">
@@ -201,7 +198,7 @@ export function CatalogoPage() {
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h2
               id="catalogo-resultados"
-              className="text-sm font-semibold text-muted-foreground"
+              className="font-sans text-sm font-semibold text-muted-foreground"
               aria-live="polite"
             >
               {isPending

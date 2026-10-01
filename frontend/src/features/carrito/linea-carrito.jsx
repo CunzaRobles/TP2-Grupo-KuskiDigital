@@ -1,5 +1,5 @@
 import { ImageOff, Trash2, TriangleAlert } from 'lucide-react';
-import { motion } from 'motion/react';
+import { m as motion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 import { Price } from '@/components/ui/price';
 import { QuantitySelector } from '@/components/ui/quantity-selector';

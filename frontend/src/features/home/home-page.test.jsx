@@ -3,8 +3,8 @@ import userEvent from '@testing-library/user-event';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Providers } from '@/app/providers';
-import { routes } from '@/app/router';
 import { CLAVE_CARRITO } from '@/features/carrito/carrito-storage';
+import { rutasResueltas } from '@/test/tienda';
 
 const imagen = (n) => ({ url: `https://img/${n}.jpg`, textoAlt: n, orden: 0, esPrincipal: true });
 
@@ -120,7 +120,7 @@ const stubApi = (fallos = []) => {
 const renderHome = () =>
   render(
     <Providers>
-      <RouterProvider router={createMemoryRouter(routes, { initialEntries: ['/'] })} />
+      <RouterProvider router={createMemoryRouter(rutasResueltas, { initialEntries: ['/'] })} />
     </Providers>,
   );
 
@@ -156,8 +156,9 @@ describe('HomePage', () => {
       '/catalogo',
     );
 
+    // El recorrido de categorías se carga en diferido (no retrasa el primer pintado del hero)
     expect(
-      screen.getByRole('heading', { level: 2, name: 'Cuatro líneas, cuatro alturas' }),
+      await screen.findByRole('heading', { level: 2, name: 'Cuatro líneas, cuatro alturas' }),
     ).toBeVisible();
     expect(
       screen.getByRole('heading', { level: 2, name: 'Destacados de nuestras comunidades' }),

@@ -1,13 +1,13 @@
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { CustomEase } from 'gsap/CustomEase';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { CURVA } from './tokens';
 
-// GSAP con los plugins que usa la tienda (todos gratuitos desde GSAP 3.13). Importar siempre
-// desde aquí para que el registro ocurra una sola vez. SplitText está en ./split-text (aparte,
-// para no sumarlo al bundle inicial).
-gsap.registerPlugin(useGSAP, ScrollTrigger, CustomEase);
+// GSAP con los plugins que usa la tienda (todos gratuitos desde GSAP 3.13). Solo lo importa la
+// Home (ruta diferida): el resto de la tienda no lo descarga. Importar siempre desde aquí para
+// que el registro ocurra una sola vez. SplitText (./split-text) y ScrollTrigger
+// (./scroll-trigger) van aparte: el hero solo necesita el núcleo y SplitText antes de pintar.
+gsap.registerPlugin(useGSAP, CustomEase);
 
 // Las curvas de los tokens, con nombre: gsap.to(el, { ease: 'salida' })
 const aCustomEase = ([x1, y1, x2, y2]) => `M0,0 C${x1},${y1} ${x2},${y2} 1,1`;
@@ -23,4 +23,4 @@ export function conMovimiento(crear) {
   return media;
 }
 
-export { gsap, ScrollTrigger, useGSAP };
+export { gsap, useGSAP };

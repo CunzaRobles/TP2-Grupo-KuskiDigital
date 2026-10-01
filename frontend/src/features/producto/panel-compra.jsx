@@ -99,7 +99,7 @@ export function PanelCompra({ producto, onVerTab, className }) {
         {categoria && (
           <Link
             to={`/catalogo?categoria=${categoria.slug}`}
-            className="eyebrow w-fit text-link hover:underline"
+            className="w-fit text-sm font-semibold text-muted-foreground hover:text-foreground hover:underline"
           >
             {nombres.categoria(categoria)}
           </Link>
@@ -171,7 +171,7 @@ export function PanelCompra({ producto, onVerTab, className }) {
         </button>
       )}
 
-      <div className="grid gap-4 rounded-2xl border bg-card p-5 shadow-soft">
+      <div className="grid gap-4 rounded-surface border bg-card p-5">
         <EstadoStock producto={producto} enCarrito={enCarrito} />
         <div className="flex flex-wrap items-center gap-3">
           <QuantitySelector

@@ -1,10 +1,4 @@
-import {
-  animate as animar,
-  AnimatePresence,
-  motion,
-  useMotionValue,
-  useTransform,
-} from 'motion/react';
+import { AnimatePresence, m as motion, useMotionValue, useTransform } from 'motion/react';
 import { useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CurrencyContext } from '@/lib/currency';
@@ -36,8 +30,17 @@ function MontoConteo({ amount, moneda, idioma }) {
       valor.jump(destino);
       return undefined;
     }
-    const controles = animar(valor, destino, transicion('lenta'));
-    return () => controles.stop();
+    // El motor de animación de Motion llega con las funciones de LazyMotion (ya cargadas cuando
+    // el carrito cambia); importarlo aquí en diferido lo deja fuera del bundle inicial.
+    let controles;
+    let cancelado = false;
+    import('@/lib/motion/funciones').then(({ animar }) => {
+      if (!cancelado) controles = animar(valor, destino, transicion('lenta'));
+    });
+    return () => {
+      cancelado = true;
+      controles?.stop();
+    };
   }, [amount, reducido, valor]);
 
   // Los lectores de pantalla leen solo el valor final, no cada paso del conteo

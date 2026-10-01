@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Badge } from '@/components/ui/badge';
 import { Price } from '@/components/ui/price';
 import { Skeleton } from '@/components/ui/skeleton';
 import { BotonAgregar } from '@/features/carrito/boton-agregar';
@@ -9,91 +8,85 @@ import { formatNumber } from '@/lib/format';
 import { Link } from '@/lib/motion/enlaces';
 import { cn } from '@/lib/utils';
 import { ENLACE_EXTENDIDO } from './enlace-extendido';
+import { FotosProducto } from './fotos-producto';
+import { useSegundaFoto } from './use-segunda-foto';
 
-const IMAGEN =
-  'absolute inset-0 size-full object-cover transition-opacity duration-300 ease-andino';
+// Ancho de la foto en la grilla del catálogo (2 columnas; 3 desde lg con la barra de filtros).
+const SIZES = '(min-width: 64rem) 22rem, 50vw';
+
+/**
+ * Procedencia en texto pequeño, siempre visible: altitud y comunidad en una línea (la
+ * comunidad se recorta con puntos suspensivos si no cabe).
+ */
+export function Procedencia({ comunidad, nombre = comunidad?.nombre, className }) {
+  const { t, i18n } = useTranslation();
+  if (!comunidad) return null;
+  return (
+    <p className={cn('flex min-w-0 gap-x-1.5 text-xs text-muted-foreground', className)}>
+      {comunidad.altitudMsnm != null && (
+        <span className="shrink-0 font-semibold text-foreground tabular-nums">
+          {t('producto.altitud', {
+            valor: formatNumber(comunidad.altitudMsnm, i18n.resolvedLanguage),
+          })}
+        </span>
+      )}
+      <span className="min-w-0 truncate" title={comunidad.nombre}>
+        {nombre}
+      </span>
+    </p>
+  );
+}
 
 /**
  * Tarjeta de producto: el hover solo cambia a la segunda foto; la altitud y la comunidad de
- * origen se ven siempre en texto pequeño. El botón "+" agrega al carrito sin salir de la página,
- * hace volar la foto hasta el icono del header y confirma con "Agregado".
+ * origen se ven siempre en texto pequeño. El nombre ocupa todo el ancho y debajo van el precio
+ * y el botón "+", que agrega al carrito sin salir de la página, hace volar la foto hasta el
+ * icono del header y confirma con "Agregado".
  * `compartirImagen`: la foto se expande hasta la ficha (false en los relacionados de una ficha).
  */
 export function ProductCard({ producto, compartirImagen = true, className }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const imagenRef = useRef(null);
+  const segunda = useSegundaFoto();
   const { enlace, nombreImagen, propsEnlace } = useEnlaceProducto(producto.slug, {
     compartida: compartirImagen,
   });
-
-  const [principal, secundaria] = producto.imagenes ?? [];
-  const { comunidad, categoria } = producto;
+  const { categoria } = producto;
 
   return (
-    <article className={cn('group relative flex flex-col gap-4', className)}>
-      <div
-        className="relative aspect-4/5 overflow-hidden bg-muted"
+    <article
+      className={cn('group relative flex h-full flex-col gap-4', className)}
+      onPointerEnter={segunda.onPointerEnter}
+    >
+      <FotosProducto
+        producto={producto}
+        imagenRef={imagenRef}
+        sizes={SIZES}
+        segunda={segunda.activa}
+        className="aspect-4/5"
         style={{ viewTransitionName: nombreImagen }}
-      >
-        {principal && (
-          <img
-            ref={imagenRef}
-            src={principal.url}
-            alt={principal.textoAlt ?? producto.nombre}
-            loading="lazy"
-            decoding="async"
-            className={cn(IMAGEN, secundaria && 'group-hover:opacity-0')}
-          />
-        )}
-        {secundaria && (
-          <img
-            src={secundaria.url}
-            alt=""
-            aria-hidden="true"
-            loading="lazy"
-            decoding="async"
-            className={cn(IMAGEN, 'opacity-0 group-hover:opacity-100')}
-          />
-        )}
+      />
 
-        {!producto.disponible && (
-          <Badge variant="neutral" className="absolute top-3 left-3">
-            {t('producto.agotado')}
-          </Badge>
+      {/* El precio y el "+" van al pie: alineados entre tarjetas aunque un nombre ocupe 2 líneas */}
+      <div className="flex flex-1 flex-col gap-1">
+        {categoria && (
+          <p className="text-xs text-muted-foreground">
+            {t(`catalogo.categorias.${categoria.slug}.nombre`, {
+              defaultValue: categoria.nombre,
+            })}
+          </p>
         )}
-      </div>
-
-      <div className="flex items-end justify-between gap-3">
-        <div className="grid min-w-0 gap-1">
-          {categoria && (
-            <p className="text-xs text-muted-foreground">
-              {t(`catalogo.categorias.${categoria.slug}.nombre`, {
-                defaultValue: categoria.nombre,
-              })}
-            </p>
-          )}
-          <h3 className="text-lg leading-snug font-semibold">
-            {/* Enlace extendido: toda la tarjeta lleva a la ficha, salvo el botón "+" (z-10) */}
-            <Link to={enlace} {...propsEnlace} className={ENLACE_EXTENDIDO}>
-              {producto.nombre}
-            </Link>
-          </h3>
-          {/* Procedencia siempre visible, en texto pequeño */}
-          {comunidad && (
-            <p className="flex flex-wrap gap-x-1.5 text-xs text-muted-foreground">
-              {comunidad.altitudMsnm != null && (
-                <span className="font-semibold text-foreground tabular-nums">
-                  {t('producto.altitud', {
-                    valor: formatNumber(comunidad.altitudMsnm, i18n.resolvedLanguage),
-                  })}
-                </span>
-              )}
-              <span className="truncate">{comunidad.nombre}</span>
-            </p>
-          )}
+        <h3 className="text-base leading-snug font-semibold sm:text-lg">
+          {/* Enlace extendido: toda la tarjeta lleva a la ficha, salvo el botón "+" (z-10) */}
+          <Link to={enlace} {...propsEnlace} className={ENLACE_EXTENDIDO}>
+            {producto.nombre}
+          </Link>
+        </h3>
+        <Procedencia comunidad={producto.comunidad} />
+        <div className="mt-auto flex items-center justify-between gap-3 pt-1">
           <Price amount={producto.precio?.monto} currency={producto.precio?.moneda} />
+          <BotonAgregar producto={producto} imagenRef={imagenRef} />
         </div>
-        <BotonAgregar producto={producto} imagenRef={imagenRef} />
       </div>
     </article>
   );
@@ -106,7 +99,8 @@ export function ProductCardSkeleton() {
       <div className="grid gap-2">
         <Skeleton className="h-3 w-20" />
         <Skeleton className="h-5 w-4/5" />
-        <Skeleton className="h-5 w-16" />
+        <Skeleton className="h-3 w-3/5" />
+        <Skeleton className="h-11 w-1/3" />
       </div>
     </div>
   );

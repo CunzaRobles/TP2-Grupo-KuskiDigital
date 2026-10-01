@@ -68,7 +68,8 @@ function Mapa({ activa, onActivar }) {
     >
       {isError ? (
         <SectionError onRetry={refetch} className="h-full border-0" />
-      ) : isPending || !cerca ? (
+      ) : !cerca ? null : isPending ? (
+        // Lejos de la pantalla basta el fondo del contenedor; el pulso solo mientras se ve
         <Skeleton className="size-full rounded-none" />
       ) : (
         <Suspense fallback={<Skeleton className="size-full rounded-none" />}>

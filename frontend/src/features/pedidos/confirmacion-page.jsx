@@ -1,5 +1,5 @@
 import { ArrowRight, Check, Copy, CreditCard, ImageOff, Mail, MapPin, Truck } from 'lucide-react';
-import { motion } from 'motion/react';
+import { m as motion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams } from 'react-router';
 import { AndeanDivider } from '@/components/ui/andean-divider';

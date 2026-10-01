@@ -1,13 +1,14 @@
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Badge } from '@/components/ui/badge';
 import { Price } from '@/components/ui/price';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useDestacados } from '@/features/catalogo/api';
 import { BotonAgregar } from '@/features/carrito/boton-agregar';
 import { ENLACE_EXTENDIDO } from '@/features/catalogo/enlace-extendido';
+import { FotosProducto } from '@/features/catalogo/fotos-producto';
+import { Procedencia } from '@/features/catalogo/product-card';
+import { useSegundaFoto } from '@/features/catalogo/use-segunda-foto';
 import { useEnlaceProducto } from '@/features/producto/use-enlace-producto';
-import { formatNumber } from '@/lib/format';
 import { Link } from '@/lib/motion/enlaces';
 import { cn } from '@/lib/utils';
 import { nombreCorto } from './altitud';
@@ -55,100 +56,70 @@ const spanEnlace = (n) =>
     SPAN.lg[restoDeFila('lg', n)],
   );
 
-const IMAGEN =
-  'absolute inset-0 size-full object-cover transition-opacity duration-300 ease-andino';
-
+// Relación de aspecto y ancho de la foto (sizes) por variante.
 const FOTO = {
   protagonista: 'aspect-4/3 sm:aspect-auto sm:min-h-80 sm:flex-1',
   ancha: 'aspect-4/3 sm:aspect-auto sm:h-full sm:min-h-56 sm:w-3/5 sm:shrink-0',
   normal: 'aspect-4/5',
 };
+const SIZES = {
+  protagonista: '(min-width: 64rem) 36rem, (min-width: 40rem) 66vw, 100vw',
+  ancha: '(min-width: 64rem) 22rem, (min-width: 40rem) 40vw, 100vw',
+  normal: '(min-width: 64rem) 18rem, (min-width: 40rem) 33vw, 50vw',
+};
 
 function Destacado({ producto, variante }) {
-  const { t, i18n } = useTranslation();
   const imagenRef = useRef(null);
+  const segunda = useSegundaFoto();
   const { enlace, nombreImagen, propsEnlace } = useEnlaceProducto(producto.slug);
-  const [principal, secundaria] = producto.imagenes ?? [];
   const { comunidad } = producto;
   const protagonista = variante === 'protagonista';
 
   return (
     <article
+      onPointerEnter={segunda.onPointerEnter}
       className={cn(
         'group relative flex h-full flex-col gap-4 bg-background p-3 sm:p-4',
         protagonista && 'sm:gap-5 sm:p-6',
         variante === 'ancha' && 'sm:flex-row sm:items-stretch sm:gap-6',
       )}
     >
-      <div
-        className={cn('relative overflow-hidden bg-muted', FOTO[variante])}
+      {/* El hover solo cambia a la segunda foto (respuesta a la acción del usuario) */}
+      <FotosProducto
+        producto={producto}
+        imagenRef={imagenRef}
+        sizes={SIZES[variante]}
+        segunda={segunda.activa}
+        className={FOTO[variante]}
         style={{ viewTransitionName: nombreImagen }}
-      >
-        {principal && (
-          <img
-            ref={imagenRef}
-            src={principal.url}
-            alt={principal.textoAlt ?? producto.nombre}
-            loading="lazy"
-            decoding="async"
-            className={cn(IMAGEN, secundaria && 'group-hover:opacity-0')}
-          />
-        )}
-        {/* El hover solo cambia a la segunda foto (respuesta a la acción del usuario) */}
-        {secundaria && (
-          <img
-            src={secundaria.url}
-            alt=""
-            aria-hidden="true"
-            loading="lazy"
-            decoding="async"
-            className={cn(IMAGEN, 'opacity-0 group-hover:opacity-100')}
-          />
-        )}
-        {!producto.disponible && (
-          <Badge variant="neutral" className="absolute top-3 left-3">
-            {t('producto.agotado')}
-          </Badge>
-        )}
-      </div>
+      />
 
-      <div className="flex flex-1 items-end justify-between gap-3">
-        <div className="grid min-w-0 gap-1">
-          {/* Procedencia siempre visible, en texto pequeño */}
-          {comunidad && (
-            <p className="flex flex-wrap gap-x-1.5 text-xs text-muted-foreground">
-              {comunidad.altitudMsnm != null && (
-                <span className="font-semibold text-foreground tabular-nums">
-                  {t('producto.altitud', {
-                    valor: formatNumber(comunidad.altitudMsnm, i18n.resolvedLanguage),
-                  })}
-                </span>
-              )}
-              <span title={comunidad.nombre}>{nombreCorto(comunidad.nombre)}</span>
-            </p>
+      <div className="flex min-w-0 flex-1 flex-col justify-end gap-1">
+        {/* Procedencia siempre visible, en texto pequeño */}
+        <Procedencia comunidad={comunidad} nombre={comunidad && nombreCorto(comunidad.nombre)} />
+        <h3
+          className={cn(
+            'leading-snug',
+            protagonista
+              ? 'text-h3'
+              : variante === 'ancha'
+                ? 'text-lg sm:text-xl'
+                : 'text-base sm:text-lg',
           )}
-          <h3
-            className={cn(
-              'leading-snug',
-              protagonista
-                ? 'text-h3'
-                : variante === 'ancha'
-                  ? 'text-lg sm:text-xl'
-                  : 'text-base sm:text-lg',
-            )}
-          >
-            {/* Enlace extendido: toda la celda lleva a la ficha (y muestra el foco), salvo el "+" */}
-            <Link to={enlace} {...propsEnlace} className={ENLACE_EXTENDIDO}>
-              {producto.nombre}
-            </Link>
-          </h3>
+        >
+          {/* Enlace extendido: toda la celda lleva a la ficha (y muestra el foco), salvo el "+" */}
+          <Link to={enlace} {...propsEnlace} className={ENLACE_EXTENDIDO}>
+            {producto.nombre}
+          </Link>
+        </h3>
+        <div className="mt-1 flex items-center justify-between gap-3">
           <Price
             amount={producto.precio?.monto}
             currency={producto.precio?.moneda}
             size={protagonista ? 'lg' : 'md'}
           />
+          <BotonAgregar producto={producto} imagenRef={imagenRef} />
         </div>
-        <BotonAgregar producto={producto} imagenRef={imagenRef} />
       </div>
     </article>
   );
@@ -206,7 +177,7 @@ export function Destacados() {
           <li className={spanEnlace(total)}>
             <Link
               to="/catalogo"
-              className="flex h-full min-h-32 items-end bg-background p-4 font-display text-lg font-medium tracking-tight underline-offset-4 transition-colors hover:bg-muted hover:underline focus-visible:-outline-offset-2 sm:p-6"
+              className="flex h-full min-h-16 items-center bg-background p-4 font-display text-lg font-medium tracking-tight underline-offset-4 transition-colors hover:bg-muted hover:underline focus-visible:-outline-offset-2 sm:p-6"
             >
               {t('home.destacados.verTodo')}
             </Link>

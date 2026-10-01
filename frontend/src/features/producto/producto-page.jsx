@@ -2,7 +2,6 @@ import { ArrowRight, ChevronRight } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { AndeanDivider } from '@/components/ui/andean-divider';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/empty-state';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -54,11 +53,7 @@ function Relacionados({ slug }) {
 
   return (
     <section aria-labelledby="relacionados-titulo" className="grid gap-10">
-      <SectionHeading
-        id="relacionados-titulo"
-        eyebrow={t('producto.relacionados.eyebrow')}
-        title={t('producto.relacionados.titulo')}
-      />
+      <SectionHeading id="relacionados-titulo" title={t('producto.relacionados.titulo')} />
       <ul className="grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 lg:grid-cols-4">
         {isPending
           ? Array.from({ length: 4 }, (_, i) => (
@@ -82,13 +77,13 @@ function FichaSkeleton() {
       className="container-page grid gap-10 py-10 lg:grid-cols-[1.15fr_1fr] lg:gap-16"
       aria-hidden="true"
     >
-      <Skeleton className="aspect-4/5 rounded-2xl" />
+      <Skeleton className="aspect-4/5 rounded-none" />
       <div className="grid content-start gap-5">
         <Skeleton className="h-3 w-24" />
         <Skeleton className="h-12 w-4/5" />
         <Skeleton className="h-5 w-40" />
         <Skeleton className="h-10 w-32" />
-        <Skeleton className="h-44 rounded-2xl" />
+        <Skeleton className="h-44 rounded-surface" />
       </div>
     </div>
   );
@@ -170,7 +165,6 @@ export function ProductoPage({ slug }) {
       </div>
 
       <div className="container-page grid gap-section">
-        <AndeanDivider />
         <TrayectoOrigen producto={producto} />
         <Relacionados slug={slug} />
       </div>

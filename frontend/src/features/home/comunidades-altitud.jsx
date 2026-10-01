@@ -64,7 +64,7 @@ export function ComunidadesAltitud({ activa = null, onActivar = () => {}, classN
                 <p>
                   <Link
                     to={`/catalogo?comunidad=${comunidad.id}`}
-                    className="text-sm font-semibold text-link underline underline-offset-4 hover:text-primary-hover"
+                    className="text-sm font-semibold underline decoration-1 underline-offset-4 hover:decoration-2"
                   >
                     {t('home.recorrido.verProductos', { count: comunidad.totalProductos })}
                   </Link>

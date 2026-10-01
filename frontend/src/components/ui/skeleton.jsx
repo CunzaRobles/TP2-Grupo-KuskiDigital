@@ -1,15 +1,13 @@
 import { cn } from '@/lib/utils';
 
-// Bloque de carga con brillo suave (se detiene con prefers-reduced-motion).
+// Bloque de carga: color plano con un pulso de opacidad (lo compone la GPU, sin repintar cada
+// frame). Con prefers-reduced-motion queda quieto (globals.css anula las animaciones CSS).
 export function Skeleton({ className, ...props }) {
   return (
     <div
       data-slot="skeleton"
       aria-hidden="true"
-      className={cn(
-        'animate-shimmer rounded-item bg-[linear-gradient(90deg,var(--muted)_0%,var(--secondary-hover)_50%,var(--muted)_100%)] bg-size-[200%_100%]',
-        className,
-      )}
+      className={cn('animate-pulse rounded-item bg-muted', className)}
       {...props}
     />
   );
