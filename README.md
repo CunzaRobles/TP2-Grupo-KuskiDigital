@@ -340,6 +340,10 @@ Para ejecutar un script en un solo workspace: `npm run <script> -w backend`.
 - `npm run test:coverage` (raíz o workspace) genera el reporte de `@vitest/coverage-v8` en texto y en HTML (`frontend/coverage/index.html`, `backend/coverage/index.html`). Las carpetas `coverage/` están en `.gitignore`.
 - `.vscode/extensions.json` recomienda la extensión oficial de Vitest (`vitest.explorer`) para ejecutar y depurar pruebas desde el editor.
 
+### Integración continua
+
+`.github/workflows/ci.yml` se ejecuta en cada Pull Request a `main` (y a mano con _Run workflow_): con Node 24 (`.nvmrc`) corre `npm ci`, `npm run lint` y `npm test` de backend y frontend. Las pruebas unitarias no usan base de datos. Las de integración contra Supabase solo se ejecutan si el repositorio define el secreto `DATABASE_URL` (Settings → Secrets and variables → Actions); si no existe, se omiten.
+
 ## Equipo
 
 - Brandon Cunza Robles — Líder de proyecto / integrador
