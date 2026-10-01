@@ -34,6 +34,8 @@
     "abrir_other": "Abrir carrito, {{count}} productos",
     "vacio": "Tu carrito está vacío",
     "agregado": "Agregado al carrito",
+    "agregadoCorto": "Agregado",
+    "agregadoProducto": "{{nombre}} agregado al carrito",
     "agregarProducto": "Agregar {{nombre}} al carrito",
     "sinMasStock": "Ya tienes en el carrito todo el stock disponible",
     "verCarrito": "Ver carrito",
@@ -218,29 +220,55 @@
   },
   "home": {
     "hero": {
-      "eyebrow": "Cusco · de 1 050 a 3 760 msnm",
-      "titulo": "Lo mejor de los Andes, con nombre y comunidad",
-      "descripcion": "Café orgánico, superalimentos, textiles de alpaca y artesanía, trazables hasta la comunidad que los produce.",
+      "titulo": "Del valle a la puna",
+      "descripcion": "Café, quinua y alpaca de comunidades de Cusco. Cada producto indica quién lo hizo y a qué altitud.",
       "cta": "Explorar catálogo",
-      "imagenAlt": "Machu Picchu y las montañas de Cusco al atardecer"
+      "imagenAlt": "El valle del Urubamba, con un pueblo al pie de los cerros y un nevado al fondo",
+      "inicio": "{{lugar}} · baja para subir",
+      "desliza": "Baja para subir"
+    },
+    "perfil": {
+      "resumen_one": "Altitud de {{count}} comunidad productora: {{min}} msnm en {{desde}}.",
+      "resumen_other": "Altitud de las {{count}} comunidades productoras: de {{min}} msnm en {{desde}} a {{max}} msnm en {{hasta}}.",
+      "puna": "Puna · desde {{valor}} msnm"
     },
     "categorias": {
-      "eyebrow": "Cuatro líneas, un mismo origen",
-      "titulo": "Explora por categoría",
-      "descripcion": "Del cafetal de ceja de selva al telar de altura: cada línea nace en una comunidad distinta.",
+      "titulo": "Cuatro líneas, cuatro alturas",
+      "descripcion": "Del cafetal de ceja de selva al telar de altura: baja por la página y sube con ellas, cada una a la altitud de la comunidad que la produce.",
       "productos_one": "{{count}} producto",
-      "productos_other": "{{count}} productos"
+      "productos_other": "{{count}} productos",
+      "lista": "Categorías, de menor a mayor altitud",
+      "origen": "Origen: {{comunidad}}",
+      "rango": "De {{min}} a {{max}} msnm",
+      "verCategoria": "Ver {{nombre}}",
+      "ver": {
+        "cafe": "Ver café",
+        "superalimentos": "Ver superalimentos",
+        "textiles": "Ver textiles",
+        "artesania": "Ver artesanía"
+      }
     },
     "destacados": {
-      "eyebrow": "Selección de temporada",
       "titulo": "Destacados de nuestras comunidades",
-      "descripcion": "Conoce de dónde viene cada producto y a qué altura se cultiva.",
+      "descripcion": "Cada producto con su comunidad y la altitud a la que se cultiva o se teje.",
       "verTodo": "Ver todo el catálogo"
     },
+    "recorrido": {
+      "lista": "Comunidades productoras, de menor a mayor altitud",
+      "unidad": "msnm",
+      "zonas": {
+        "yunga": "Yunga",
+        "quechua": "Quechua",
+        "suni": "Suni",
+        "puna": "Puna"
+      },
+      "verProductos_one": "Ver su producto",
+      "verProductos_other": "Ver sus {{count}} productos",
+      "horizonte": "Por encima de los {{valor}} metros empieza la puna."
+    },
     "trazabilidad": {
-      "eyebrow": "Trazabilidad",
-      "titulo": "Cada producto tiene un lugar en el mapa",
-      "descripcion": "Trabajamos directamente con comunidades productoras de Cusco. Toca un pin para conocer quién cultiva o teje lo que compras.",
+      "titulo": "Sube por Cusco, comunidad por comunidad",
+      "descripcion": "Las comunidades productoras, del valle a la cumbre. Pasa por un pin o por una comunidad de la lista para ubicarla.",
       "cifras": {
         "comunidades": "Comunidades productoras",
         "familias": "Familias beneficiadas",
@@ -508,14 +536,14 @@
     },
     "imagenes": {
       "elegir": "Elige fotos o arrástralas aquí",
-      "ayuda": "JPG, PNG o WebP · máx. 5 MB cada una · {{total}} de {{max}}",
+      "ayuda": "JPG, PNG o WebP · máx. 4 MB cada una · {{total}} de {{max}}",
       "principal": "Principal",
       "hacerPrincipal": "Usar como foto principal",
       "eliminar": "Eliminar foto",
       "eliminada": "Foto eliminada",
       "quitar": "Quitar {{nombre}}",
       "tipoInvalido": "{{nombre}}: solo se aceptan JPG, PNG o WebP",
-      "muyGrande": "{{nombre}} supera los 5 MB",
+      "muyGrande": "{{nombre}} supera los 4 MB",
       "limite": "Un producto admite como máximo {{max}} fotos",
       "fallos_one": "{{count}} foto no se pudo subir: vuelve a intentarlo desde la ficha",
       "fallos_other": "{{count}} fotos no se pudieron subir: vuelve a intentarlo desde la ficha",
@@ -648,7 +676,7 @@
       "CATEGORIA_CON_PRODUCTOS": "La categoría tiene productos: muévelos antes de eliminarla.",
       "ACCION_SOBRE_SI_MISMO": "No puedes cambiar tu propio rol ni desactivar tu cuenta.",
       "TIPO_ARCHIVO_INVALIDO": "El archivo no es una imagen JPG, PNG o WebP válida.",
-      "ARCHIVO_DEMASIADO_GRANDE": "La imagen supera el máximo de 5 MB.",
+      "ARCHIVO_DEMASIADO_GRANDE": "La imagen supera el máximo de 4 MB.",
       "LIMITE_IMAGENES": "El producto ya tiene el máximo de fotos.",
       "STORAGE_NO_CONFIGURADO": "El almacenamiento de imágenes no está configurado en el servidor.",
       "PRODUCTO_NO_ENCONTRADO": "No encontramos ese producto.",
@@ -895,7 +923,9 @@
       "ayudaCredenciales": "Revisa que el correo esté bien escrito y que no tengas activadas las mayúsculas.",
       "enviar": "Iniciar sesión",
       "sinCuenta": "¿Aún no tienes cuenta?",
-      "crearCuenta": "Crear una cuenta"
+      "crearCuenta": "Crear una cuenta",
+      "esEquipo": "¿Eres parte del equipo Kuski?",
+      "panelAdmin": "Ingresar al panel de administración"
     },
     "registro": {
       "eyebrow": "Únete a Kuski",

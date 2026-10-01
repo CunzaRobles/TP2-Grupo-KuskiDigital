@@ -1,5 +1,5 @@
 import { CircleCheck, CircleX, House, Package, Truck } from 'lucide-react';
-import { motion } from 'motion/react';
+import { m as motion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 import { Badge } from '@/components/ui/badge';
 import { formatDate } from '@/lib/format';
@@ -60,7 +60,7 @@ export function Tracking({ tracking, compacto = false, className }) {
         aria-hidden="true"
       >
         <motion.div
-          className="h-full origin-left bg-verde"
+          className="h-full origin-left bg-musgo"
           initial={{ scaleX: 0 }}
           animate={{ scaleX: progreso }}
           transition={{ ...transicion('lenta'), delay: 0.15 }}
@@ -85,13 +85,13 @@ export function Tracking({ tracking, compacto = false, className }) {
                   'relative flex shrink-0 items-center justify-center rounded-full border-2',
                   compacto ? 'size-8' : 'size-10',
                   paso.completado
-                    ? 'border-verde bg-verde text-alpaca'
+                    ? 'border-musgo bg-musgo text-white'
                     : 'border-border bg-background text-muted-foreground',
                 )}
               >
                 {actual && !compacto && (
                   <span
-                    className="absolute inset-0 animate-ping rounded-full bg-verde/25"
+                    className="absolute inset-0 animate-ping rounded-full bg-musgo/25"
                     aria-hidden="true"
                   />
                 )}

@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
   [
-    'relative inline-flex shrink-0 items-center justify-center gap-2 rounded-full font-sans font-semibold whitespace-nowrap select-none',
+    'relative inline-flex shrink-0 items-center justify-center gap-2 rounded-button font-sans font-semibold whitespace-nowrap select-none',
     'transition-[background-color,color,border-color,box-shadow,transform] duration-200 ease-andino',
     'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
     'active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 aria-busy:cursor-wait',
@@ -14,7 +14,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: 'bg-primary text-primary-foreground shadow-soft hover:bg-primary-hover',
+        primary: 'bg-primary text-primary-foreground shadow-field hover:bg-primary-hover',
         secondary:
           'border border-input bg-card text-foreground hover:border-foreground hover:bg-secondary',
         ghost: 'text-foreground hover:bg-secondary',
@@ -25,8 +25,8 @@ const buttonVariants = cva(
         sm: 'h-9 px-4 text-sm',
         md: 'h-11 px-6 text-sm',
         lg: 'h-13 px-8 text-base',
-        icon: 'size-11',
-        'icon-sm': 'size-9',
+        icon: 'size-11 rounded-full',
+        'icon-sm': 'size-9 rounded-full',
       },
     },
     defaultVariants: { variant: 'primary', size: 'md' },

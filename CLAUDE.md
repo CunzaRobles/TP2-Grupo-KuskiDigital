@@ -27,7 +27,7 @@ Las simulaciones deben verse reales en la interfaz (estados de carga, aprobado/r
 ## Stack (100% gratuito, no cambiar sin consultar)
 
 - Node.js 24 LTS (fijado en `.nvmrc`), npm 11, npm workspaces (un solo `package-lock.json` en la raíz)
-- **Frontend:** React 19 + Vite 8 (versiones ya instaladas, aprobadas por el equipo), React Router, Tailwind CSS v4 (`@tailwindcss/vite`), shadcn/ui (Radix), Motion (Framer Motion), TanStack Query, react-i18next, Recharts, react-leaflet, lucide-react. Usar siempre versiones compatibles con React 19 y Vite 8.
+- **Frontend:** React 19 + Vite 8 (versiones ya instaladas, aprobadas por el equipo), React Router, Tailwind CSS v4 (`@tailwindcss/vite`), shadcn/ui (Radix), Motion (Framer Motion), GSAP + `@gsap/react` (ScrollTrigger, SplitText y CustomEase; gratuitos), Lenis (scroll suave), TanStack Query, react-i18next, Recharts, react-leaflet, lucide-react. Usar siempre versiones compatibles con React 19 y Vite 8.
 - **Backend:** Express 5 (`"type": "module"`), Sequelize 6 + sequelize-cli (migraciones, seeders y config en `.cjs`), PostgreSQL en **Supabase** (conexión por `DATABASE_URL` con SSL, Session pooler), Zod, bcrypt, jsonwebtoken, helmet, cors, express-rate-limit
 - **Pruebas:** Vitest (+ Testing Library), Supertest, Cypress (E2E)
 - **Calidad:** ESLint + Prettier
@@ -105,28 +105,43 @@ Usar migraciones de Sequelize (nada de `sync()`): una migración baseline que ej
 - El costo de envío depende del país, del peso y del método (estándar 12–18 días, express 4–7 días).
 - Pago simulado: aprueba por defecto. Una tarjeta terminada en `0002` se rechaza (para demostrar el manejo de errores). Yape/Plin muestra un código de aprobación.
 
-## Dirección de diseño: "editorial andino"
+## Dirección de diseño de la tienda: "Del valle a la puna"
 
-Debe sentirse como una marca premium de origen, no como una plantilla genérica de tienda. Respetar la **estructura** de los wireframes, elevando la estética.
+Lo único de Kuski es la **altitud de origen** de sus productos: de 1,050 msnm (Quillabamba) a 3,760 msnm (Chinchero), según `comunidades.altitud_msnm`. La identidad se construye sobre ese dato real. Respetar la **estructura** de los wireframes.
 
-- **Paleta (tokens en CSS / Tailwind):** café profundo `#2B1D14`, terracota/achiote `#B5532C`, dorado maíz `#D9A441`, crema quinua `#F5EFE4`, blanco alpaca `#FBF9F5`, verde andino `#4F6B4A`. Contraste AA mínimo.
-- **Tipografía:** Fraunces (títulos, serif) + Manrope (texto). Escala tipográfica generosa.
-- **Motivo:** patrón geométrico inspirado en textiles andinos, usado de forma sutil en divisores y bordes, nunca como fondo cargado.
-- **Movimiento:** Framer Motion con transiciones suaves (200–400 ms). Respetar `prefers-reduced-motion`.
-- **Imágenes:** placeholders elegantes (Unsplash por categoría o SVG) hasta tener fotos reales; `loading="lazy"`, relación de aspecto fija.
+- **Paleta (tokens en `frontend/src/styles/tokens.css`):** Puna `#1B2440` (texto y banda oscura), Cochinilla `#A3123A` (**único acento**: CTA, "+", contador del carrito, marcador de altitud; hover `#7C1232`), Ichu `#C9A55A`, Musgo `#3E5A3A` (estados de éxito y certificaciones), Niebla `#EEF0EC` (fondo), Blanco `#FFFFFF` (superficies).
+- **Tokens derivados (aprobados):**
+  - `--color-niebla-texto` `#5B6270`: texto secundario (5.34:1 sobre Niebla).
+  - `--color-niebla-borde` `#838A82`: borde de inputs y controles (3.09:1 sobre Niebla, 3.55:1 sobre Blanco).
+  - `--color-error` `#9A3412`: errores y acciones destructivas, siempre con ícono (6.37:1 sobre Niebla). Nunca Cochinilla para errores.
+- **Reglas de contraste:** Ichu solo sobre Puna (6.56:1) o como relleno detrás de texto Puna; **nunca como texto ni línea con significado sobre Niebla/Blanco** (2.03:1). Cochinilla nunca sobre Puna (1.97:1): en la banda Puna el botón es Niebla con texto Puna y el foco es Niebla. Blanco y Niebla casi no contrastan (1.09:1): las superficies se separan con bordes finos (Puna al 12–15 %), no con sombras. `tokens.test.js` verifica los pares.
+- **Tipografía:** Unbounded (h1, h2 y cifras de altitud; peso 500–600, `hyphens: auto` por el alemán) + Hanken Grotesk (texto, h3/h4, nombres de producto, precios con `tabular-nums`). Google Fonts.
+- **Motivo:** el perfil de altitud de las comunidades, las marcas de una regla y las curvas de nivel, en bordes, divisores y como capa sutil sobre la foto del hero. Ya no se usa el patrón textil en la tienda.
+- **Radios con jerarquía** (utilidades semánticas; la tienda y `.admin` les dan valores distintos): `rounded-full` para indicadores (badges, contador, pasos, botones de icono) → `rounded-item` 2 px (ítems de lista, skeletons, checkbox) → `rounded-field` y `rounded-button` 6 px → `rounded-surface` 10 px (tarjetas, avisos) → `rounded-popover` 12 px (menús, toasts) → `rounded-dialog` 16 px (diálogos, hoja inferior). Las fotos no llevan radio.
+- **Elevación:** solo proyecta sombra lo que flota sobre la página (`shadow-overlay` en popovers, diálogos y toasts; `shadow-sheet` en drawers). `shadow-field` y `shadow-surface` no tienen sombra en la tienda: campos y superficies se separan con bordes finos. El botón primario es Cochinilla.
+- **Movimiento:** un solo momento memorable, el **recorrido "Del valle a la puna"** de la sección de categorías (al bajar con el scroll se sube en altitud; ver Home). La única animación automática de la carga es la entrada del hero: el titular por líneas con SplitText (máscara, nunca letra por letra), luego el texto, el CTA y la indicación de scroll; 1.2 s como máximo en total. El resto, movimiento solo como respuesta a acciones del usuario (agregar al carrito, abrir drawer, hover, cambio de país, cambio de ruta). Respetar `prefers-reduced-motion` (el marcador salta sin transición).
+  - Todo vive en `frontend/src/lib/motion/`: tokens de duración (`ruta` 180 ms, `rapida` 200, `base` 300, `lenta` 400) y curvas (`salida`, `suave`) espejados en `--duracion-*` / `--curva-*` de `tokens.css`; `useReducedMotion`; GSAP con sus plugins registrados una vez (`lib/motion/gsap`, curvas con nombre `'salida'`/`'suave'`; SplitText aparte en `lib/motion/split-text` y ScrollTrigger en `lib/motion/scroll-trigger`); `LenisProvider` con su propio rAF, sincronizado con ScrollTrigger vía `alHacerScrollLenis`. GSAP solo se descarga en la Home (ruta diferida): no importarlo desde código compartido. Motion se usa con `LazyMotion`: importar `m as motion`, nunca `motion`, ni `animate` estático (está en `lib/motion/funciones`).
+  - Lenis solo en la tienda (el admin conserva el scroll nativo); se detiene mientras Radix bloquea el scroll (modales).
+  - **Cambio de ruta:** fundido corto con View Transitions (`::view-transition-*(root)`); el header no se funde. Sin soporte, fundido de entrada con Motion (`TransicionRuta`). En la tienda, `Link`/`NavLink` se importan de `@/lib/motion/enlaces` y `useNavigate` de `@/lib/motion/use-navigate` (activan las View Transitions por defecto).
+  - **Elemento compartido:** la foto de una tarjeta de producto se expande hasta la foto principal de la ficha (`producto-imagen`, `features/producto/use-enlace-producto.js`, que además precarga la ficha con la intención del usuario). Nunca dos elementos con el mismo nombre en la página: los relacionados de una ficha no lo comparten.
+  - Con movimiento reducido: sin Lenis, sin View Transitions ni elemento compartido; lo esencial (que el estado cambie) se ve sin transición.
+- **Prohibido:** antetítulos en mayúsculas sobre los títulos, resaltar una palabra del titular, todas las tarjetas iguales con la misma sombra, degradados decorativos, "→" en botones, animaciones de aparición (fade-up) por sección, parallax (única excepción: las montañas del recorrido de categorías), contadores animados de cifras (única excepción: el subtotal del drawer cuenta hasta el nuevo valor al cambiar el carrito, `Price animate="conteo"`).
+- **Precisión del concepto:** la puna empieza alrededor de 4,000 m; ninguna comunidad actual llega. La regla va de 1,000 a 4,000 m con la puna como horizonte; no afirmar que un producto viene de la puna.
+- **Imágenes:** placeholders (Unsplash por categoría) hasta tener fotos reales; `loading="lazy"`, relación de aspecto fija.
+- **Panel admin:** conserva la dirección anterior "editorial andino" (café, terracota, crema; Fraunces + Manrope; botones en píldora), aislada en la clase `.admin` de `tokens.css` que aplica `ThemeScope`; sus fuentes las carga `ThemeScope` al abrir el admin.
 
 ### Pantallas de la tienda (estructura de los wireframes)
 
-1. **Header persistente:** logo, navegación, selector de idioma (ES/EN/DE) y de moneda (PEN/USD/EUR), carrito con contador animado. Se vuelve compacto al hacer scroll.
+1. **Header persistente:** fondo Niebla sólido con línea inferior; en la home es transparente (texto y foco Niebla) sobre el hero hasta que se hace scroll; logo, navegación, selector de idioma (ES/EN/DE) y de moneda (PEN/USD/EUR), carrito con contador (se mueve solo al agregar). Se vuelve compacto al hacer scroll.
 2. **Home:**
-   - Hero a pantalla completa con leve parallax y un único CTA "Explorar catálogo".
-   - Categorías en grilla bento (4).
-   - Destacados: tarjeta con hover que muestra segunda imagen, comunidad y altitud; botón "+" que agrega sin salir, con animación hacia el carrito.
-   - Bloque de trazabilidad: mapa interactivo de Cusco con pines por comunidad, más contadores animados (24 comunidades, 31 países).
-   - Footer.
-3. **Catálogo:** filtros (categoría, precio, comunidad, certificación), orden, skeletons de carga y estado vacío cuidado.
+   - Hero a pantalla completa con la foto del valle (punto de partida del recorrido), velo Puna de legibilidad, curvas de nivel y la regla del altímetro en el borde: titular corto, texto, un único CTA "Explorar catálogo" (Niebla con texto Puna, porque va sobre fondo oscuro) y la indicación de scroll con la altitud de la comunidad más baja (1,050 msnm). Debajo, el perfil de altitud de las comunidades (SVG con datos de la API).
+   - Categorías (4): el recorrido "Del valle a la puna" con GSAP ScrollTrigger. En escritorio la sección queda fija (pin); un altímetro de cinta (Ichu sobre una franja Puna) sube de la comunidad más baja a la más alta (1,050 → 3,760 msnm); el fondo cambia de piso por altitud (Musgo < 2,000 m, Ichu < 3,000 m, Puna; texto Niebla, Puna y Niebla); tres planos de montaña en SVG con parallax suave; cada categoría aparece a la altitud de su `comunidadPrincipal` (`GET /api/v1/categorias`) con foto, comunidad de origen y enlace "Ver café", etc. Solo se animan transform y opacity. En móvil, sin pin: lista vertical con el altímetro como línea lateral. Con movimiento reducido, versión estática (cuatro columnas en escritorio).
+   - Destacados: grilla editorial con bordes (no todas iguales): una protagonista 2×2, una ancha con la foto a la izquierda y el resto normales. El hover solo cambia a la segunda imagen; altitud y comunidad siempre visibles en texto pequeño (igual en las tarjetas del catálogo). Botón "+" (`features/carrito/boton-agregar.jsx`) que agrega sin salir: la miniatura viaja en arco al carrito, el contador rebota y el botón confirma "Agregado" 1.5 s.
+   - Trazabilidad: mapa interactivo de Cusco con pines junto a una lista lateral de las comunidades de menor a mayor altitud (región natural, altitud y productos). Pin y fila están enlazados: al pasar o enfocar uno se resalta el otro (Cochinilla). Debajo, cifras estáticas de `/estadisticas/trazabilidad`.
+   - Footer: banda Puna (la otra es el final del recorrido de categorías), con el perfil de altitud como borde superior.
+3. **Catálogo:** filtros (categoría, precio, comunidad, certificación), orden, skeletons de carga y estado vacío cuidado. Al filtrar, las tarjetas se reacomodan con animación de layout de Motion.
 4. **Detalle de producto:** galería con zoom, panel de compra fijo (sticky), selector de cantidad, pestañas (Descripción / Origen / Reseñas) y línea de tiempo del origen (cosecha → proceso → envío).
-5. **Carrito:** drawer lateral, más una página de resumen.
+5. **Carrito:** drawer lateral con entrada de resorte suave (todos los `Drawer` de `components/ui/drawer.jsx`), más una página de resumen.
 6. **Checkout en 4 pasos** (Envío → Método de envío → Pago → Confirmar):
    - Stepper con progreso; permite volver atrás sin perder datos.
    - Resumen del pedido fijo a la derecha.

@@ -34,6 +34,8 @@
     "abrir_other": "Warenkorb öffnen, {{count}} Artikel",
     "vacio": "Dein Warenkorb ist leer",
     "agregado": "In den Warenkorb gelegt",
+    "agregadoCorto": "Hinzugefügt",
+    "agregadoProducto": "{{nombre}} wurde in den Warenkorb gelegt",
     "agregarProducto": "{{nombre}} in den Warenkorb legen",
     "sinMasStock": "Du hast bereits den gesamten verfügbaren Bestand im Warenkorb",
     "verCarrito": "Warenkorb ansehen",
@@ -218,29 +220,55 @@
   },
   "home": {
     "hero": {
-      "eyebrow": "Cusco · 1.050 bis 3.760 m ü. M.",
-      "titulo": "Das Beste der Anden – mit Namen und Gemeinde",
-      "descripcion": "Bio-Kaffee, Superfoods, Alpaka-Textilien und Kunsthandwerk, rückverfolgbar bis zur Gemeinde, die sie herstellt.",
+      "titulo": "Vom Tal bis zur Puna",
+      "descripcion": "Kaffee, Quinoa und Alpaka aus Gemeinden in Cusco. Bei jedem Produkt steht, wer es gemacht hat und auf welcher Höhe.",
       "cta": "Katalog entdecken",
-      "imagenAlt": "Machu Picchu und die Berge von Cusco bei Sonnenuntergang"
+      "imagenAlt": "Das Urubamba-Tal mit einem Dorf am Fuß der Berge und einem Schneegipfel dahinter",
+      "inicio": "{{lugar}} · nach unten scrollen, um aufzusteigen",
+      "desliza": "Nach unten scrollen, um aufzusteigen"
+    },
+    "perfil": {
+      "resumen_one": "Höhe von {{count}} Erzeugergemeinde: {{min}} m ü. M. in {{desde}}.",
+      "resumen_other": "Höhe der {{count}} Erzeugergemeinden: von {{min}} m ü. M. in {{desde}} bis {{max}} m ü. M. in {{hasta}}.",
+      "puna": "Puna · ab {{valor}} m ü. M."
     },
     "categorias": {
-      "eyebrow": "Vier Linien, ein Ursprung",
-      "titulo": "Nach Kategorie stöbern",
-      "descripcion": "Von der Kaffeefinca am Nebelwald bis zum Webstuhl im Hochland: Jede Linie stammt aus einer anderen Gemeinde.",
+      "titulo": "Vier Linien, vier Höhen",
+      "descripcion": "Von der Kaffeefinca am Nebelwald bis zum Webstuhl im Hochland: Scrolle nach unten und steige mit ihnen auf, jede auf der Höhe der Gemeinde, die sie herstellt.",
       "productos_one": "{{count}} Produkt",
-      "productos_other": "{{count}} Produkte"
+      "productos_other": "{{count}} Produkte",
+      "lista": "Kategorien, von der niedrigsten zur höchsten Lage",
+      "origen": "Herkunft: {{comunidad}}",
+      "rango": "Von {{min}} bis {{max}} m ü. M.",
+      "verCategoria": "{{nombre}} ansehen",
+      "ver": {
+        "cafe": "Kaffee ansehen",
+        "superalimentos": "Superfoods ansehen",
+        "textiles": "Textilien ansehen",
+        "artesania": "Kunsthandwerk ansehen"
+      }
     },
     "destacados": {
-      "eyebrow": "Saisonale Auswahl",
       "titulo": "Highlights unserer Gemeinden",
-      "descripcion": "Erfahre, woher jedes Produkt stammt und in welcher Höhe es angebaut wird.",
+      "descripcion": "Jedes Produkt mit seiner Gemeinde und der Höhe, in der es angebaut oder gewebt wird.",
       "verTodo": "Gesamten Katalog ansehen"
     },
+    "recorrido": {
+      "lista": "Erzeugergemeinden, von der niedrigsten zur höchsten Lage",
+      "unidad": "m ü. M.",
+      "zonas": {
+        "yunga": "Yunga",
+        "quechua": "Quechua",
+        "suni": "Suni",
+        "puna": "Puna"
+      },
+      "verProductos_one": "Ihr Produkt ansehen",
+      "verProductos_other": "Ihre {{count}} Produkte ansehen",
+      "horizonte": "Oberhalb von {{valor}} Metern beginnt die Puna."
+    },
     "trazabilidad": {
-      "eyebrow": "Rückverfolgbarkeit",
-      "titulo": "Jedes Produkt hat einen Ort auf der Karte",
-      "descripcion": "Wir arbeiten direkt mit Erzeugergemeinden in Cusco. Tippe auf eine Markierung, um zu sehen, wer anbaut oder webt, was du kaufst.",
+      "titulo": "Durch Cusco nach oben, Gemeinde für Gemeinde",
+      "descripcion": "Die Erzeugergemeinden, vom Tal bis zum Gipfel. Fahre über eine Markierung oder eine Gemeinde in der Liste, um sie auf der Karte zu finden.",
       "cifras": {
         "comunidades": "Erzeugergemeinden",
         "familias": "Begünstigte Familien",
@@ -508,14 +536,14 @@
     },
     "imagenes": {
       "elegir": "Fotos auswählen oder hierher ziehen",
-      "ayuda": "JPG, PNG oder WebP · max. 5 MB pro Foto · {{total}} von {{max}}",
+      "ayuda": "JPG, PNG oder WebP · max. 4 MB pro Foto · {{total}} von {{max}}",
       "principal": "Hauptfoto",
       "hacerPrincipal": "Als Hauptfoto verwenden",
       "eliminar": "Foto löschen",
       "eliminada": "Foto gelöscht",
       "quitar": "{{nombre}} entfernen",
       "tipoInvalido": "{{nombre}}: nur JPG, PNG oder WebP",
-      "muyGrande": "{{nombre}} ist größer als 5 MB",
+      "muyGrande": "{{nombre}} ist größer als 4 MB",
       "limite": "Ein Produkt kann höchstens {{max}} Fotos haben",
       "fallos_one": "{{count}} Foto konnte nicht hochgeladen werden: versuche es auf der Produktseite erneut",
       "fallos_other": "{{count}} Fotos konnten nicht hochgeladen werden: versuche es auf der Produktseite erneut",
@@ -648,7 +676,7 @@
       "CATEGORIA_CON_PRODUCTOS": "Die Kategorie enthält Produkte: verschiebe sie vor dem Löschen.",
       "ACCION_SOBRE_SI_MISMO": "Du kannst deine eigene Rolle nicht ändern und dein Konto nicht deaktivieren.",
       "TIPO_ARCHIVO_INVALIDO": "Die Datei ist kein gültiges JPG-, PNG- oder WebP-Bild.",
-      "ARCHIVO_DEMASIADO_GRANDE": "Das Bild überschreitet 5 MB.",
+      "ARCHIVO_DEMASIADO_GRANDE": "Das Bild überschreitet 4 MB.",
       "LIMITE_IMAGENES": "Das Produkt hat bereits die maximale Anzahl an Fotos.",
       "STORAGE_NO_CONFIGURADO": "Der Bildspeicher ist auf dem Server nicht konfiguriert.",
       "PRODUCTO_NO_ENCONTRADO": "Dieses Produkt wurde nicht gefunden.",
@@ -895,7 +923,9 @@
       "ayudaCredenciales": "Prüfe, ob die E-Mail richtig geschrieben und die Feststelltaste aus ist.",
       "enviar": "Anmelden",
       "sinCuenta": "Noch kein Konto?",
-      "crearCuenta": "Konto erstellen"
+      "crearCuenta": "Konto erstellen",
+      "esEquipo": "Gehörst du zum Kuski-Team?",
+      "panelAdmin": "Zum Admin-Bereich"
     },
     "registro": {
       "eyebrow": "Werde Teil von Kuski",

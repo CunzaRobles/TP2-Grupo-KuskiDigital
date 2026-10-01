@@ -3,8 +3,8 @@ import { cn } from '@/lib/utils';
 
 const VARIANTES = {
   error: { icono: CircleAlert, clase: 'border-destructive/30 bg-destructive/8 text-destructive' },
-  aviso: { icono: TriangleAlert, clase: 'border-maiz/50 bg-maiz/12 text-terracota-700' },
-  exito: { icono: CircleCheck, clase: 'border-verde/30 bg-verde/10 text-verde' },
+  aviso: { icono: TriangleAlert, clase: 'border-aviso/50 bg-aviso/12 text-aviso-foreground' },
+  exito: { icono: CircleCheck, clase: 'border-musgo/30 bg-musgo/10 text-musgo' },
   info: { icono: Info, clase: 'border-border bg-surface text-foreground' },
 };
 
@@ -18,7 +18,7 @@ export function Alert({ variante = 'info', titulo, children, accion, className }
   return (
     <div
       role={variante === 'error' ? 'alert' : 'status'}
-      className={cn('flex gap-3 rounded-xl border p-4 text-sm', clase, className)}
+      className={cn('flex gap-3 rounded-surface border p-4 text-sm', clase, className)}
     >
       <Icono className="mt-0.5 size-5 shrink-0" aria-hidden="true" />
       <div className="grid flex-1 gap-1">

@@ -1,7 +1,15 @@
-import { BadgeCheck, MapPin, Mountain, ShieldCheck, ShoppingBag, Truck, Zap } from 'lucide-react';
+import {
+  BadgeCheck,
+  Check,
+  MapPin,
+  Mountain,
+  ShieldCheck,
+  ShoppingBag,
+  Truck,
+  Zap,
+} from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Price } from '@/components/ui/price';
@@ -11,8 +19,11 @@ import { toast } from '@/components/ui/toast';
 import { useCarrito } from '@/features/carrito/carrito-context';
 import { MAX_POR_PRODUCTO } from '@/features/carrito/carrito-storage';
 import { RUTA_CHECKOUT } from '@/features/carrito/rutas';
+import { useConfirmacion } from '@/features/carrito/use-confirmacion';
 import { useNombres } from '@/features/catalogo/use-nombres';
 import { formatNumber } from '@/lib/format';
+import { Link } from '@/lib/motion/enlaces';
+import { useNavigate } from '@/lib/motion/use-navigate';
 import { cn } from '@/lib/utils';
 
 // Umbral de "últimas unidades" cuando el producto no define su stock mínimo.
@@ -23,13 +34,13 @@ function EstadoStock({ producto, enCarrito }) {
   const umbral = Math.max(producto.stockMinimo ?? 0, POCAS_UNIDADES);
 
   let texto = t('producto.stock.disponible');
-  let tono = 'bg-verde';
+  let tono = 'bg-musgo';
   if (!producto.disponible) {
     texto = t('producto.agotado');
-    tono = 'bg-tierra-400';
+    tono = 'bg-niebla-borde';
   } else if (producto.stock <= umbral) {
     texto = t('producto.stock.pocas', { count: producto.stock });
-    tono = 'bg-terracota';
+    tono = 'bg-error';
   }
 
   return (
@@ -58,6 +69,7 @@ export function PanelCompra({ producto, onVerTab, className }) {
   const nombres = useNombres();
   const { agregar, abrir, cantidadEn } = useCarrito();
   const [cantidad, setCantidad] = useState(1);
+  const [agregado, confirmar] = useConfirmacion();
 
   const { categoria, comunidad, resenas } = producto;
   const enCarrito = cantidadEn(producto.id);
@@ -69,6 +81,7 @@ export function PanelCompra({ producto, onVerTab, className }) {
     const agregado = agregar(producto, cantidadValida);
     if (agregado > 0) {
       setCantidad(1);
+      confirmar();
       abrir();
     } else {
       toast.info(t('carrito.sinMasStock'), { description: producto.nombre });
@@ -86,7 +99,7 @@ export function PanelCompra({ producto, onVerTab, className }) {
         {categoria && (
           <Link
             to={`/catalogo?categoria=${categoria.slug}`}
-            className="eyebrow w-fit text-link hover:underline"
+            className="w-fit text-sm font-semibold text-muted-foreground hover:text-foreground hover:underline"
           >
             {nombres.categoria(categoria)}
           </Link>
@@ -119,7 +132,7 @@ export function PanelCompra({ producto, onVerTab, className }) {
         currency={producto.precio.moneda}
         size="xl"
         animate
-        className="text-cafe"
+        className="text-foreground"
       />
 
       {producto.certificaciones.length > 0 && (
@@ -142,12 +155,12 @@ export function PanelCompra({ producto, onVerTab, className }) {
           className="grid w-fit gap-1.5 rounded-lg text-left text-sm hover:text-link"
         >
           <span className="flex items-center gap-2 font-semibold">
-            <MapPin className="size-4 shrink-0 text-verde" aria-hidden="true" />
+            <MapPin className="size-4 shrink-0 text-musgo" aria-hidden="true" />
             {comunidad.nombre}
           </span>
           {comunidad.altitudMsnm != null && (
             <span className="flex items-center gap-2 text-muted-foreground">
-              <Mountain className="size-4 shrink-0 text-verde" aria-hidden="true" />
+              <Mountain className="size-4 shrink-0 text-musgo" aria-hidden="true" />
               {t('producto.altitud', {
                 valor: formatNumber(comunidad.altitudMsnm, i18n.resolvedLanguage),
               })}
@@ -158,7 +171,7 @@ export function PanelCompra({ producto, onVerTab, className }) {
         </button>
       )}
 
-      <div className="grid gap-4 rounded-2xl border bg-card p-5 shadow-soft">
+      <div className="grid gap-4 rounded-surface border bg-card p-5">
         <EstadoStock producto={producto} enCarrito={enCarrito} />
         <div className="flex flex-wrap items-center gap-3">
           <QuantitySelector
@@ -167,9 +180,14 @@ export function PanelCompra({ producto, onVerTab, className }) {
             max={Math.max(restante, 1)}
             disabled={!puedeAgregar}
           />
-          <Button size="lg" className="flex-1" onClick={alAgregar} disabled={!puedeAgregar}>
-            <ShoppingBag aria-hidden="true" />
-            {t('producto.agregar')}
+          <Button
+            size="lg"
+            className={cn('flex-1', agregado && 'bg-musgo hover:bg-musgo')}
+            onClick={alAgregar}
+            disabled={!puedeAgregar && !agregado}
+          >
+            {agregado ? <Check aria-hidden="true" /> : <ShoppingBag aria-hidden="true" />}
+            {agregado ? t('carrito.agregadoCorto') : t('producto.agregar')}
           </Button>
         </div>
         <Button
@@ -185,11 +203,11 @@ export function PanelCompra({ producto, onVerTab, className }) {
 
       <ul className="grid gap-3 text-sm text-muted-foreground">
         <li className="flex gap-3">
-          <Truck className="mt-0.5 size-4 shrink-0 text-verde" aria-hidden="true" />
+          <Truck className="mt-0.5 size-4 shrink-0 text-musgo" aria-hidden="true" />
           {t('producto.envio')}
         </li>
         <li className="flex gap-3">
-          <ShieldCheck className="mt-0.5 size-4 shrink-0 text-verde" aria-hidden="true" />
+          <ShieldCheck className="mt-0.5 size-4 shrink-0 text-musgo" aria-hidden="true" />
           {t('producto.sinCostosOcultos')}
         </li>
       </ul>

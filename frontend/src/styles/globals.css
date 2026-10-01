@@ -37,6 +37,9 @@
   --color-chart-1: var(--chart-1);
   --color-chart-muted: var(--chart-muted);
   --color-chart-grid: var(--chart-grid);
+  --color-aviso: var(--aviso);
+  --color-aviso-foreground: var(--aviso-foreground);
+  --color-rating: var(--rating);
 }
 
 @layer base {
@@ -65,10 +68,23 @@
   h2,
   h3,
   h4 {
-    font-family: var(--font-serif);
-    font-weight: 500;
     font-optical-sizing: auto;
     text-wrap: balance;
+  }
+
+  /* Tienda: Unbounded en h1/h2 (con guiones automáticos por las palabras largas del alemán) y
+     Hanken Grotesk en h3/h4. En .admin ambas variables apuntan a Fraunces. */
+  h1,
+  h2 {
+    font-family: var(--font-display);
+    font-weight: var(--display-weight);
+    hyphens: auto;
+  }
+
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    font-weight: var(--heading-weight);
   }
 
   p {
@@ -81,8 +97,8 @@
   }
 
   ::selection {
-    background-color: var(--color-maiz);
-    color: var(--color-cafe);
+    background-color: var(--selection);
+    color: var(--selection-foreground);
   }
 }
 
@@ -102,10 +118,44 @@
   text-transform: uppercase;
 }
 
+/* Con Lenis activo el scroll suave lo hace Lenis: el del navegador lo duplicaría */
+html.lenis {
+  scroll-behavior: auto;
+}
+
+/*
+ * View Transitions entre rutas (lib/motion/enlaces.jsx): fundido corto de la página. El header
+ * tiene su propio nombre y no se funde. La foto de la tarjeta (producto-imagen) se expande hasta
+ * la foto principal de la ficha; recorta como object-fit: cover para no deformarse.
+ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--duracion-ruta);
+  animation-timing-function: var(--curva-suave);
+}
+
+::view-transition-group(producto-imagen) {
+  animation-duration: var(--duracion-lenta);
+  animation-timing-function: var(--curva-salida);
+}
+
+::view-transition-old(producto-imagen),
+::view-transition-new(producto-imagen) {
+  height: 100%;
+  object-fit: cover;
+  overflow: clip;
+}
+
 /* prefers-reduced-motion: sin animaciones CSS ni scroll suave (Motion lo respeta vía MotionConfig) */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 
   *,

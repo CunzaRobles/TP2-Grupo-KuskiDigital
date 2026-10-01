@@ -6,6 +6,20 @@ import { routes } from '@/app/router';
 
 // Utilidades para probar páginas completas de la tienda con la API simulada.
 
+// Las páginas son rutas diferidas (`lazy`). Para las pruebas se resuelven una vez aquí: la
+// página aparece en el primer render, como con un import estático. router.test.jsx prueba la
+// carga diferida real con `routes`.
+async function resolverDiferidas(lista) {
+  return Promise.all(
+    lista.map(async ({ lazy, children, ...ruta }) => ({
+      ...ruta,
+      ...(typeof lazy === 'function' ? await lazy() : {}),
+      ...(children && { children: await resolverDiferidas(children) }),
+    })),
+  );
+}
+export const rutasResueltas = await resolverDiferidas(routes);
+
 export const json = (status, cuerpo) =>
   new Response(JSON.stringify(cuerpo), {
     status,
@@ -45,7 +59,7 @@ export const llamadas = (fetchMock, ruta) =>
     .filter(({ url, metodo }) => `${metodo} ${url.pathname.replace('/api/v1', '')}` === ruta);
 
 export function renderRuta(ruta) {
-  const router = createMemoryRouter(routes, { initialEntries: [ruta] });
+  const router = createMemoryRouter(rutasResueltas, { initialEntries: [ruta] });
   return {
     router,
     ...render(

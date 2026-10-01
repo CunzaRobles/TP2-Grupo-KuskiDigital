@@ -10,10 +10,14 @@ import apiV1 from './routes/index.js';
 
 const app = express();
 
+// Detrás del proxy de Vercel: req.secure y req.ip salen de X-Forwarded-*, así funcionan la
+// cookie `secure` y el límite de peticiones por IP.
+app.set('trust proxy', 1);
+
 app.use(helmet());
 app.use(
   cors({
-    origin: env.CORS_ORIGIN.split(',').map((o) => o.trim()),
+    origin: env.CORS_ORIGINS,
     credentials: true,
   }),
 );
@@ -26,4 +30,5 @@ app.use('/api/v1', apiV1);
 app.use(notFound);
 app.use(errorHandler);
 
+// Vercel (Express zero-config) usa esta exportación; app.listen solo vive en server.js.
 export default app;

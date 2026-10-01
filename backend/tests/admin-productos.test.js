@@ -232,8 +232,8 @@ describe('Imágenes de producto (Supabase Storage)', () => {
     expect(res.status).toBe(415);
   });
 
-  it('rechaza imágenes de más de 5 MB (413)', async () => {
-    const grande = Buffer.concat([PNG, Buffer.alloc(5 * 1024 * 1024)]);
+  it('rechaza imágenes de más de 4 MB (413)', async () => {
+    const grande = Buffer.concat([PNG, Buffer.alloc(4 * 1024 * 1024)]);
     const res = await subir(grande);
     expect(res.status).toBe(413);
     expect(res.body.error.code).toBe('ARCHIVO_DEMASIADO_GRANDE');

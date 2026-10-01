@@ -1,9 +1,9 @@
 import { ArrowRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
 import { AndeanDivider } from '@/components/ui/andean-divider';
 import { Button } from '@/components/ui/button';
 import { Ilustracion } from '@/components/ui/empty-state';
+import { Link } from '@/lib/motion/enlaces';
 
 const CATEGORIAS = ['cafe', 'superalimentos', 'textiles', 'artesania'];
 
@@ -18,7 +18,7 @@ export function NotFoundPage() {
       <div className="relative">
         <Ilustracion objeto="busqueda" className="w-64 sm:w-80" />
         <p
-          className="absolute inset-x-0 -bottom-4 font-serif text-display leading-none text-terracota-700"
+          className="absolute inset-x-0 -bottom-4 font-display text-display leading-none text-primary"
           aria-hidden="true"
         >
           404

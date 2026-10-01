@@ -190,7 +190,7 @@ export function PasoPago({ pago, rechazo, onCambiar, onVolver, onContinuar }) {
               className="items-center"
             >
               <span className="flex items-center gap-2 font-semibold">
-                <Icono className="size-4 text-verde" aria-hidden="true" />
+                <Icono className="size-4 text-musgo" aria-hidden="true" />
                 {t(`checkout.pago.metodos.${metodo}`)}
               </span>
               {deshabilitado && (

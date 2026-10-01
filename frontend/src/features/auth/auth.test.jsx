@@ -77,6 +77,30 @@ describe('login', () => {
     );
   });
 
+  it('enlaza al panel admin y lleva a un administrador directo a su panel', async () => {
+    const user = userEvent.setup();
+    let usuario = null;
+    stubApi({
+      'GET /auth/me': () =>
+        usuario ? { usuario } : json(401, { error: { code: 'NO_AUTENTICADO', message: 'x' } }),
+      'POST /auth/login': (_url, { correo }) => {
+        usuario = { ...USUARIO, correo, rol: 'admin_gerente' };
+        return { usuario };
+      },
+    });
+    const { router } = renderRuta('/login');
+
+    expect(
+      await screen.findByRole('link', { name: 'Ingresar al panel de administración' }),
+    ).toHaveAttribute('href', '/admin/login');
+
+    await user.type(screen.getByLabelText('Correo electrónico'), 'gerente@kuski.pe');
+    await user.type(screen.getByLabelText('Contraseña'), 'KuskiAdmin2026!');
+    await user.click(screen.getByRole('button', { name: 'Iniciar sesión' }));
+
+    await waitFor(() => expect(router.state.location.pathname).toMatch(/^\/admin/));
+  });
+
   it('fusiona el carrito de invitado al iniciar sesión', async () => {
     window.localStorage.setItem(
       CLAVE_CARRITO,
@@ -107,8 +131,8 @@ describe('registro', () => {
 
     const password = await screen.findByLabelText('Contraseña');
     await user.type(password, 'kuski');
-    expect(screen.getByText('Al menos una letra').closest('li')).toHaveClass('text-verde');
-    expect(screen.getByText('Al menos 8 caracteres').closest('li')).not.toHaveClass('text-verde');
+    expect(screen.getByText('Al menos una letra').closest('li')).toHaveClass('text-musgo');
+    expect(screen.getByText('Al menos 8 caracteres').closest('li')).not.toHaveClass('text-musgo');
 
     await user.type(screen.getByLabelText('Repite la contraseña'), 'otra');
     await user.click(screen.getByRole('button', { name: 'Crear cuenta' }));

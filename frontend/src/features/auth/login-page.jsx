@@ -1,34 +1,42 @@
+import { ShieldCheck } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Link, Navigate, useNavigate, useSearchParams } from 'react-router';
+import { Navigate, useSearchParams } from 'react-router';
 import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Field } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 import { mensajeError } from '@/lib/errores';
+import { esAdmin } from '@/features/admin/permisos';
 import { useFormulario } from '@/lib/formulario';
+import { Link } from '@/lib/motion/enlaces';
+import { useNavigate } from '@/lib/motion/use-navigate';
 import { useLogin, useSesion } from './api';
 import { AuthLayout } from './auth-layout';
 import { destinoSeguro, loginSchema } from './schemas';
 
 /**
  * Inicio de sesión. Con ?redirect= vuelve a donde estaba (p. ej. el checkout). El carrito de
- * invitado se fusiona solo al detectarse la sesión (CarritoProvider).
+ * invitado se fusiona solo al detectarse la sesión (CarritoProvider). Si entra un administrador
+ * sin ?redirect=, va directo a su panel.
  */
 export function LoginPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const destino = destinoSeguro(params.get('redirect'));
+  const destinoDe = (u) => (!params.get('redirect') && esAdmin(u?.rol) ? '/admin' : destino);
   const { data: usuario } = useSesion();
   const login = useLogin();
   const { errores, enviar, campo } = useFormulario(loginSchema, { correo: '', password: '' });
 
   // Ya había sesión (p. ej. volvió con "atrás"): no tiene sentido mostrar el formulario.
-  if (usuario && !login.isSuccess) return <Navigate to={destino} replace />;
+  if (usuario && !login.isSuccess) return <Navigate to={destinoDe(usuario)} replace />;
 
   const alEnviar = enviar((datos) =>
-    login.mutate(datos, { onSuccess: () => navigate(destino, { replace: true }) }),
+    login.mutate(datos, {
+      onSuccess: ({ usuario: u }) => navigate(destinoDe(u), { replace: true }),
+    }),
   );
 
   const enlaceRegistro = `/registro${params.get('redirect') ? `?redirect=${encodeURIComponent(destino)}` : ''}`;
@@ -64,6 +72,13 @@ export function LoginPage() {
         {t('auth.login.sinCuenta')}{' '}
         <Link to={enlaceRegistro} className="font-semibold text-link hover:underline">
           {t('auth.login.crearCuenta')}
+        </Link>
+      </p>
+      <p className="flex flex-wrap items-center justify-center gap-x-1.5 border-t border-border pt-5 text-center text-sm text-muted-foreground">
+        <ShieldCheck className="size-4 shrink-0" aria-hidden="true" />
+        {t('auth.login.esEquipo')}
+        <Link to="/admin/login" className="font-semibold text-link hover:underline">
+          {t('auth.login.panelAdmin')}
         </Link>
       </p>
     </AuthLayout>

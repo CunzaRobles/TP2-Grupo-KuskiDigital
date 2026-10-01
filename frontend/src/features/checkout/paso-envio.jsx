@@ -127,7 +127,7 @@ export function PasoEnvio({ direcciones, seleccion, envio, onCambiar, onContinua
               {direcciones.data.map((d) => (
                 <RadioCard key={d.id} value={String(d.id)}>
                   <span className="flex flex-wrap items-center gap-2 font-semibold">
-                    <MapPin className="size-4 text-verde" aria-hidden="true" />
+                    <MapPin className="size-4 text-musgo" aria-hidden="true" />
                     {d.nombreDestinatario}
                     {d.esPrincipal && (
                       <Badge variant="neutral">{t('cuenta.direcciones.principal')}</Badge>
@@ -138,7 +138,7 @@ export function PasoEnvio({ direcciones, seleccion, envio, onCambiar, onContinua
               ))}
               <RadioCard value={NUEVA}>
                 <span className="flex items-center gap-2 font-semibold">
-                  <Plus className="size-4 text-verde" aria-hidden="true" />
+                  <Plus className="size-4 text-musgo" aria-hidden="true" />
                   {t('checkout.envio.otra')}
                 </span>
               </RadioCard>

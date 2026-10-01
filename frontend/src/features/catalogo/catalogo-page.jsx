@@ -1,8 +1,8 @@
 import { Search, SlidersHorizontal } from 'lucide-react';
+import { AnimatePresence, m as motion } from 'motion/react';
 import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
-import { AndeanDivider } from '@/components/ui/andean-divider';
 import { Button } from '@/components/ui/button';
 import {
   Drawer,
@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/select';
 import { SectionError } from '@/features/home/section-heading';
 import { useCurrency } from '@/lib/currency';
+import { transicion } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 import { useCategorias, useComunidades, useProductos } from './api';
 import {
@@ -105,7 +106,6 @@ function Encabezado({ filtros }) {
   return (
     <header className="grid max-w-3xl gap-4">
       <title>{`${titulo} · Kuski`}</title>
-      <p className="eyebrow text-link">{t('catalogo.eyebrow')}</p>
       <h1 className="text-h1">{titulo}</h1>
       <p className="text-lead text-muted-foreground">{descripcion}</p>
     </header>
@@ -152,9 +152,8 @@ export function CatalogoPage() {
   return (
     <div className="container-page grid gap-8 py-10 sm:py-14">
       <Encabezado filtros={filtros} />
-      <AndeanDivider />
 
-      <div className="grid gap-10 lg:grid-cols-[15rem_1fr] xl:gap-14">
+      <div className="grid gap-10 border-t pt-8 lg:grid-cols-[15rem_1fr] xl:gap-14">
         {/* Escritorio: filtros en barra lateral fija */}
         <aside aria-label={t('catalogo.filtros')} className="hidden lg:block">
           <div className="sticky top-[calc(var(--spacing-header-compact)+1.5rem)] max-h-[calc(100dvh-var(--spacing-header-compact)-3rem)] overflow-y-auto pr-2 pb-4">
@@ -199,7 +198,7 @@ export function CatalogoPage() {
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h2
               id="catalogo-resultados"
-              className="text-sm font-semibold text-muted-foreground"
+              className="font-sans text-sm font-semibold text-muted-foreground"
               aria-live="polite"
             >
               {isPending
@@ -227,22 +226,35 @@ export function CatalogoPage() {
           ) : (
             <ul
               className={cn(
-                'grid grid-cols-2 gap-x-4 gap-y-10 transition-opacity duration-300 sm:gap-x-6 xl:grid-cols-3',
+                'relative grid grid-cols-2 gap-x-4 gap-y-10 transition-opacity duration-300 sm:gap-x-6 xl:grid-cols-3',
                 isPlaceholderData && 'opacity-60',
               )}
               aria-busy={isPending || isPlaceholderData || undefined}
             >
-              {isPending
-                ? Array.from({ length: 6 }, (_, i) => (
-                    <li key={i}>
-                      <ProductCardSkeleton />
-                    </li>
-                  ))
-                : items.map((producto) => (
-                    <li key={producto.id}>
+              {isPending ? (
+                Array.from({ length: 6 }, (_, i) => (
+                  <li key={i}>
+                    <ProductCardSkeleton />
+                  </li>
+                ))
+              ) : (
+                // Al filtrar u ordenar, las tarjetas que siguen se reacomodan hasta su nuevo lugar
+                // (animación de layout); solo las que salen o entran se funden.
+                <AnimatePresence mode="popLayout" initial={false}>
+                  {items.map((producto) => (
+                    <motion.li
+                      key={producto.id}
+                      layout
+                      initial={{ opacity: 0, scale: 0.97 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.97 }}
+                      transition={transicion('lenta')}
+                    >
                       <ProductCard producto={producto} />
-                    </li>
+                    </motion.li>
                   ))}
+                </AnimatePresence>
+              )}
             </ul>
           )}
 

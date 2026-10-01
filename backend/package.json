@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "API REST de Kuski Digital (Express)",
-  "main": "src/server.js",
+  "main": "src/app.js",
   "type": "module",
   "scripts": {
     "dev": "node --watch src/server.js",
@@ -19,7 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "@supabase/storage-js": "^2.117.2",
-    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^18.0.4",
@@ -31,7 +31,6 @@
     "pg": "^8.23.0",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.8",
-    "swagger-ui-express": "^5.0.1",
     "yaml": "^2.9.1",
     "zod": "^4.6.5"
   },

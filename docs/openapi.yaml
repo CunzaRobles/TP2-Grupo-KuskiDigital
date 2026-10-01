@@ -138,13 +138,25 @@ paths:
     get:
       tags: [Auth]
       summary: Usuario de la sesión actual
-      security: [{ cookieSesion: [] }]
+      description: >-
+        Sin sesión (o con un token inválido) responde 200 con `usuario: null`: un visitante
+        anónimo no es un error. Responde 401 solo si la cuenta de la sesión ya no está activa.
+      security: [{ cookieSesion: [] }, {}]
       responses:
         '200':
-          description: Perfil del usuario
+          description: Perfil del usuario, o `usuario` null sin sesión
           content:
             application/json:
-              schema: { $ref: '#/components/schemas/UsuarioRespuesta' }
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      usuario:
+                        oneOf:
+                          - { $ref: '#/components/schemas/Usuario' }
+                          - { type: 'null' }
         '401': { $ref: '#/components/responses/NoAutenticado' }
 
   # ───────────────────────── Catálogo ─────────────────────────
@@ -288,7 +300,12 @@ paths:
   /categorias:
     get:
       tags: [Catálogo]
-      summary: Categorías con número de productos activos
+      summary: Categorías con número de productos activos y rango de altitud de origen
+      description: >-
+        `altitudMin` y `altitudMax` son el MIN/MAX de `altitud_msnm` de las comunidades de los
+        productos activos de cada categoría (`null` si no tiene productos activos).
+        `comunidadPrincipal` es la comunidad que aporta más productos activos (empate: la de
+        menor altitud).
       responses:
         '200':
           description: Categorías ordenadas
@@ -1094,7 +1111,7 @@ paths:
       tags: [Admin]
       summary: Subir una imagen a Supabase Storage
       description: |
-        **Roles:** gerente. `multipart/form-data` con el archivo en `imagen` (JPG, PNG o WebP, máx. 5 MB;
+        **Roles:** gerente. `multipart/form-data` con el archivo en `imagen` (JPG, PNG o WebP, máx. 4 MB;
         se comprueba el contenido real del archivo). Se guarda en el bucket `productos` y su URL
         pública en `producto_imagenes`. La primera imagen queda como principal. Máximo 8 por producto.
       security: [{ cookieSesion: [] }]
@@ -1855,6 +1872,15 @@ components:
         imagenUrl: { type: [string, 'null'] }
         orden: { type: integer }
         totalProductos: { type: integer, example: 11 }
+        altitudMin: { type: [integer, 'null'], example: 1050, description: msnm }
+        altitudMax: { type: [integer, 'null'], example: 1050, description: msnm }
+        comunidadPrincipal:
+          type: [object, 'null']
+          description: Comunidad con más productos activos en la categoría
+          properties:
+            id: { type: integer }
+            nombre: { type: string, example: Comunidad Cafetalera de Quillabamba }
+            altitudMsnm: { type: integer, example: 1050 }
 
     Comunidad:
       type: object

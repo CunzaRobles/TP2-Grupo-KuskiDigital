@@ -1,11 +1,11 @@
 import { ArrowLeft, ArrowRight, ListChecks, ShieldCheck, Truck } from 'lucide-react';
 import { AnimatePresence } from 'motion/react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
 import { AndeanDivider } from '@/components/ui/andean-divider';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/empty-state';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Link } from '@/lib/motion/enlaces';
 import { cn } from '@/lib/utils';
 import { useCarrito } from './carrito-context';
 import { LineaCarrito, MontoCarrito } from './linea-carrito';
@@ -133,13 +133,13 @@ export function CarritoPage() {
               </Link>
             </Button>
             {hayAvisos && (
-              <p className="text-center text-sm text-terracota-700">{t('carrito.ajustaAvisos')}</p>
+              <p className="text-center text-sm text-error">{t('carrito.ajustaAvisos')}</p>
             )}
 
             <ul className="grid gap-3 border-t pt-5 text-sm text-muted-foreground">
               {GARANTIAS.map(({ icono: Icono, clave }) => (
                 <li key={clave} className="flex items-center gap-3">
-                  <Icono className="size-4 shrink-0 text-verde" aria-hidden="true" />
+                  <Icono className="size-4 shrink-0 text-musgo" aria-hidden="true" />
                   {t(clave)}
                 </li>
               ))}
