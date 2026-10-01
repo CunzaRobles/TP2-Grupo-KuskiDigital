@@ -7,6 +7,7 @@ import { Rating } from '@/components/ui/rating';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useNombres } from '@/features/catalogo/use-nombres';
 import { formatDate, formatNumber, localeDe } from '@/lib/format';
+import { imagenResponsiva } from '@/lib/imagen';
 
 const MapaOrigen = lazy(() => import('./mapa-origen'));
 
@@ -37,7 +38,7 @@ function Descripcion({ producto }) {
         ))}
       </div>
       <div className="grid content-start gap-4 rounded-2xl bg-surface p-6 text-sm">
-        <h3 className="text-h4">{t('producto.ficha.titulo')}</h3>
+        <h2 className="text-h4">{t('producto.ficha.titulo')}</h2>
         <dl className="grid gap-4">
           {[
             [t('producto.ficha.sku'), producto.sku],
@@ -90,7 +91,7 @@ function Origen({ comunidad }) {
       <div className="grid content-start gap-6">
         <div className="grid gap-2">
           <p className="eyebrow text-link">{t('producto.origen.eyebrow')}</p>
-          <h3 className="text-h3">{comunidad.nombre}</h3>
+          <h2 className="text-h3">{comunidad.nombre}</h2>
         </div>
         {comunidad.descripcion && (
           <p className="text-lg leading-relaxed text-muted-foreground">{comunidad.descripcion}</p>
@@ -137,7 +138,7 @@ function Origen({ comunidad }) {
       ) : (
         comunidad.imagenUrl && (
           <img
-            src={comunidad.imagenUrl}
+            {...imagenResponsiva(comunidad.imagenUrl, '(min-width: 1024px) 40vw, 100vw')}
             alt=""
             loading="lazy"
             className="aspect-4/3 w-full rounded-2xl object-cover shadow-card"

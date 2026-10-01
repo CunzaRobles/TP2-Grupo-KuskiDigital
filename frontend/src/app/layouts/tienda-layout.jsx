@@ -20,7 +20,9 @@ export function TiendaLayout() {
         {t('nav.saltarContenido')}
       </a>
       <SiteHeader transparente={esHome} />
-      <main id="contenido" className={cn('flex-1', !esHome && 'pt-header')}>
+      {/* min-h-dvh: el footer siempre empieza bajo el pliegue, así no salta (CLS) mientras
+          la página carga sus datos y crece */}
+      <main id="contenido" className={cn('min-h-dvh flex-1', !esHome && 'pt-header')}>
         <Outlet />
       </main>
       <SiteFooter />

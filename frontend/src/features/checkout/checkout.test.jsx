@@ -118,7 +118,7 @@ const pedidoCreado = (pago) => ({
 
 const api = (rutas = {}) =>
   stubApi({
-    'GET /auth/me': { usuario: USUARIO },
+    'GET /auth/sesion': { usuario: USUARIO },
     'GET /carrito': carritoApi([{ id: 7, producto: CAFE, cantidad: 2, precio: 65 }]),
     'GET /direcciones': DIRECCIONES,
     'POST /checkout/cotizar': cotizar,
@@ -143,7 +143,7 @@ describe('checkout', () => {
             aprobar = () => resolve(pedidoCreado(body.pago));
           }),
       });
-      const { router } = renderRuta('/checkout');
+      const { router } = await renderRuta('/checkout');
 
       // Paso 1: la dirección principal (Perú) viene elegida y el total incluye IGV
       expect(
@@ -224,7 +224,7 @@ describe('checkout', () => {
           },
         }),
       });
-      renderRuta('/checkout');
+      await renderRuta('/checkout');
 
       await user.click(await screen.findByRole('button', { name: /Continuar al método de envío/ }));
       await screen.findByRole('heading', { name: 'Elige cómo quieres recibirlo' });
@@ -258,7 +258,7 @@ describe('checkout', () => {
   it('pide una dirección nueva si no hay guardadas y la guarda con el pedido', async () => {
     const user = userEvent.setup();
     const fetchMock = api({ 'GET /direcciones': [] });
-    renderRuta('/checkout');
+    await renderRuta('/checkout');
 
     // Nombre y país vienen del perfil
     const destinatario = await screen.findByLabelText('Nombre de quien recibe');
@@ -286,7 +286,7 @@ describe('checkout', () => {
     window.localStorage.setItem('kuski.moneda', 'EUR');
     const user = userEvent.setup();
     api();
-    renderRuta('/checkout');
+    await renderRuta('/checkout');
 
     await user.click(await screen.findByRole('button', { name: /Continuar al método de envío/ }));
     await screen.findByRole('heading', { name: 'Elige cómo quieres recibirlo' });
@@ -301,7 +301,7 @@ describe('checkout', () => {
 
   it('con el carrito vacío ofrece volver al catálogo', async () => {
     api({ 'GET /carrito': carritoApi([]) });
-    renderRuta('/checkout');
+    await renderRuta('/checkout');
     expect(
       await screen.findByRole('heading', { name: 'No hay nada que pagar todavía' }),
     ).toBeInTheDocument();

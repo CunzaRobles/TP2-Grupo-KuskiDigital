@@ -267,7 +267,7 @@ export function GraficoMensual({ serie = [], cargando }) {
 export function BarrasHorizontales({ filas, className }) {
   const max = Math.max(...filas.map((f) => f.valor), 1);
   return (
-    <ul className={cn('grid gap-3', className)}>
+    <ul className={cn('grid grid-cols-1 gap-3', className)}>
       {filas.map((f) => (
         <li key={f.clave} className="grid gap-1.5">
           <div className="flex items-baseline justify-between gap-3 text-sm">

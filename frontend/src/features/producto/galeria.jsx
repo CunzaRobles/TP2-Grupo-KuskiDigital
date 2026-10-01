@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { transicion } from '@/lib/motion';
+import { imagenResponsiva, miniatura } from '@/lib/imagen';
 import { cn } from '@/lib/utils';
 
 const FLECHA =
@@ -51,7 +52,7 @@ export function Galeria({ imagenes, nombre, agotado = false }) {
           <AnimatePresence initial={false} mode="popLayout">
             <motion.img
               key={actual.url}
-              src={actual.url}
+              {...imagenResponsiva(actual.url, '(min-width: 1024px) 45vw, 100vw')}
               alt={actual.textoAlt ?? nombre}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -99,7 +100,7 @@ export function Galeria({ imagenes, nombre, agotado = false }) {
                 )}
               >
                 <img
-                  src={imagen.url}
+                  {...miniatura(imagen.url, 72)}
                   alt=""
                   loading="lazy"
                   decoding="async"

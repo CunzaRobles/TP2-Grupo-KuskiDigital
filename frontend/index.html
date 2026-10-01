@@ -9,13 +9,17 @@
       name="description"
       content="Kuski Digital: café orgánico, superalimentos, textiles de alpaca y artesanía de comunidades productoras de Cusco."
     />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Fuentes propias (src/styles/fonts.css): se piden en paralelo con el JS -->
+    <link rel="preload" href="/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Manrope:wght@400..700&display=swap"
+      rel="preload"
+      href="/fonts/fraunces-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
-    <title>Kuski Digital</title>
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <title>Kuski Digital · Café, superalimentos y alpaca de Cusco</title>
   </head>
   <body>
     <div id="root"></div>

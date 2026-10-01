@@ -895,7 +895,9 @@
       "ayudaCredenciales": "Prüfe, ob die E-Mail richtig geschrieben und die Feststelltaste aus ist.",
       "enviar": "Anmelden",
       "sinCuenta": "Noch kein Konto?",
-      "crearCuenta": "Konto erstellen"
+      "crearCuenta": "Konto erstellen",
+      "equipo": "Teil des Kuski-Teams?",
+      "accesoPanel": "Zugang zum Verwaltungsbereich"
     },
     "registro": {
       "eyebrow": "Werde Teil von Kuski",

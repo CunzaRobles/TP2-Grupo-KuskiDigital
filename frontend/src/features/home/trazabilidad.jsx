@@ -62,9 +62,11 @@ function Mapa() {
       aria-label={t('home.trazabilidad.mapa')}
       className="relative isolate h-[26rem] overflow-hidden rounded-2xl border bg-muted shadow-card sm:h-[32rem] lg:h-full lg:min-h-[34rem]"
     >
-      {isError ? (
+      {/* Lejos de la pantalla basta el fondo liso del contenedor: un skeleton animado fuera de
+          vista repintaría sin parar y ocuparía el hilo principal */}
+      {!cerca ? null : isError ? (
         <SectionError onRetry={refetch} className="h-full border-0" />
-      ) : isPending || !cerca ? (
+      ) : isPending ? (
         <Skeleton className="size-full rounded-none" />
       ) : (
         <Suspense fallback={<Skeleton className="size-full rounded-none" />}>

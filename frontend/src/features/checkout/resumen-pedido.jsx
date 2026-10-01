@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Price } from '@/components/ui/price';
 import { MontoCarrito } from '@/features/carrito/linea-carrito';
 import { formatMoney, formatNumber } from '@/lib/format';
+import { miniatura } from '@/lib/imagen';
 import { transicion } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 
@@ -56,7 +57,12 @@ export function ResumenPedido({ carrito, cotizacion, actualizando, paisCodigo, c
           <li key={l.productoId} className="flex items-center gap-3 text-sm">
             <span className="relative aspect-square w-12 shrink-0 overflow-hidden rounded-md bg-muted">
               {l.imagen ? (
-                <img src={l.imagen.url} alt="" loading="lazy" className="size-full object-cover" />
+                <img
+                  {...miniatura(l.imagen.url, 48)}
+                  alt=""
+                  loading="lazy"
+                  className="size-full object-cover"
+                />
               ) : (
                 <ImageOff className="absolute inset-0 m-auto size-4 text-muted-foreground" />
               )}

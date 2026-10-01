@@ -20,7 +20,7 @@ function Flecha({ to, etiqueta, children }) {
       {children}
     </Link>
   ) : (
-    <span className={cn(BASE, 'text-muted-foreground opacity-50')} aria-hidden="true">
+    <span className={cn(BASE, 'cursor-default text-muted-foreground')} aria-hidden="true">
       {children}
     </span>
   );

@@ -9,9 +9,12 @@ import { toast } from '@/components/ui/toast';
 import { useCarrito } from '@/features/carrito/carrito-context';
 import { volarAlCarrito } from '@/features/carrito/volar-al-carrito';
 import { formatNumber } from '@/lib/format';
+import { imagenResponsiva } from '@/lib/imagen';
 import { cn } from '@/lib/utils';
 
 const IMAGEN = 'absolute inset-0 size-full object-cover transition duration-400 ease-andino';
+// Ancho de la tarjeta: 2 columnas en móvil; 3 (catálogo) o 4 (home) en escritorio
+const TAMANO = '(min-width: 1280px) 24vw, (min-width: 1024px) 33vw, 50vw';
 
 /**
  * Tarjeta de producto: al pasar el cursor cambia a la segunda foto y muestra comunidad y altitud
@@ -67,7 +70,7 @@ export function ProductCard({ producto, className }) {
         {principal && (
           <img
             ref={imagenRef}
-            src={principal.url}
+            {...imagenResponsiva(principal.url, TAMANO)}
             alt={principal.textoAlt ?? producto.nombre}
             loading="lazy"
             decoding="async"
@@ -76,7 +79,7 @@ export function ProductCard({ producto, className }) {
         )}
         {secundaria && (
           <img
-            src={secundaria.url}
+            {...imagenResponsiva(secundaria.url, TAMANO)}
             alt=""
             aria-hidden="true"
             loading="lazy"
@@ -128,7 +131,8 @@ export function ProductCard({ producto, className }) {
             {t(`catalogo.categorias.${categoria.slug}.nombre`, { defaultValue: categoria.nombre })}
           </p>
         )}
-        <h3 className="font-serif text-lg leading-snug">
+        {/* Siempre dos líneas de alto: precios alineados y mismo alto que el skeleton */}
+        <h3 className="min-h-[2lh] font-serif text-lg leading-snug">
           {/* Enlace extendido: toda la tarjeta lleva a la ficha, salvo el botón "+" (z-10) */}
           <Link
             to={enlace}
@@ -150,14 +154,31 @@ export function ProductCard({ producto, className }) {
   );
 }
 
+// Reproduce las cajas de línea de la tarjeta real (eyebrow, nombre en 2 líneas, origen en
+// pantallas táctiles y precio): al llegar los datos la grilla no salta (CLS).
 export function ProductCardSkeleton() {
   return (
     <div className="flex flex-col gap-4">
       <Skeleton className="aspect-4/5 rounded-xl" />
-      <div className="grid gap-2">
-        <Skeleton className="h-3 w-20" />
-        <Skeleton className="h-5 w-4/5" />
-        <Skeleton className="h-5 w-16" />
+      <div className="grid grid-cols-1 gap-1.5">
+        <div className="eyebrow flex h-lh items-center">
+          <Skeleton className="h-3 w-20" />
+        </div>
+        <div className="grid h-[2lh] content-center gap-2 font-serif text-lg leading-snug">
+          <Skeleton className="h-4 w-4/5" />
+          <Skeleton className="h-4 w-1/2" />
+        </div>
+        <div className="hidden gap-1 text-xs pointer-coarse:grid">
+          <div className="flex h-lh items-center">
+            <Skeleton className="h-3 w-3/4" />
+          </div>
+          <div className="flex h-lh items-center">
+            <Skeleton className="h-3 w-1/2" />
+          </div>
+        </div>
+        <div className="flex h-lh items-center text-base">
+          <Skeleton className="h-4 w-16" />
+        </div>
       </div>
     </div>
   );

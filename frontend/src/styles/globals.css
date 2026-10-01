@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@import './fonts.css';
 @import './tokens.css';
 
 /* dark: solo aplica dentro de un contenedor .dark (panel admin), nunca por preferencia del sistema */

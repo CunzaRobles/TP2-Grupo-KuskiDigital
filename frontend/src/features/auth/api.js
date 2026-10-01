@@ -11,7 +11,7 @@ export const useSesion = () =>
     queryKey: authKeys.sesion,
     queryFn: async ({ signal }) => {
       try {
-        const data = await http.get('/auth/me', { signal });
+        const data = await http.get('/auth/sesion', { signal });
         return data?.usuario ?? null;
       } catch (err) {
         if (err instanceof ApiError && err.status === 401) return null;

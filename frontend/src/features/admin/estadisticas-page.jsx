@@ -63,7 +63,7 @@ export function EstadisticasPage() {
           descripcion={t('admin.estadisticasPage.sinVentasDetalle')}
         />
       ) : (
-        <div className="grid gap-4 xl:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
           <Panel
             titulo={t('admin.estadisticasPage.porPais')}
             descripcion={t('admin.estadisticasPage.porPaisDetalle')}

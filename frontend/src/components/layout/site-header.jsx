@@ -59,7 +59,7 @@ export function SiteHeader({ transparente = false }) {
           <Menu className="size-5" aria-hidden="true" />
         </Button>
 
-        <Link to="/" className="rounded-md" aria-label="Kuski Digital">
+        <Link to="/" className="rounded-md">
           <Logo compact={scrolled} tone={sobreHero ? 'light' : 'dark'} />
         </Link>
 

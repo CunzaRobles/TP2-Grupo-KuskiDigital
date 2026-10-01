@@ -1,18 +1,36 @@
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
-import de from '@/locales/de.json';
-import en from '@/locales/en.json';
 import es from '@/locales/es.json';
 import { IDIOMAS } from './format';
 
 export const CLAVE_IDIOMA = 'kuski.idioma';
 
+// El español (idioma por defecto y de respaldo) va en el bundle; inglés y alemán se descargan
+// solo si el visitante los usa. changeLanguage() espera a tenerlos antes de cambiar la interfaz.
+const CARGADORES = {
+  en: () => import('@/locales/en.json'),
+  de: () => import('@/locales/de.json'),
+};
+const idiomasDiferidos = {
+  type: 'backend',
+  read(idioma, _namespace, callback) {
+    const cargar = CARGADORES[idioma];
+    if (!cargar) return callback(null, {});
+    cargar().then(
+      (modulo) => callback(null, modulo.default),
+      (error) => callback(error, null),
+    );
+  },
+};
+
 i18n
+  .use(idiomasDiferidos)
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    resources: { es: { translation: es }, en: { translation: en }, de: { translation: de } },
+    resources: { es: { translation: es } },
+    partialBundledLanguages: true,
     supportedLngs: IDIOMAS,
     nonExplicitSupportedLngs: true,
     load: 'languageOnly',

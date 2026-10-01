@@ -54,7 +54,7 @@ describe('carrito de invitado (localStorage)', () => {
     ]);
     const user = userEvent.setup();
     const fetchMock = stubApi({ 'POST /carrito/invitado': preciosInvitado });
-    renderRuta('/carrito');
+    await renderRuta('/carrito');
 
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Tu carrito' }),
@@ -85,7 +85,7 @@ describe('carrito de invitado (localStorage)', () => {
         items: [lineaApi({ ...PONCHO, stock: 2 }, 4, { aviso: 'STOCK_INSUFICIENTE' })],
       },
     });
-    renderRuta('/carrito');
+    await renderRuta('/carrito');
 
     expect(await screen.findByText('Solo quedan 2 unidades')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Continuar con la compra/ })).toHaveAttribute(
@@ -96,7 +96,7 @@ describe('carrito de invitado (localStorage)', () => {
 
   it('muestra un estado vacío con salida al catálogo', async () => {
     stubApi();
-    renderRuta('/carrito');
+    await renderRuta('/carrito');
     expect(
       await screen.findByRole('heading', { name: 'Tu carrito está vacío' }),
     ).toBeInTheDocument();
@@ -110,7 +110,7 @@ describe('carrito de invitado (localStorage)', () => {
     guardarLocal([{ ...CAFE, cantidad: 1 }]);
     const user = userEvent.setup();
     stubApi({ 'POST /carrito/invitado': preciosInvitado });
-    renderRuta('/catalogo');
+    await renderRuta('/catalogo');
 
     await user.click(screen.getByRole('button', { name: 'Abrir carrito, 1 producto' }));
     const drawer = await screen.findByRole('dialog', { name: 'Tu carrito' });
@@ -141,14 +141,14 @@ describe('carrito con sesión (API)', () => {
   it('fusiona el carrito de invitado al detectar la sesión y lo borra de localStorage', async () => {
     guardarLocal([{ ...CAFE, cantidad: 2 }]);
     const fetchMock = stubApi({
-      'GET /auth/me': { usuario },
+      'GET /auth/sesion': { usuario },
       'GET /carrito': carritoApi([]),
       'POST /carrito/fusionar': {
         carrito: carritoApi([lineaPen(7, CAFE, 2)]),
         ajustes: [],
       },
     });
-    renderRuta('/carrito');
+    await renderRuta('/carrito');
 
     await waitFor(() => expect(llamadas(fetchMock, 'POST /carrito/fusionar')).toHaveLength(1));
     expect(llamadas(fetchMock, 'POST /carrito/fusionar')[0].body).toEqual({
@@ -165,14 +165,14 @@ describe('carrito con sesión (API)', () => {
     const user = userEvent.setup();
     let responder;
     const fetchMock = stubApi({
-      'GET /auth/me': { usuario },
+      'GET /auth/sesion': { usuario },
       'GET /carrito': carritoApi([lineaPen(7, CAFE, 1)]),
       'PATCH /carrito/items/7': () =>
         new Promise((resolve) => {
           responder = () => resolve(carritoApi([lineaPen(7, CAFE, 2)]));
         }),
     });
-    renderRuta('/carrito');
+    await renderRuta('/carrito');
 
     await user.click(await screen.findByRole('button', { name: 'Aumentar cantidad' }));
     // Antes de la respuesta la cantidad y el subtotal ya cambiaron

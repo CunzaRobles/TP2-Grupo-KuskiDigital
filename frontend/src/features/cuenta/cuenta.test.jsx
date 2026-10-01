@@ -41,7 +41,7 @@ const DIRECCION = {
 
 const api = (rutas = {}) =>
   stubApi({
-    'GET /auth/me': { usuario: USUARIO },
+    'GET /auth/sesion': { usuario: USUARIO },
     'GET /carrito': carritoApi([]),
     'GET /pedidos': PEDIDOS,
     'GET /direcciones': [DIRECCION],
@@ -54,7 +54,7 @@ afterEach(() => vi.unstubAllGlobals());
 describe('Mi cuenta', () => {
   it('lista mis pedidos con su tracking y enlace al detalle', async () => {
     api();
-    renderRuta('/cuenta');
+    await renderRuta('/cuenta');
 
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Hola, María' }),
@@ -78,7 +78,7 @@ describe('Mi cuenta', () => {
       'POST /direcciones': (_url, body) => ({ id: 2, ...body, esPrincipal: false }),
       'DELETE /direcciones/1': [],
     });
-    renderRuta('/cuenta/direcciones');
+    await renderRuta('/cuenta/direcciones');
 
     expect(await screen.findByText('Av. de la Cultura 1520', { exact: false })).toBeInTheDocument();
     expect(screen.getByText('Principal')).toBeInTheDocument();
@@ -110,7 +110,7 @@ describe('Mi cuenta', () => {
   it('cierra la sesión y vuelve al inicio', async () => {
     const user = userEvent.setup();
     const fetchMock = api({ 'POST /auth/logout': { ok: true } });
-    const { router } = renderRuta('/cuenta');
+    const { router } = await renderRuta('/cuenta');
 
     await user.click(await screen.findByRole('button', { name: 'Cerrar sesión' }));
     await waitFor(() => expect(router.state.location.pathname).toBe('/'));

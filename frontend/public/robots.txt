@@ -1,0 +1,4 @@
+# El panel admin no se indexa; el resto de páginas privadas ya exige sesión.
+User-agent: *
+Allow: /
+Disallow: /admin

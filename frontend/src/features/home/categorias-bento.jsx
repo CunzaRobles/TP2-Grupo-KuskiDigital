@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCategorias } from '@/features/catalogo/api';
 import { cn } from '@/lib/utils';
+import { imagenResponsiva } from '@/lib/imagen';
 import { SectionError, SectionHeading } from './section-heading';
 
 // Grilla bento de 4 celdas de distinto tamaño (la primera categoría es la protagonista).
@@ -35,7 +36,7 @@ function CategoriaCard({ categoria, indice }) {
     >
       {categoria.imagenUrl && (
         <img
-          src={categoria.imagenUrl}
+          {...imagenResponsiva(categoria.imagenUrl, '(min-width: 768px) 50vw, 100vw')}
           alt=""
           loading="lazy"
           decoding="async"

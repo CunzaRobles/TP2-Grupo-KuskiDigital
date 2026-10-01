@@ -40,7 +40,7 @@ export function Destacados() {
         >
           {isPending
             ? Array.from({ length: CANTIDAD }, (_, i) => (
-                <li key={i}>
+                <li key={`skeleton-${i}`}>
                   <ProductCardSkeleton />
                 </li>
               ))
