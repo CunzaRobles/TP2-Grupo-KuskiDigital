@@ -36,7 +36,7 @@ export function QuantitySelector({
     <div
       data-slot="quantity-selector"
       className={cn(
-        'inline-flex items-center overflow-hidden rounded-full border border-input bg-card',
+        'inline-flex items-center overflow-hidden rounded-field border border-input bg-card',
         disabled && 'opacity-50',
         className,
       )}
@@ -55,7 +55,7 @@ export function QuantitySelector({
         inputMode="numeric"
         pattern="[0-9]*"
         aria-label={label ?? t('ui.cantidad')}
-        className="w-10 bg-transparent text-center font-semibold tabular-nums outline-none focus-visible:underline"
+        className="w-10 rounded-item bg-transparent text-center font-semibold tabular-nums"
         value={borrador ?? value}
         disabled={disabled}
         onChange={(e) => setBorrador(e.target.value.replace(/\D/g, ''))}

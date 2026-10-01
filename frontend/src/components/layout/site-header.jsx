@@ -1,13 +1,14 @@
 import { Menu, ShoppingBag, UserRound } from 'lucide-react';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, m as motion } from 'motion/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, NavLink } from 'react-router';
+import { useLocation } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { useSesion } from '@/features/auth/api';
 import { useCarrito } from '@/features/carrito/carrito-context';
 import { useScrolled } from '@/lib/hooks/use-scrolled';
 import { transicion } from '@/lib/motion';
+import { Link, NavLink } from '@/lib/motion/enlaces';
 import { cn } from '@/lib/utils';
 import { Logo } from './logo';
 import { MobileMenu } from './mobile-menu';
@@ -19,39 +20,43 @@ const ENLACES_NAV = [
   { to: '/nosotros', clave: 'nav.nosotros' },
 ];
 
+// Sobre la foto del hero el header es transparente con texto Niebla: se redefinen los tokens
+// que usan sus hijos (botones ghost, enlaces, foco). Cochinilla no va sobre fondo oscuro.
+const SOBRE_HERO =
+  'border-transparent bg-transparent [--foreground:var(--color-niebla)] [--link:var(--color-niebla)] [--ring:var(--color-niebla)] [--muted-foreground:rgb(238_240_236/0.8)] [--secondary:rgb(238_240_236/0.14)] [--background:var(--color-puna)]';
+
 /**
- * Header persistente (fijo). Con `transparente` (home) arranca sin fondo y con texto claro
- * sobre el hero; al hacer scroll se compacta y gana fondo con desenfoque.
+ * Header persistente (fijo). En la home, transparente sobre el hero hasta que se hace scroll;
+ * en el resto, y al bajar, fondo Niebla sólido con línea inferior y versión compacta. Las
+ * transiciones responden al scroll del usuario.
  */
-export function SiteHeader({ transparente = false }) {
+export function SiteHeader() {
   const { t } = useTranslation();
   const scrolled = useScrolled();
   const { totalUnidades, iconoCarritoRef, abrir: abrirCarrito } = useCarrito();
   const { data: usuario } = useSesion();
   const [menuAbierto, setMenuAbierto] = useState(false);
-  const sobreHero = transparente && !scrolled;
-
-  const control = sobreHero ? 'text-alpaca hover:bg-alpaca/15' : undefined;
+  const { pathname } = useLocation();
+  const sobreHero = pathname === '/' && !scrolled;
 
   return (
     <header
+      data-sobre-hero={sobreHero || undefined}
       className={cn(
-        'fixed inset-x-0 top-0 z-40 border-b transition-[background-color,border-color,box-shadow,color] duration-300 ease-andino',
-        sobreHero && 'border-transparent bg-transparent text-alpaca',
-        !sobreHero && scrolled && 'border-border bg-background/90 shadow-soft backdrop-blur-md',
-        !sobreHero && !scrolled && 'border-transparent bg-background',
+        'fixed inset-x-0 top-0 z-40 border-b text-foreground transition-[background-color,border-color] duration-200 ease-andino [view-transition-name:site-header]',
+        sobreHero ? SOBRE_HERO : 'border-border bg-background',
       )}
     >
       <div
         className={cn(
-          'container-page flex items-center gap-2 transition-[height] duration-300 ease-andino sm:gap-4',
+          'container-page flex items-center gap-2 transition-[height] duration-200 ease-andino sm:gap-4',
           scrolled ? 'h-header-compact' : 'h-header',
         )}
       >
         <Button
           variant="ghost"
           size="icon-sm"
-          className={cn('-ml-2 md:hidden', control)}
+          className="-ml-2 md:hidden"
           aria-label={t('nav.abrirMenu')}
           aria-expanded={menuAbierto}
           onClick={() => setMenuAbierto(true)}
@@ -71,11 +76,9 @@ export function SiteHeader({ transparente = false }) {
                   to={to}
                   className={({ isActive }) =>
                     cn(
-                      'relative py-1 text-sm font-semibold transition-colors',
-                      'after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:rounded-full after:bg-current after:transition-transform after:duration-300 after:ease-andino hover:after:scale-x-100',
-                      sobreHero ? 'hover:text-maiz' : 'hover:text-link',
-                      isActive &&
-                        (sobreHero ? 'text-maiz after:scale-x-100' : 'text-link after:scale-x-100'),
+                      'relative py-1 text-sm font-semibold transition-colors hover:text-link',
+                      'after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-200 after:ease-andino hover:after:scale-x-100',
+                      isActive && 'text-link after:scale-x-100',
                     )
                   }
                 >
@@ -87,9 +90,9 @@ export function SiteHeader({ transparente = false }) {
         </nav>
 
         <div className="ml-auto flex items-center gap-0.5 sm:gap-1">
-          <LanguageSelect className={cn('hidden sm:inline-flex', control)} />
-          <CurrencySelect className={control} />
-          <Button asChild variant="ghost" size="icon" className={cn('relative', control)}>
+          <LanguageSelect className="hidden sm:inline-flex" />
+          <CurrencySelect />
+          <Button asChild variant="ghost" size="icon" className="relative">
             <Link
               to={usuario ? '/cuenta' : '/login'}
               aria-label={
@@ -99,7 +102,7 @@ export function SiteHeader({ transparente = false }) {
               <UserRound className="size-5" aria-hidden="true" />
               {usuario && (
                 <span
-                  className="absolute right-2.5 bottom-2.5 size-2 rounded-full bg-verde ring-2 ring-background"
+                  className="absolute right-2.5 bottom-2.5 size-2 rounded-full bg-musgo ring-2 ring-background"
                   aria-hidden="true"
                 />
               )}
@@ -109,16 +112,17 @@ export function SiteHeader({ transparente = false }) {
             ref={iconoCarritoRef}
             variant="ghost"
             size="icon"
-            className={cn('relative', control)}
+            className="relative"
             onClick={abrirCarrito}
             aria-haspopup="dialog"
             aria-label={t('carrito.abrir', { count: totalUnidades })}
           >
             <ShoppingBag className="size-5" aria-hidden="true" />
+            {/* Aparece con el primer producto; al llegar cada producto rebota (volar-al-carrito) */}
             <AnimatePresence initial={false}>
               {totalUnidades > 0 && (
                 <motion.span
-                  key={totalUnidades}
+                  data-slot="contador-carrito"
                   initial={{ scale: 0.4, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0.4, opacity: 0 }}

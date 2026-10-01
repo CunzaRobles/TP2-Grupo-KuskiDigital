@@ -1,6 +1,6 @@
 import { Check, Circle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Link, Navigate, useNavigate, useSearchParams } from 'react-router';
+import { Navigate, useSearchParams } from 'react-router';
 import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Field } from '@/components/ui/field';
@@ -10,6 +10,8 @@ import { PasswordInput } from '@/components/ui/password-input';
 import { useCurrency } from '@/lib/currency';
 import { erroresDeCampos, mensajeError } from '@/lib/errores';
 import { useFormulario } from '@/lib/formulario';
+import { Link } from '@/lib/motion/enlaces';
+import { useNavigate } from '@/lib/motion/use-navigate';
 import { cn } from '@/lib/utils';
 import { useRegistro, useSesion } from './api';
 import { AuthLayout } from './auth-layout';
@@ -25,7 +27,7 @@ function Requisitos({ password }) {
         return (
           <li
             key={clave}
-            className={cn('flex items-center gap-2', ok ? 'text-verde' : 'text-muted-foreground')}
+            className={cn('flex items-center gap-2', ok ? 'text-musgo' : 'text-muted-foreground')}
           >
             <Icono className="size-3.5" aria-hidden="true" />
             {t(clave)}

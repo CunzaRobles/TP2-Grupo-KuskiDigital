@@ -24,7 +24,7 @@ export function TabsTrigger({ className, ...props }) {
         'after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:origin-left after:scale-x-0 after:rounded-full after:bg-primary',
         'after:transition-transform after:duration-300 after:ease-andino',
         'data-[state=active]:text-foreground data-[state=active]:after:scale-x-100',
-        'focus-visible:rounded-sm disabled:pointer-events-none disabled:opacity-50',
+        'focus-visible:rounded-item disabled:pointer-events-none disabled:opacity-50',
         className,
       )}
       {...props}

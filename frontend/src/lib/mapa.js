@@ -15,12 +15,12 @@ export const ATRIBUCION =
   import.meta.env.VITE_MAP_TILES_ATTRIBUTION ??
   '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
 
-// Pin propio: gota terracota con el rombo maíz del isotipo.
+// Pin propio: gota Puna con el punto Cochinilla del isotipo (marcador de altitud).
 export const PIN = L.divIcon({
   className: 'kuski-pin',
   html: `<svg viewBox="0 0 32 42" aria-hidden="true">
-    <path d="M16 41s13-13.3 13-24A13 13 0 0 0 3 17c0 10.7 13 24 13 24z" fill="#b5532c" stroke="#fbf9f5" stroke-width="2"/>
-    <path d="M16 10l6 6.5-6 6.5-6-6.5z" fill="#d9a441"/>
+    <path d="M16 41s13-13.3 13-24A13 13 0 0 0 3 17c0 10.7 13 24 13 24z" fill="#1b2440" stroke="#ffffff" stroke-width="2"/>
+    <circle cx="16" cy="16.5" r="5" fill="#a3123a" stroke="#ffffff" stroke-width="1.5"/>
   </svg>`,
   iconSize: [32, 42],
   iconAnchor: [16, 41],

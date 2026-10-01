@@ -55,7 +55,7 @@ export function PasoMetodo({ cotizacion, metodoEnvio, onElegir, onVolver, onCont
               <RadioCard key={o.metodo} value={o.metodo} className="items-center">
                 <span className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
                   <span className="flex items-center gap-2 font-semibold">
-                    <Icono className="size-4 text-verde" aria-hidden="true" />
+                    <Icono className="size-4 text-musgo" aria-hidden="true" />
                     {t(`checkout.metodo.${o.metodo}`)}
                   </span>
                   <Price amount={o.costo} currency={cotizacion.data.moneda} animate />

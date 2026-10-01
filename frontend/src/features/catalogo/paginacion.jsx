@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
+import { Link } from '@/lib/motion/enlaces';
 import { cn } from '@/lib/utils';
 import { aSearchParams } from './filtros';
 

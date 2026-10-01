@@ -1,5 +1,5 @@
 import { Check, LoaderCircle } from 'lucide-react';
-import { motion } from 'motion/react';
+import { m as motion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { EASE_ANDINO } from '@/lib/motion';
@@ -24,7 +24,7 @@ export function ProcesandoPago({ abierto, metodo }) {
       >
         <span className="relative flex size-16 items-center justify-center">
           <span
-            className="absolute inset-0 animate-ping rounded-full bg-maiz/30"
+            className="absolute inset-0 animate-ping rounded-full bg-ichu/30"
             aria-hidden="true"
           />
           <LoaderCircle className="size-10 animate-spin text-primary" aria-hidden="true" />
@@ -44,7 +44,7 @@ export function ProcesandoPago({ abierto, metodo }) {
               transition={{ delay: i * 0.6, duration: 0.3, ease: EASE_ANDINO }}
               className="flex items-center gap-2"
             >
-              <Check className="size-4 text-verde" />
+              <Check className="size-4 text-musgo" />
               {t(`checkout.procesando.etapas.${etapa}`)}
             </motion.li>
           ))}

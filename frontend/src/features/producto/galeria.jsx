@@ -1,13 +1,19 @@
 import { ChevronLeft, ChevronRight, Expand, ImageOff } from 'lucide-react';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, m as motion } from 'motion/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation, useViewTransitionState } from 'react-router';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
-import { transicion } from '@/lib/motion';
+import { imagenResponsive } from '@/lib/imagenes';
+import { NOMBRE_IMAGEN_PRODUCTO, transicion } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 
+// La foto principal se pide más ancha de lo que ocupa: el zoom la muestra al doble.
+const SIZES_PRINCIPAL = '(min-width: 64rem) 60rem, 100vw';
+const MINIATURA = { anchos: [160, 320] };
+
 const FLECHA =
-  'absolute top-1/2 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-alpaca/90 text-cafe shadow-lift transition-colors hover:bg-alpaca';
+  'absolute top-1/2 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-puna shadow-lift transition-colors hover:bg-white';
 
 /**
  * Galería de la ficha: foto principal con zoom al pasar el cursor (solo con mouse), miniaturas
@@ -17,6 +23,9 @@ export function Galeria({ imagenes, nombre, agotado = false }) {
   const { t } = useTranslation();
   const [indice, setIndice] = useState(0);
   const [visor, setVisor] = useState(false);
+  // Destino (o origen) de la View Transition: la foto de la tarjeta se expande hasta aquí
+  const { pathname } = useLocation();
+  const transicionando = useViewTransitionState(pathname);
   const total = imagenes.length;
   const actual = imagenes[Math.min(indice, total - 1)];
 
@@ -32,7 +41,7 @@ export function Galeria({ imagenes, nombre, agotado = false }) {
 
   if (!actual) {
     return (
-      <div className="flex aspect-4/5 items-center justify-center rounded-2xl bg-muted">
+      <div className="flex aspect-4/5 items-center justify-center bg-muted">
         <ImageOff className="size-10 text-muted-foreground" aria-hidden="true" />
       </div>
     );
@@ -46,12 +55,14 @@ export function Galeria({ imagenes, nombre, agotado = false }) {
           onClick={() => setVisor(true)}
           onMouseMove={alMover}
           aria-label={t('producto.galeria.ampliar')}
-          className="group relative block aspect-4/5 w-full cursor-zoom-in overflow-hidden rounded-2xl bg-muted shadow-card"
+          className="group relative block aspect-4/5 w-full cursor-zoom-in overflow-hidden bg-muted"
+          style={{ viewTransitionName: transicionando ? NOMBRE_IMAGEN_PRODUCTO : undefined }}
         >
           <AnimatePresence initial={false} mode="popLayout">
             <motion.img
               key={actual.url}
-              src={actual.url}
+              {...imagenResponsive(actual.url)}
+              sizes={SIZES_PRINCIPAL}
               alt={actual.textoAlt ?? nombre}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -66,7 +77,7 @@ export function Galeria({ imagenes, nombre, agotado = false }) {
               )}
             />
           </AnimatePresence>
-          <span className="absolute right-3 bottom-3 inline-flex items-center gap-1.5 rounded-full bg-alpaca/90 px-3 py-1.5 text-xs font-semibold text-cafe shadow-soft transition-opacity group-hover:opacity-0">
+          <span className="absolute right-3 bottom-3 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-xs font-semibold text-puna shadow-soft transition-opacity group-hover:opacity-0">
             <Expand className="size-3.5" aria-hidden="true" />
             {t('producto.galeria.zoom')}
           </span>
@@ -92,14 +103,15 @@ export function Galeria({ imagenes, nombre, agotado = false }) {
                 aria-label={t('producto.galeria.ver', { n: i + 1, total })}
                 aria-current={i === indice || undefined}
                 className={cn(
-                  'block aspect-4/5 w-16 overflow-hidden rounded-lg border-2 transition-[border-color,opacity] duration-200 lg:w-full',
+                  'block aspect-4/5 w-16 overflow-hidden border-2 transition-[border-color,opacity] duration-200 lg:w-full',
                   i === indice
-                    ? 'border-primary'
+                    ? 'border-foreground'
                     : 'border-transparent opacity-70 hover:opacity-100',
                 )}
               >
                 <img
-                  src={imagen.url}
+                  {...imagenResponsive(imagen.url, MINIATURA)}
+                  sizes="72px"
                   alt=""
                   loading="lazy"
                   decoding="async"
@@ -112,16 +124,17 @@ export function Galeria({ imagenes, nombre, agotado = false }) {
       )}
 
       <Dialog open={visor} onOpenChange={setVisor}>
-        <DialogContent className="max-w-4xl gap-4 bg-alpaca p-3 sm:p-4">
+        <DialogContent className="max-w-4xl gap-4 bg-white p-3 sm:p-4">
           <DialogTitle className="sr-only">{nombre}</DialogTitle>
           <DialogDescription className="sr-only">
             {t('producto.galeria.posicion', { n: indice + 1, total })}
           </DialogDescription>
           <div className="relative">
             <img
-              src={actual.url}
+              {...imagenResponsive(actual.url)}
+              sizes="(min-width: 56rem) 56rem, 100vw"
               alt={actual.textoAlt ?? nombre}
-              className="max-h-[80dvh] w-full rounded-xl object-contain"
+              className="max-h-[80dvh] w-full object-contain"
             />
             {total > 1 && (
               <>

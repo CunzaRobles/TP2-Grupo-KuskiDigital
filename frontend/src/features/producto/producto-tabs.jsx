@@ -1,23 +1,21 @@
 import { ArrowRight, Building2, MapPin, Mountain, Users } from 'lucide-react';
 import { lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Rating } from '@/components/ui/rating';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useNombres } from '@/features/catalogo/use-nombres';
 import { formatDate, formatNumber, localeDe } from '@/lib/format';
+import { Link } from '@/lib/motion/enlaces';
 
 const MapaOrigen = lazy(() => import('./mapa-origen'));
 
 function Dato({ icono: Icono, etiqueta, children }) {
   return (
     <div className="flex gap-3">
-      <Icono className="mt-0.5 size-4 shrink-0 text-verde" aria-hidden="true" />
+      <Icono className="mt-0.5 size-4 shrink-0 text-musgo" aria-hidden="true" />
       <div className="grid gap-0.5">
-        <dt className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-          {etiqueta}
-        </dt>
+        <dt className="text-sm text-muted-foreground">{etiqueta}</dt>
         <dd className="font-medium">{children}</dd>
       </div>
     </div>
@@ -36,7 +34,7 @@ function Descripcion({ producto }) {
           <p key={i}>{p}</p>
         ))}
       </div>
-      <div className="grid content-start gap-4 rounded-2xl bg-surface p-6 text-sm">
+      <div className="grid content-start gap-4 rounded-surface border bg-card p-6 text-sm">
         <h3 className="text-h4">{t('producto.ficha.titulo')}</h3>
         <dl className="grid gap-4">
           {[
@@ -88,10 +86,7 @@ function Origen({ comunidad }) {
   return (
     <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
       <div className="grid content-start gap-6">
-        <div className="grid gap-2">
-          <p className="eyebrow text-link">{t('producto.origen.eyebrow')}</p>
-          <h3 className="text-h3">{comunidad.nombre}</h3>
-        </div>
+        <h3 className="text-h3">{comunidad.nombre}</h3>
         {comunidad.descripcion && (
           <p className="text-lg leading-relaxed text-muted-foreground">{comunidad.descripcion}</p>
         )}
@@ -126,7 +121,7 @@ function Origen({ comunidad }) {
 
       {conMapa ? (
         <div
-          className="aspect-4/3 overflow-hidden rounded-2xl border shadow-card"
+          className="aspect-4/3 overflow-hidden rounded-surface border"
           role="img"
           aria-label={t('producto.origen.mapa', { comunidad: comunidad.nombre })}
         >
@@ -140,7 +135,7 @@ function Origen({ comunidad }) {
             src={comunidad.imagenUrl}
             alt=""
             loading="lazy"
-            className="aspect-4/3 w-full rounded-2xl object-cover shadow-card"
+            className="aspect-4/3 w-full object-cover"
           />
         )
       )}
@@ -155,8 +150,8 @@ function Resenas({ resenas }) {
 
   if (resenas.total === 0) {
     return (
-      <div className="grid max-w-md gap-2 rounded-2xl border border-dashed p-8">
-        <p className="font-serif text-h4">{t('producto.resenas.vacio')}</p>
+      <div className="grid max-w-md gap-2 rounded-surface border border-dashed p-8">
+        <p className="font-heading text-h4">{t('producto.resenas.vacio')}</p>
         <p className="text-muted-foreground">{t('producto.resenas.vacioDetalle')}</p>
       </div>
     );
@@ -165,7 +160,7 @@ function Resenas({ resenas }) {
   return (
     <div className="grid gap-10 lg:grid-cols-[18rem_1fr] lg:gap-14">
       <div className="grid content-start gap-4">
-        <p className="font-serif text-display leading-none">
+        <p className="font-display text-display leading-none">
           {formatNumber(resenas.promedio, idioma, {
             minimumFractionDigits: 1,
             maximumFractionDigits: 1,
@@ -192,7 +187,7 @@ function Resenas({ resenas }) {
                   aria-hidden="true"
                 >
                   <span
-                    className="block h-full rounded-full bg-maiz"
+                    className="block h-full rounded-full bg-puna"
                     style={{ width: `${porcentaje}%` }}
                   />
                 </span>

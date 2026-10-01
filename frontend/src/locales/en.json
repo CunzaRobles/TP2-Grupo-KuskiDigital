@@ -34,6 +34,8 @@
     "abrir_other": "Open cart, {{count}} items",
     "vacio": "Your cart is empty",
     "agregado": "Added to cart",
+    "agregadoCorto": "Added",
+    "agregadoProducto": "{{nombre}} added to your cart",
     "agregarProducto": "Add {{nombre}} to cart",
     "sinMasStock": "Your cart already holds all the available stock",
     "verCarrito": "View cart",
@@ -218,29 +220,55 @@
   },
   "home": {
     "hero": {
-      "eyebrow": "Cusco · 1,050 to 3,760 m a.s.l.",
-      "titulo": "The best of the Andes, with a name and a community",
-      "descripcion": "Organic coffee, superfoods, alpaca textiles and crafts, traceable to the community that makes them.",
+      "titulo": "From the valley to the puna",
+      "descripcion": "Coffee, quinoa and alpaca from communities in Cusco. Every product shows who made it and at what altitude.",
       "cta": "Explore the catalogue",
-      "imagenAlt": "Machu Picchu and the mountains of Cusco at sunset"
+      "imagenAlt": "The Urubamba valley, with a village at the foot of the hills and a snow peak behind",
+      "inicio": "{{lugar}} · scroll down to climb",
+      "desliza": "Scroll down to climb"
+    },
+    "perfil": {
+      "resumen_one": "Altitude of {{count}} producer community: {{min}} m a.s.l. in {{desde}}.",
+      "resumen_other": "Altitude of the {{count}} producer communities: from {{min}} m a.s.l. in {{desde}} to {{max}} m a.s.l. in {{hasta}}.",
+      "puna": "Puna · from {{valor}} m a.s.l."
     },
     "categorias": {
-      "eyebrow": "Four lines, one origin",
-      "titulo": "Shop by category",
-      "descripcion": "From cloud-forest coffee farms to high-altitude looms: each line is born in a different community.",
+      "titulo": "Four lines, four altitudes",
+      "descripcion": "From cloud-forest coffee farms to high-altitude looms: scroll down and climb with them, each at the altitude of the community that makes it.",
       "productos_one": "{{count}} product",
-      "productos_other": "{{count}} products"
+      "productos_other": "{{count}} products",
+      "lista": "Categories, from lowest to highest altitude",
+      "origen": "Origin: {{comunidad}}",
+      "rango": "From {{min}} to {{max}} m a.s.l.",
+      "verCategoria": "Shop {{nombre}}",
+      "ver": {
+        "cafe": "Shop coffee",
+        "superalimentos": "Shop superfoods",
+        "textiles": "Shop textiles",
+        "artesania": "Shop crafts"
+      }
     },
     "destacados": {
-      "eyebrow": "Seasonal selection",
       "titulo": "Highlights from our communities",
-      "descripcion": "See where each product comes from and the altitude at which it is grown.",
+      "descripcion": "Each product with its community and the altitude at which it is grown or woven.",
       "verTodo": "View the full catalogue"
     },
+    "recorrido": {
+      "lista": "Producer communities, from lowest to highest altitude",
+      "unidad": "m a.s.l.",
+      "zonas": {
+        "yunga": "Yunga",
+        "quechua": "Quechua",
+        "suni": "Suni",
+        "puna": "Puna"
+      },
+      "verProductos_one": "See their product",
+      "verProductos_other": "See their {{count}} products",
+      "horizonte": "Above {{valor}} metres, the puna begins."
+    },
     "trazabilidad": {
-      "eyebrow": "Traceability",
-      "titulo": "Every product has a place on the map",
-      "descripcion": "We work directly with producer communities in Cusco. Tap a pin to meet the people who grow or weave what you buy.",
+      "titulo": "Climb through Cusco, community by community",
+      "descripcion": "The producer communities, from the valley to the summit. Hover over a pin or a community in the list to find it on the map.",
       "cifras": {
         "comunidades": "Producer communities",
         "familias": "Families benefited",
@@ -895,7 +923,9 @@
       "ayudaCredenciales": "Check that your email is spelled correctly and Caps Lock is off.",
       "enviar": "Sign in",
       "sinCuenta": "Don’t have an account yet?",
-      "crearCuenta": "Create an account"
+      "crearCuenta": "Create an account",
+      "esEquipo": "Part of the Kuski team?",
+      "panelAdmin": "Go to the admin panel"
     },
     "registro": {
       "eyebrow": "Join Kuski",

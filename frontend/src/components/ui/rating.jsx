@@ -27,7 +27,7 @@ export function Rating({ value, size = 'md', className }) {
         return (
           <span key={i} className={cn('relative', TAMANOS[size])} aria-hidden="true">
             <Star
-              className="absolute inset-0 size-full text-maiz/35"
+              className="absolute inset-0 size-full text-rating/35"
               fill="currentColor"
               strokeWidth={0}
             />
@@ -37,7 +37,7 @@ export function Rating({ value, size = 'md', className }) {
                 style={{ width: `${relleno * 100}%` }}
               >
                 <Star
-                  className={cn('text-maiz', TAMANOS[size])}
+                  className={cn('text-rating', TAMANOS[size])}
                   fill="currentColor"
                   strokeWidth={0}
                 />

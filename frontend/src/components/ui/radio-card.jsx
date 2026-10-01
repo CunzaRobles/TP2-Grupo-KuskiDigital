@@ -11,7 +11,7 @@ export function RadioCard({ className, children, ...props }) {
   return (
     <RadioGroupPrimitive.Item
       className={cn(
-        'group relative flex w-full items-start gap-4 rounded-xl border bg-card p-4 text-left shadow-soft',
+        'group relative flex w-full items-start gap-4 rounded-surface border bg-card p-4 text-left shadow-surface',
         'transition-[border-color,box-shadow,background-color] duration-200 ease-andino',
         'hover:border-foreground/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
         'data-[state=checked]:border-primary data-[state=checked]:bg-primary/4 data-[state=checked]:ring-1 data-[state=checked]:ring-primary',

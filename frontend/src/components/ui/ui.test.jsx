@@ -29,6 +29,15 @@ describe('Price', () => {
     rerender(<Price amount={40} currency="PEN" compareAt={30} />);
     expect(container.querySelector('s')).toBeNull();
   });
+
+  it('con conteo, anuncia solo el valor final y oculta los pasos intermedios', () => {
+    const { container, rerender } = render(<Price amount={40} currency="PEN" animate="conteo" />);
+    const animado = container.querySelector('[aria-hidden="true"]');
+    expect(plano(animado.textContent)).toBe('S/ 40.00');
+
+    rerender(<Price amount={65} currency="PEN" animate="conteo" />);
+    expect(plano(container.querySelector('.sr-only').textContent)).toBe('S/ 65.00');
+  });
 });
 
 describe('QuantitySelector', () => {

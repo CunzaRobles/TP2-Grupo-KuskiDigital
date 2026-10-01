@@ -155,19 +155,32 @@ describe('POST /api/v1/auth/login', () => {
 });
 
 describe('GET /api/v1/auth/me y POST /api/v1/auth/logout', () => {
-  it('sin cookie responde 401 NO_AUTENTICADO', async () => {
+  it('sin cookie responde 200 con usuario null (visitante anónimo)', async () => {
     const res = await request(app).get('/api/v1/auth/me');
 
-    expect(res.status).toBe(401);
-    expect(res.body.error.code).toBe('NO_AUTENTICADO');
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ data: { usuario: null } });
+    expect(usuarioRepository.findById).not.toHaveBeenCalled();
   });
 
-  it('con un token manipulado responde 401', async () => {
+  it('con un token manipulado no hay sesión', async () => {
     const res = await request(app)
       .get('/api/v1/auth/me')
       .set('Cookie', `${cookieDe({ id: 7 })}x`);
 
+    expect(res.status).toBe(200);
+    expect(res.body.data.usuario).toBeNull();
+  });
+
+  it('con la cuenta desactivada responde 401', async () => {
+    usuarioRepository.findById.mockResolvedValue({ ...usuarioDb, activo: false });
+
+    const res = await request(app)
+      .get('/api/v1/auth/me')
+      .set('Cookie', cookieDe({ id: 7 }));
+
     expect(res.status).toBe(401);
+    expect(res.body.error.code).toBe('NO_AUTENTICADO');
   });
 
   it('con sesión válida devuelve el perfil', async () => {
@@ -196,7 +209,7 @@ describe('GET /api/v1/auth/me y POST /api/v1/auth/logout', () => {
     const logout = await agente.post('/api/v1/auth/logout');
     expect(logout.status).toBe(200);
     expect(cookieSesion(logout)).toMatch(/Expires=Thu, 01 Jan 1970/);
-    expect((await agente.get('/api/v1/auth/me')).status).toBe(401);
+    expect((await agente.get('/api/v1/auth/me')).body.data.usuario).toBeNull();
   });
 });
 

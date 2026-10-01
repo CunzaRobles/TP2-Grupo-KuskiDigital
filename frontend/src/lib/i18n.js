@@ -1,18 +1,40 @@
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
-import de from '@/locales/de.json';
-import en from '@/locales/en.json';
 import es from '@/locales/es.json';
 import { IDIOMAS } from './format';
 
 export const CLAVE_IDIOMA = 'kuski.idioma';
 
-i18n
+// El español (idioma por defecto y de respaldo) va en el bundle; inglés y alemán se descargan
+// solo cuando se eligen o detectan. changeLanguage espera la descarga antes de cambiar.
+const traducciones = {
+  en: () => import('@/locales/en.json'),
+  de: () => import('@/locales/de.json'),
+};
+
+const cargaDiferida = {
+  type: 'backend',
+  init() {},
+  read(idioma, _espacio, listo) {
+    const cargar = traducciones[idioma];
+    if (!cargar) return listo(null, {});
+    cargar().then(
+      (modulo) => listo(null, modulo.default),
+      (error) => listo(error, null),
+    );
+  },
+};
+
+// Promesa de la inicialización: main.jsx la espera antes del primer render, así un visitante
+// en inglés o alemán no ve la tienda en español por un instante.
+export const i18nListo = i18n
+  .use(cargaDiferida)
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    resources: { es: { translation: es }, en: { translation: en }, de: { translation: de } },
+    resources: { es: { translation: es } },
+    partialBundledLanguages: true,
     supportedLngs: IDIOMAS,
     nonExplicitSupportedLngs: true,
     load: 'languageOnly',

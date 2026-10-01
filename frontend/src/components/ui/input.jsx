@@ -7,9 +7,9 @@ export function Input({ className, type = 'text', ...props }) {
       type={type}
       data-slot="input"
       className={cn(
-        'h-11 w-full min-w-0 rounded-md border border-input bg-card px-3.5 text-base text-foreground shadow-soft',
+        'h-11 w-full min-w-0 rounded-field border border-input bg-card px-3.5 text-base text-foreground shadow-field',
         'transition-[border-color,box-shadow] duration-200 ease-andino placeholder:text-muted-foreground',
-        'focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/20 focus-visible:outline-none',
+        'focus-visible:border-ring focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring',
         'aria-invalid:border-destructive aria-invalid:ring-destructive/20',
         'disabled:cursor-not-allowed disabled:opacity-50',
         'file:mr-3 file:border-0 file:bg-transparent file:text-sm file:font-semibold',
