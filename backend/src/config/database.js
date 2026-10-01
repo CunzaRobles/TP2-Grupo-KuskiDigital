@@ -1,4 +1,5 @@
 import { createRequire } from 'node:module';
+import pg from 'pg';
 import { Sequelize } from 'sequelize';
 import { env } from './env.js';
 
@@ -15,7 +16,11 @@ if (!env.DATABASE_URL) {
 const esProduccion = env.NODE_ENV === 'production';
 
 export const sequelize = new Sequelize(env.DATABASE_URL, {
-  dialect: config.dialect,
+  dialect: 'postgres',
+  // Sequelize carga pg con un require dinámico que el bundler de Vercel no detecta
+  // ("Please install pg package manually"); al pasarlo explícito queda incluido.
+  dialectModule: pg,
+  // SSL de Supabase: { require: true, rejectUnauthorized: false } (database.cjs).
   dialectOptions: config.dialectOptions,
   define: config.define,
   logging: config.logging,
