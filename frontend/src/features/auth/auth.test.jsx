@@ -107,8 +107,8 @@ describe('registro', () => {
 
     const password = await screen.findByLabelText('Contraseña');
     await user.type(password, 'kuski');
-    expect(screen.getByText('Al menos una letra').closest('li')).toHaveClass('text-verde');
-    expect(screen.getByText('Al menos 8 caracteres').closest('li')).not.toHaveClass('text-verde');
+    expect(screen.getByText('Al menos una letra').closest('li')).toHaveClass('text-musgo');
+    expect(screen.getByText('Al menos 8 caracteres').closest('li')).not.toHaveClass('text-musgo');
 
     await user.type(screen.getByLabelText('Repite la contraseña'), 'otra');
     await user.click(screen.getByRole('button', { name: 'Crear cuenta' }));

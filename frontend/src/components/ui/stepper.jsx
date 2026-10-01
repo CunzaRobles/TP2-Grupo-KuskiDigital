@@ -67,7 +67,7 @@ export function Stepper({ steps, current, onStepClick, className }) {
                   {...(clicable && { type: 'button', onClick: () => onStepClick(i) })}
                   aria-current={estado === 'actual' ? 'step' : undefined}
                   className={cn(
-                    'group flex flex-col items-center gap-2 rounded-md text-center',
+                    'group flex flex-col items-center gap-2 rounded-item text-center',
                     clicable && 'cursor-pointer',
                   )}
                 >

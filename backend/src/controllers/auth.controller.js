@@ -30,7 +30,9 @@ export const logout = (_req, res) => {
   res.json({ data: { ok: true } });
 };
 
+// Sin sesión responde 200 con usuario null (no 401): la tienda lo consulta en cada carga y un
+// visitante anónimo no es un error.
 export const me = async (req, res) => {
-  const usuario = await authService.perfil(req.usuario.id);
+  const usuario = req.usuario ? await authService.perfil(req.usuario.id) : null;
   res.json({ data: { usuario } });
 };

@@ -1,7 +1,6 @@
 import { BadgeCheck, MapPin, Mountain, ShieldCheck, ShoppingBag, Truck, Zap } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Price } from '@/components/ui/price';
@@ -13,6 +12,8 @@ import { MAX_POR_PRODUCTO } from '@/features/carrito/carrito-storage';
 import { RUTA_CHECKOUT } from '@/features/carrito/rutas';
 import { useNombres } from '@/features/catalogo/use-nombres';
 import { formatNumber } from '@/lib/format';
+import { Link } from '@/lib/motion/enlaces';
+import { useNavigate } from '@/lib/motion/use-navigate';
 import { cn } from '@/lib/utils';
 
 // Umbral de "últimas unidades" cuando el producto no define su stock mínimo.
@@ -23,13 +24,13 @@ function EstadoStock({ producto, enCarrito }) {
   const umbral = Math.max(producto.stockMinimo ?? 0, POCAS_UNIDADES);
 
   let texto = t('producto.stock.disponible');
-  let tono = 'bg-verde';
+  let tono = 'bg-musgo';
   if (!producto.disponible) {
     texto = t('producto.agotado');
-    tono = 'bg-tierra-400';
+    tono = 'bg-niebla-borde';
   } else if (producto.stock <= umbral) {
     texto = t('producto.stock.pocas', { count: producto.stock });
-    tono = 'bg-terracota';
+    tono = 'bg-error';
   }
 
   return (
@@ -119,7 +120,7 @@ export function PanelCompra({ producto, onVerTab, className }) {
         currency={producto.precio.moneda}
         size="xl"
         animate
-        className="text-cafe"
+        className="text-foreground"
       />
 
       {producto.certificaciones.length > 0 && (
@@ -142,12 +143,12 @@ export function PanelCompra({ producto, onVerTab, className }) {
           className="grid w-fit gap-1.5 rounded-lg text-left text-sm hover:text-link"
         >
           <span className="flex items-center gap-2 font-semibold">
-            <MapPin className="size-4 shrink-0 text-verde" aria-hidden="true" />
+            <MapPin className="size-4 shrink-0 text-musgo" aria-hidden="true" />
             {comunidad.nombre}
           </span>
           {comunidad.altitudMsnm != null && (
             <span className="flex items-center gap-2 text-muted-foreground">
-              <Mountain className="size-4 shrink-0 text-verde" aria-hidden="true" />
+              <Mountain className="size-4 shrink-0 text-musgo" aria-hidden="true" />
               {t('producto.altitud', {
                 valor: formatNumber(comunidad.altitudMsnm, i18n.resolvedLanguage),
               })}
@@ -185,11 +186,11 @@ export function PanelCompra({ producto, onVerTab, className }) {
 
       <ul className="grid gap-3 text-sm text-muted-foreground">
         <li className="flex gap-3">
-          <Truck className="mt-0.5 size-4 shrink-0 text-verde" aria-hidden="true" />
+          <Truck className="mt-0.5 size-4 shrink-0 text-musgo" aria-hidden="true" />
           {t('producto.envio')}
         </li>
         <li className="flex gap-3">
-          <ShieldCheck className="mt-0.5 size-4 shrink-0 text-verde" aria-hidden="true" />
+          <ShieldCheck className="mt-0.5 size-4 shrink-0 text-musgo" aria-hidden="true" />
           {t('producto.sinCostosOcultos')}
         </li>
       </ul>

@@ -28,7 +28,7 @@ describe('router', () => {
   it('muestra el home de la tienda con header y selectores', async () => {
     renderRuta('/');
     expect(
-      await screen.findByRole('heading', { level: 1, name: /Lo mejor de los Andes/ }),
+      await screen.findByRole('heading', { level: 1, name: 'Del valle a la puna' }),
     ).toBeInTheDocument();
     expect(screen.getByRole('combobox', { name: 'Moneda' })).toHaveTextContent('PEN');
     expect(screen.getByRole('combobox', { name: 'Idioma' })).toHaveTextContent('ES');
@@ -49,8 +49,10 @@ describe('router', () => {
   it('expone /design en desarrollo', async () => {
     renderRuta('/design');
     expect(
-      await screen.findByRole('heading', { level: 1, name: 'Editorial andino' }),
+      await screen.findByRole('heading', { level: 1, name: 'Del valle a la puna' }),
     ).toBeInTheDocument();
-    expect(screen.getByText('Oscuro · admin').closest('.dark')).not.toBeNull();
+    expect(screen.getByText('Tienda').closest('.admin')).toBeNull();
+    expect(screen.getByText('Admin · claro').closest('.admin')).not.toBeNull();
+    expect(screen.getByText('Admin · oscuro').closest('.admin.dark')).not.toBeNull();
   });
 });

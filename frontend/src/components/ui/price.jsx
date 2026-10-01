@@ -10,7 +10,7 @@ const TAMANOS = {
   sm: 'text-sm',
   md: 'text-base',
   lg: 'text-xl',
-  xl: 'font-serif text-h3',
+  xl: 'font-heading text-h3',
 };
 
 /**

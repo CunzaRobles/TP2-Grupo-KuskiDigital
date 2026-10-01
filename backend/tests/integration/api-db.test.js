@@ -59,6 +59,17 @@ describe.runIf(conDb)('API contra Supabase', () => {
     expect(res.body.data.resenas).toHaveProperty('distribucion');
   });
 
+  it('GET /api/v1/categorias calcula el rango de altitud de cada categoría', async () => {
+    const res = await request(app).get('/api/v1/categorias');
+
+    expect(res.status).toBe(200);
+    const cafe = res.body.data.find((c) => c.slug === 'cafe');
+    expect(cafe.altitudMin).toEqual(expect.any(Number));
+    for (const c of res.body.data.filter((c) => c.totalProductos > 0)) {
+      expect(c.altitudMin).toBeLessThanOrEqual(c.altitudMax);
+    }
+  });
+
   it('GET /api/v1/comunidades y /estadisticas/trazabilidad', async () => {
     const [comunidades, traza] = await Promise.all([
       request(app).get('/api/v1/comunidades'),

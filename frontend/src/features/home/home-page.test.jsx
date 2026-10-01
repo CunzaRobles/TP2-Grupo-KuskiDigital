@@ -35,19 +35,47 @@ const PRODUCTOS = [
   },
 ];
 
-const CATEGORIAS = ['cafe', 'superalimentos', 'textiles', 'artesania'].map((slug, i) => ({
+// [slug, altitudMin, altitudMax] (rangos reales de Supabase), en el orden de la API
+const CATEGORIAS = [
+  ['cafe', 1050, 1050],
+  ['superalimentos', 2792, 3345],
+  ['textiles', 3200, 3760],
+  ['artesania', 3122, 3122],
+].map(([slug, altitudMin, altitudMax], i) => ({
   id: i + 1,
   nombre: slug,
   slug,
   descripcion: '',
   imagenUrl: `https://img/${slug}.jpg`,
   totalProductos: 11,
+  altitudMin,
+  altitudMax,
 }));
+
+const COMUNIDADES = [
+  {
+    id: 2,
+    nombre: 'Comunidad Tejedora de Chinchero',
+    provincia: 'Urubamba',
+    altitudMsnm: 3760,
+    familiasBeneficiadas: 60,
+    totalProductos: 5,
+  },
+  {
+    id: 1,
+    nombre: 'Comunidad Cafetalera de Quillabamba',
+    provincia: 'La Convención',
+    altitudMsnm: 1050,
+    familiasBeneficiadas: 85,
+    totalProductos: 11,
+  },
+  { id: 3, nombre: 'Comunidad Agrícola de Pisac', altitudMsnm: 2970, totalProductos: 0 },
+];
 
 const RESPUESTAS = {
   '/api/v1/productos/destacados': PRODUCTOS,
   '/api/v1/categorias': CATEGORIAS,
-  '/api/v1/comunidades': [],
+  '/api/v1/comunidades': COMUNIDADES,
   '/api/v1/estadisticas/trazabilidad': {
     comunidades: 8,
     familias: 450,
@@ -105,27 +133,57 @@ describe('HomePage', () => {
   it('sigue la estructura del wireframe con un solo CTA en el hero', async () => {
     renderHome();
 
-    const hero = screen.getByRole('region', { name: /Lo mejor de los Andes/ });
+    const hero = screen.getByRole('region', { name: 'Del valle a la puna' });
     expect(within(hero).getAllByRole('link')).toHaveLength(1);
     expect(within(hero).getByRole('link', { name: /Explorar catálogo/ })).toHaveAttribute(
       'href',
       '/catalogo',
     );
 
-    expect(screen.getByRole('heading', { level: 2, name: 'Explora por categoría' })).toBeVisible();
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Cuatro líneas, cuatro alturas' }),
+    ).toBeVisible();
     expect(
       screen.getByRole('heading', { level: 2, name: 'Destacados de nuestras comunidades' }),
     ).toBeVisible();
     expect(
-      screen.getByRole('heading', { level: 2, name: 'Cada producto tiene un lugar en el mapa' }),
+      screen.getByRole('heading', { level: 2, name: 'Sube por Cusco, comunidad por comunidad' }),
     ).toBeVisible();
     expect(screen.getByRole('contentinfo')).toHaveTextContent('Pago 100 % seguro');
+  });
+
+  it('muestra el perfil de altitud de las comunidades en el hero, sin enlaces extra', async () => {
+    renderHome();
+
+    expect(
+      await screen.findByRole('img', {
+        name: 'Altitud de las 3 comunidades productoras: de 1,050 msnm en Quillabamba a 3,760 msnm en Chinchero.',
+      }),
+    ).toBeInTheDocument();
+    const hero = screen.getByRole('region', { name: 'Del valle a la puna' });
+    expect(within(hero).getAllByRole('link')).toHaveLength(1);
+  });
+
+  it('ordena las categorías por altitud con su rango de origen', async () => {
+    renderHome();
+
+    const seccion = screen.getByRole('region', { name: 'Cuatro líneas, cuatro alturas' });
+    await within(seccion).findAllByText('11 productos');
+    const enlaces = within(seccion).getAllByRole('link');
+    expect(enlaces.map((a) => a.getAttribute('href'))).toEqual([
+      '/catalogo?categoria=cafe',
+      '/catalogo?categoria=superalimentos',
+      '/catalogo?categoria=artesania',
+      '/catalogo?categoria=textiles',
+    ]);
+    expect(enlaces[0]).toHaveTextContent('1,050 msnm');
+    expect(enlaces[3]).toHaveTextContent('3,200–3,760 msnm');
   });
 
   it('enlaza las 4 categorías al catálogo filtrado', async () => {
     renderHome();
 
-    const seccion = screen.getByRole('region', { name: 'Explora por categoría' });
+    const seccion = screen.getByRole('region', { name: 'Cuatro líneas, cuatro alturas' });
     expect(await within(seccion).findAllByText('11 productos')).toHaveLength(4);
     expect(within(seccion).getAllByRole('link')).toHaveLength(4);
     expect(within(seccion).getByRole('link', { name: /Café/ })).toHaveAttribute(
@@ -145,8 +203,15 @@ describe('HomePage', () => {
       'href',
       '/producto/cafe-geisha',
     );
-    expect(screen.getAllByText('Comunidad Cafetalera de Quillabamba')[0]).toBeInTheDocument();
-    expect(screen.getAllByText('1,050 msnm')[0]).toBeInTheDocument();
+    const seccion = screen.getByRole('region', { name: 'Destacados de nuestras comunidades' });
+    expect(within(seccion).getByTitle('Comunidad Cafetalera de Quillabamba')).toHaveTextContent(
+      'Quillabamba',
+    );
+    expect(within(seccion).getByText('1,050 msnm')).toBeInTheDocument();
+    expect(within(seccion).getByRole('link', { name: 'Ver todo el catálogo' })).toHaveAttribute(
+      'href',
+      '/catalogo',
+    );
     expect(screen.getByText('Agotado')).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: 'Agregar Chal de alpaca al carrito' }),
@@ -170,6 +235,17 @@ describe('HomePage', () => {
     expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
   });
 
+  it('precarga la ficha al pasar el cursor por un destacado (para el elemento compartido)', async () => {
+    const user = userEvent.setup();
+    const fetchMock = stubApi();
+    renderHome();
+
+    await user.hover(await screen.findByRole('link', { name: 'Café Geisha de Quillabamba' }));
+
+    const urls = fetchMock.mock.calls.map(([url]) => String(url));
+    expect(urls).toContain('/api/v1/productos/cafe-geisha?moneda=PEN');
+  });
+
   it('pide los destacados en la moneda elegida', async () => {
     window.localStorage.setItem('kuski.moneda', 'EUR');
     const fetchMock = stubApi();
@@ -178,6 +254,27 @@ describe('HomePage', () => {
     await screen.findByRole('link', { name: 'Café Geisha de Quillabamba' });
     const urls = fetchMock.mock.calls.map(([url]) => String(url));
     expect(urls).toContain('/api/v1/productos/destacados?moneda=EUR&limit=8');
+  });
+
+  it('recorre las comunidades del valle a la cumbre con su región natural', async () => {
+    renderHome();
+
+    const lista = await screen.findByRole('list', {
+      name: 'Comunidades productoras, de menor a mayor altitud',
+    });
+    const paradas = within(lista).getAllByRole('listitem');
+    expect(paradas.map((p) => within(p).getByRole('heading', { level: 3 }).textContent)).toEqual([
+      'Comunidad Cafetalera de Quillabamba',
+      'Comunidad Agrícola de Pisac',
+      'Comunidad Tejedora de Chinchero',
+    ]);
+    expect(paradas[0]).toHaveTextContent('msnm · Yunga');
+    expect(paradas[2]).toHaveTextContent('msnm · Suni');
+    expect(within(paradas[0]).getByRole('link', { name: 'Ver sus 11 productos' })).toHaveAttribute(
+      'href',
+      '/catalogo?comunidad=1',
+    );
+    expect(within(paradas[1]).queryByRole('link')).not.toBeInTheDocument();
   });
 
   it('muestra las cifras de trazabilidad para lectores de pantalla', async () => {

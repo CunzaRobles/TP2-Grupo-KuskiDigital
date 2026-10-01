@@ -218,29 +218,43 @@
   },
   "home": {
     "hero": {
-      "eyebrow": "Cusco · 1,050 to 3,760 m a.s.l.",
-      "titulo": "The best of the Andes, with a name and a community",
-      "descripcion": "Organic coffee, superfoods, alpaca textiles and crafts, traceable to the community that makes them.",
+      "titulo": "From the valley to the puna",
+      "descripcion": "Cloud-forest coffee, quinoa from the Sacred Valley and alpaca from the Cusco highlands. Every product carries the altitude of the community that makes it.",
       "cta": "Explore the catalogue",
       "imagenAlt": "Machu Picchu and the mountains of Cusco at sunset"
     },
+    "perfil": {
+      "resumen_one": "Altitude of {{count}} producer community: {{min}} m a.s.l. in {{desde}}.",
+      "resumen_other": "Altitude of the {{count}} producer communities: from {{min}} m a.s.l. in {{desde}} to {{max}} m a.s.l. in {{hasta}}.",
+      "puna": "Puna · from {{valor}} m a.s.l."
+    },
     "categorias": {
-      "eyebrow": "Four lines, one origin",
-      "titulo": "Shop by category",
-      "descripcion": "From cloud-forest coffee farms to high-altitude looms: each line is born in a different community.",
+      "titulo": "Four lines, four altitudes",
+      "descripcion": "From cloud-forest coffee farms to high-altitude looms: each line sits at the altitude of the communities that make it.",
       "productos_one": "{{count}} product",
       "productos_other": "{{count}} products"
     },
     "destacados": {
-      "eyebrow": "Seasonal selection",
       "titulo": "Highlights from our communities",
-      "descripcion": "See where each product comes from and the altitude at which it is grown.",
+      "descripcion": "Each product with its community and the altitude at which it is grown or woven.",
       "verTodo": "View the full catalogue"
     },
+    "recorrido": {
+      "lista": "Producer communities, from lowest to highest altitude",
+      "unidad": "m a.s.l.",
+      "zonas": {
+        "yunga": "Yunga",
+        "quechua": "Quechua",
+        "suni": "Suni",
+        "puna": "Puna"
+      },
+      "verProductos_one": "See their product",
+      "verProductos_other": "See their {{count}} products",
+      "horizonte": "Above {{valor}} metres, the puna begins."
+    },
     "trazabilidad": {
-      "eyebrow": "Traceability",
-      "titulo": "Every product has a place on the map",
-      "descripcion": "We work directly with producer communities in Cusco. Tap a pin to meet the people who grow or weave what you buy.",
+      "titulo": "Climb through Cusco, community by community",
+      "descripcion": "Scroll down the page and travel through the producer communities from the valley to the summit. Then find them on the map.",
       "cifras": {
         "comunidades": "Producer communities",
         "familias": "Families benefited",

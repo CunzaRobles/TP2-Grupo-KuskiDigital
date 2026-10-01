@@ -1,7 +1,7 @@
 import { ArrowRight, Check, Copy, CreditCard, ImageOff, Mail, MapPin, Truck } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation, useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import { AndeanDivider } from '@/components/ui/andean-divider';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/empty-state';
@@ -13,6 +13,7 @@ import { SectionError } from '@/features/home/section-heading';
 import { usePedido } from '@/features/cuenta/api';
 import { formatDate, formatNumber } from '@/lib/format';
 import { EASE_ANDINO } from '@/lib/motion';
+import { Link } from '@/lib/motion/enlaces';
 import { banderaPais, nombrePais } from '@/lib/paises';
 import { EstadoPedido, Tracking } from './tracking';
 
@@ -20,7 +21,7 @@ function Tarjeta({ icono: Icono, titulo, children }) {
   return (
     <section className="grid content-start gap-3 rounded-2xl border bg-card p-6 shadow-soft">
       <h2 className="flex items-center gap-2 text-sm font-semibold">
-        <Icono className="size-4 text-verde" aria-hidden="true" />
+        <Icono className="size-4 text-musgo" aria-hidden="true" />
         {titulo}
       </h2>
       <div className="grid gap-1 text-sm text-muted-foreground">{children}</div>
@@ -136,7 +137,7 @@ export function ConfirmacionPage() {
             initial={{ scale: 0.4, opacity: 0, rotate: -20 }}
             animate={{ scale: 1, opacity: 1, rotate: 0 }}
             transition={{ duration: 0.4, ease: EASE_ANDINO }}
-            className="flex size-14 items-center justify-center rounded-full bg-verde text-alpaca shadow-lift"
+            className="flex size-14 items-center justify-center rounded-full bg-musgo text-white shadow-lift"
             aria-hidden="true"
           >
             <Check className="size-7" strokeWidth={3} />
@@ -161,7 +162,7 @@ export function ConfirmacionPage() {
         <div className="flex flex-wrap items-center gap-3">
           <span className="text-sm text-muted-foreground">{t('pedidos.detalle.codigo')}</span>
           <span
-            className="rounded-lg bg-cafe px-3 py-1.5 font-mono text-lg font-bold tracking-wider text-alpaca"
+            className="rounded-lg bg-puna px-3 py-1.5 font-mono text-lg font-bold tracking-wider text-white"
             data-testid="codigo-pedido"
           >
             {pedido.codigo}
@@ -225,11 +226,11 @@ export function ConfirmacionPage() {
                 </span>
                 <span className="grid min-w-0 flex-1 gap-0.5">
                   {item.slug ? (
-                    <Link to={`/producto/${item.slug}`} className="font-serif hover:text-link">
+                    <Link to={`/producto/${item.slug}`} className="font-semibold hover:text-link">
                       {item.nombreProducto}
                     </Link>
                   ) : (
-                    <span className="font-serif">{item.nombreProducto}</span>
+                    <span className="font-semibold">{item.nombreProducto}</span>
                   )}
                   <span className="text-sm text-muted-foreground">
                     {item.cantidad} ×{' '}

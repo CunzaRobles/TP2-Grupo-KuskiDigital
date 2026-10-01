@@ -1,7 +1,7 @@
 import { ArrowRight, ChevronRight } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { AndeanDivider } from '@/components/ui/andean-divider';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/empty-state';
@@ -9,6 +9,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ProductCard, ProductCardSkeleton } from '@/features/catalogo/product-card';
 import { useNombres } from '@/features/catalogo/use-nombres';
 import { SectionError, SectionHeading } from '@/features/home/section-heading';
+import { Link } from '@/lib/motion/enlaces';
 import { useProducto, useRelacionados } from './api';
 import { Galeria } from './galeria';
 import { PanelCompra } from './panel-compra';
@@ -67,7 +68,7 @@ function Relacionados({ slug }) {
             ))
           : productos.map((producto) => (
               <li key={producto.id}>
-                <ProductCard producto={producto} />
+                <ProductCard producto={producto} compartirImagen={false} />
               </li>
             ))}
       </ul>

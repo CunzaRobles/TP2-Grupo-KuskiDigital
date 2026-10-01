@@ -7,6 +7,7 @@ import { CatalogoPage } from '@/features/catalogo/catalogo-page';
 import { HomePage } from '@/features/home/home-page';
 import { ProductoRuta } from '@/features/producto/producto-page';
 import { TiendaLayout } from './layouts/tienda-layout';
+import { CargaInicial } from './pages/carga-inicial';
 import { NotFoundPage } from './pages/not-found-page';
 
 // El panel admin se carga en diferido: el visitante de la tienda no descarga su código.
@@ -25,10 +26,12 @@ const conPermiso = (permiso, children) => ({
 const rutasAdmin = [
   {
     path: '/admin/login',
+    HydrateFallback: CargaInicial,
     lazy: pagina(() => import('@/features/admin/admin-login-page'), 'AdminLoginPage'),
   },
   {
     path: '/admin',
+    HydrateFallback: CargaInicial,
     lazy: pagina(guardiasAdmin, 'RequireAdmin'),
     children: [
       {
@@ -116,6 +119,7 @@ const rutasDesarrollo = import.meta.env.DEV
   ? [
       {
         path: '/design',
+        HydrateFallback: CargaInicial,
         lazy: async () => ({
           Component: (await import('@/features/design-system/design-system-page')).DesignSystemPage,
         }),
@@ -127,6 +131,7 @@ export const routes = [
   {
     path: '/',
     Component: TiendaLayout,
+    HydrateFallback: CargaInicial,
     children: [
       { index: true, Component: HomePage },
       { path: 'catalogo', Component: CatalogoPage },

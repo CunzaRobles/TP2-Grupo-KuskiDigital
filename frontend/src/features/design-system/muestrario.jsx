@@ -1,7 +1,6 @@
 import { Leaf, Mountain, Plus, ShoppingBag } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AndeanDivider } from '@/components/ui/andean-divider';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -55,7 +54,7 @@ const ENVIO_POR_PAIS = { PE: 15, DE: 128.5, US: 142 };
 function Grupo({ titulo, children }) {
   return (
     <div className="grid gap-3">
-      <h3 className="eyebrow text-muted-foreground">{titulo}</h3>
+      <h3 className="text-sm font-semibold text-muted-foreground">{titulo}</h3>
       {children}
     </div>
   );
@@ -156,7 +155,7 @@ export function Muestrario() {
           <Badge variant="maiz">Comercio justo</Badge>
           <Badge variant="primary">Nuevo</Badge>
           <Badge>
-            <Mountain aria-hidden="true" /> 3 400 msnm
+            <Mountain aria-hidden="true" /> 3,400 msnm
           </Badge>
           <Badge variant="outline">Pendiente</Badge>
           <Badge variant="destructive">Sin stock</Badge>
@@ -165,7 +164,7 @@ export function Muestrario() {
 
       <Grupo titulo="Card · QuantitySelector">
         <Card interactive className="max-w-sm">
-          <div className="aspect-4/3 overflow-hidden rounded-lg bg-secondary">
+          <div className="aspect-4/3 overflow-hidden bg-secondary">
             <img
               src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?auto=format&fit=crop&w=640&q=70"
               alt="Granos de café tostado"
@@ -174,7 +173,7 @@ export function Muestrario() {
             />
           </div>
           <CardHeader>
-            <p className="eyebrow text-link">Comunidad Huayopata</p>
+            <p className="text-sm text-muted-foreground">1,600 msnm · Huayopata</p>
             <CardTitle>Café orgánico de altura</CardTitle>
             <CardDescription>Tostado medio, notas de cacao y panela. 250 g.</CardDescription>
           </CardHeader>
@@ -230,7 +229,7 @@ export function Muestrario() {
 
       <Grupo titulo="Skeleton">
         <div className="flex max-w-sm gap-4">
-          <Skeleton className="size-20 shrink-0 rounded-lg" />
+          <Skeleton className="size-20 shrink-0" />
           <div className="grid flex-1 content-center gap-2">
             <Skeleton className="h-4 w-3/4" />
             <Skeleton className="h-3 w-1/2" />
@@ -275,7 +274,7 @@ export function Muestrario() {
               <DrawerBody className="grid content-start gap-4">
                 {[0, 1].map((i) => (
                   <div key={i} className="flex gap-4">
-                    <Skeleton className="size-16 rounded-lg" />
+                    <Skeleton className="size-16" />
                     <div className="grid flex-1 content-center gap-2">
                       <Skeleton className="h-4 w-2/3" />
                       <Skeleton className="h-3 w-1/3" />
@@ -311,8 +310,6 @@ export function Muestrario() {
           </Button>
         </div>
       </Grupo>
-
-      <AndeanDivider variant="ornament" />
     </div>
   );
 }

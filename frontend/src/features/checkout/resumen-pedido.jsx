@@ -60,7 +60,7 @@ export function ResumenPedido({ carrito, cotizacion, actualizando, paisCodigo, c
               ) : (
                 <ImageOff className="absolute inset-0 m-auto size-4 text-muted-foreground" />
               )}
-              <span className="absolute top-0 right-0 min-w-5 rounded-bl-md bg-cafe px-1 text-center text-[0.6875rem] leading-5 font-bold text-alpaca tabular-nums">
+              <span className="absolute top-0 right-0 min-w-5 rounded-bl-md bg-puna px-1 text-center text-[0.6875rem] leading-5 font-bold text-white tabular-nums">
                 {l.cantidad}
               </span>
             </span>
@@ -147,7 +147,7 @@ export function ResumenPedido({ carrito, cotizacion, actualizando, paisCodigo, c
       </div>
 
       <p className="flex gap-2 rounded-lg bg-surface p-3 text-xs text-muted-foreground">
-        <ShieldCheck className="size-4 shrink-0 text-verde" aria-hidden="true" />
+        <ShieldCheck className="size-4 shrink-0 text-musgo" aria-hidden="true" />
         {t('checkout.resumen.sinCostosOcultos')}
       </p>
     </section>

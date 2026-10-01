@@ -2,7 +2,6 @@ import { ArrowRight, Lock } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useReducer, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router';
 import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/empty-state';
@@ -13,6 +12,8 @@ import { useCarrito } from '@/features/carrito/carrito-context';
 import { useDirecciones } from '@/features/cuenta/api';
 import { useCurrency } from '@/lib/currency';
 import { transicion } from '@/lib/motion';
+import { Link } from '@/lib/motion/enlaces';
+import { useNavigate } from '@/lib/motion/use-navigate';
 import { useCotizacion, useCrearPedido } from './api';
 import {
   NUEVA,

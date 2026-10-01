@@ -1,10 +1,10 @@
 import { CreditCard, Lock, MapPin, Truck } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
 import { Alert } from '@/components/ui/alert';
 import { Price } from '@/components/ui/price';
 import { mensajeError } from '@/lib/errores';
 import { formatMoney } from '@/lib/format';
+import { Link } from '@/lib/motion/enlaces';
 import { Paso } from './paso';
 import { DireccionTexto } from './paso-envio';
 import { detectarMarca, enmascarar } from './tarjeta';
@@ -13,7 +13,7 @@ function Bloque({ icono: Icono, titulo, onEditar, children }) {
   const { t } = useTranslation();
   return (
     <div className="flex gap-4 border-b pb-5 last:border-b-0 last:pb-0">
-      <Icono className="mt-1 size-5 shrink-0 text-verde" aria-hidden="true" />
+      <Icono className="mt-1 size-5 shrink-0 text-musgo" aria-hidden="true" />
       <div className="grid flex-1 gap-1">
         <h3 className="text-sm font-semibold">{titulo}</h3>
         <div className="text-sm text-muted-foreground">{children}</div>

@@ -1,4 +1,4 @@
-import { CategoriasBento } from './categorias-bento';
+import { CategoriasAltitud } from './categorias-altitud';
 import { Destacados } from './destacados';
 import { Hero } from './hero';
 import { Trazabilidad } from './trazabilidad';
@@ -9,7 +9,7 @@ export function HomePage() {
   return (
     <>
       <Hero />
-      <CategoriasBento />
+      <CategoriasAltitud />
       <Destacados />
       <Trazabilidad />
     </>

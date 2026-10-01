@@ -1,11 +1,11 @@
 import L from 'leaflet';
-import { ArrowRight, Mountain, Package, Users } from 'lucide-react';
+import { Mountain, Package, Users } from 'lucide-react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
-import { Link } from 'react-router';
 import { formatNumber } from '@/lib/format';
 import { ATRIBUCION, PIN, TILES } from '@/lib/mapa';
+import { Link } from '@/lib/motion/enlaces';
 
 // Mapa de comunidades productoras. Se carga en diferido (Leaflet pesa ~150 kB) cuando el
 // bloque de trazabilidad se acerca a la pantalla.
@@ -49,25 +49,25 @@ export default function MapaComunidades({ comunidades }) {
           <Popup>
             <div className="grid gap-3 font-sans text-foreground">
               <div className="grid gap-0.5">
-                <p className="eyebrow text-link">
+                <p className="text-lg leading-tight font-semibold">{c.nombre}</p>
+                <p className="text-sm text-muted-foreground">
                   {[c.provincia, c.region].filter(Boolean).join(' · ')}
                 </p>
-                <p className="font-serif text-lg leading-tight">{c.nombre}</p>
               </div>
               <ul className="grid gap-1.5 text-sm text-muted-foreground">
                 {c.altitudMsnm != null && (
                   <li className="flex items-center gap-2">
-                    <Mountain className="size-4 text-verde" aria-hidden="true" />
+                    <Mountain className="size-4 text-musgo" aria-hidden="true" />
                     {t('producto.altitud', { valor: formatNumber(c.altitudMsnm, idioma) })}
                   </li>
                 )}
                 <li className="flex items-center gap-2">
-                  <Package className="size-4 text-verde" aria-hidden="true" />
+                  <Package className="size-4 text-musgo" aria-hidden="true" />
                   {t('home.trazabilidad.popup.productos', { count: c.totalProductos ?? 0 })}
                 </li>
                 {c.familiasBeneficiadas != null && (
                   <li className="flex items-center gap-2">
-                    <Users className="size-4 text-verde" aria-hidden="true" />
+                    <Users className="size-4 text-musgo" aria-hidden="true" />
                     {t('home.trazabilidad.popup.familias', { count: c.familiasBeneficiadas })}
                   </li>
                 )}
@@ -75,10 +75,9 @@ export default function MapaComunidades({ comunidades }) {
               {c.totalProductos > 0 && (
                 <Link
                   to={`/catalogo?comunidad=${c.id}`}
-                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-link hover:underline"
+                  className="text-sm font-semibold text-link underline underline-offset-4"
                 >
                   {t('home.trazabilidad.popup.verProductos')}
-                  <ArrowRight className="size-4" aria-hidden="true" />
                 </Link>
               )}
             </div>

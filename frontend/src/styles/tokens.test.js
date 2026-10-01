@@ -66,8 +66,15 @@ const NO_TEXTO = [
   ['chart-1', 'background'],
 ];
 
-describe.each([':root', '.dark'])('contraste AA de los tokens (%s)', (selector) => {
-  const tema = resolverTema(selector);
+// .dark se aplica junto a .admin: hereda de él lo que no redefine
+const TEMAS = {
+  ':root': resolverTema(':root'),
+  '.admin': resolverTema('.admin'),
+  '.dark': { ...resolverTema('.admin'), ...resolverTema('.dark') },
+};
+
+describe.each(Object.keys(TEMAS))('contraste AA de los tokens (%s)', (selector) => {
+  const tema = TEMAS[selector];
 
   it.each(TEXTO)('texto %s sobre %s ≥ 4.5:1', (fg, bg) => {
     expect(contrastRatio(tema[fg], tema[bg])).toBeGreaterThanOrEqual(4.5);
@@ -78,8 +85,48 @@ describe.each([':root', '.dark'])('contraste AA de los tokens (%s)', (selector) 
   });
 });
 
-describe('paleta de marca', () => {
+const color = (nombre) => paleta[`color-${nombre}`];
+
+describe('paleta de la tienda', () => {
   it('conserva los valores exactos de CLAUDE.md', () => {
+    expect(paleta).toMatchObject({
+      'color-puna': '#1b2440',
+      'color-cochinilla': '#a3123a',
+      'color-ichu': '#c9a55a',
+      'color-musgo': '#3e5a3a',
+      'color-niebla': '#eef0ec',
+      'color-blanco': '#ffffff',
+      'color-niebla-texto': '#5b6270',
+      'color-niebla-borde': '#838a82',
+      'color-error': '#9a3412',
+    });
+  });
+
+  // [primer plano, fondo, mínimo]
+  it.each([
+    ['niebla-texto', 'niebla', 4.5],
+    ['niebla-texto', 'blanco', 4.5],
+    ['niebla-borde', 'niebla', 3],
+    ['niebla-borde', 'blanco', 3],
+    ['error', 'niebla', 4.5],
+    ['error', 'blanco', 4.5],
+    ['cochinilla', 'niebla', 4.5],
+    ['blanco', 'cochinilla-700', 4.5],
+    // Banda Puna (footer): texto Niebla, acentos Ichu
+    ['niebla', 'puna', 4.5],
+    ['ichu', 'puna', 4.5],
+  ])('%s sobre %s ≥ %s:1', (fg, bg, minimo) => {
+    expect(contrastRatio(color(fg), color(bg))).toBeGreaterThanOrEqual(minimo);
+  });
+
+  it('Ichu no sirve como texto sobre Niebla ni Cochinilla sobre Puna (reglas de CLAUDE.md)', () => {
+    expect(contrastRatio(color('ichu'), color('niebla'))).toBeLessThan(3);
+    expect(contrastRatio(color('cochinilla'), color('puna'))).toBeLessThan(3);
+  });
+});
+
+describe('paleta del panel admin', () => {
+  it('conserva los valores de "editorial andino"', () => {
     expect(paleta).toMatchObject({
       'color-cafe': '#2b1d14',
       'color-terracota': '#b5532c',

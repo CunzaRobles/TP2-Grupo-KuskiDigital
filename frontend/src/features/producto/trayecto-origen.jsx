@@ -1,8 +1,6 @@
 import { Hand, Plane, Sprout } from 'lucide-react';
-import { motion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '@/lib/format';
-import { EASE_ANDINO } from '@/lib/motion';
 
 const PASOS = [
   { id: 'cosecha', icono: Sprout },
@@ -41,18 +39,14 @@ export function TrayectoOrigen({ producto }) {
         {/* Hilo que une los pasos: vertical en móvil, horizontal en escritorio */}
         <span
           aria-hidden="true"
-          className="absolute top-6 bottom-6 left-6 w-px bg-linear-to-b from-terracota via-maiz to-verde md:top-6 md:right-[16.66%] md:bottom-auto md:left-[16.66%] md:h-px md:w-auto md:bg-linear-to-r"
+          className="absolute top-6 bottom-6 left-6 w-px bg-border md:top-6 md:right-[16.66%] md:bottom-auto md:left-[16.66%] md:h-px md:w-auto"
         />
         {PASOS.map(({ id, icono: Icono }, i) => (
-          <motion.li
+          <li
             key={id}
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.4, ease: EASE_ANDINO, delay: i * 0.12 }}
             className="relative grid grid-cols-[3rem_1fr] gap-5 md:grid-cols-1 md:justify-items-center md:text-center"
           >
-            <span className="relative z-10 flex size-12 items-center justify-center rounded-full border-4 border-background bg-cafe text-maiz shadow-card">
+            <span className="relative z-10 flex size-12 items-center justify-center rounded-full border-4 border-background bg-puna text-ichu">
               <Icono className="size-5" aria-hidden="true" />
             </span>
             <div className="grid gap-2">
@@ -66,7 +60,7 @@ export function TrayectoOrigen({ producto }) {
                   : t(`producto.trayecto.${grupo}.${id}`, valores)}
               </p>
             </div>
-          </motion.li>
+          </li>
         ))}
       </ol>
     </section>

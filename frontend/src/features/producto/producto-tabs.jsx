@@ -1,19 +1,19 @@
 import { ArrowRight, Building2, MapPin, Mountain, Users } from 'lucide-react';
 import { lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Rating } from '@/components/ui/rating';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useNombres } from '@/features/catalogo/use-nombres';
 import { formatDate, formatNumber, localeDe } from '@/lib/format';
+import { Link } from '@/lib/motion/enlaces';
 
 const MapaOrigen = lazy(() => import('./mapa-origen'));
 
 function Dato({ icono: Icono, etiqueta, children }) {
   return (
     <div className="flex gap-3">
-      <Icono className="mt-0.5 size-4 shrink-0 text-verde" aria-hidden="true" />
+      <Icono className="mt-0.5 size-4 shrink-0 text-musgo" aria-hidden="true" />
       <div className="grid gap-0.5">
         <dt className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
           {etiqueta}
@@ -156,7 +156,7 @@ function Resenas({ resenas }) {
   if (resenas.total === 0) {
     return (
       <div className="grid max-w-md gap-2 rounded-2xl border border-dashed p-8">
-        <p className="font-serif text-h4">{t('producto.resenas.vacio')}</p>
+        <p className="font-heading text-h4">{t('producto.resenas.vacio')}</p>
         <p className="text-muted-foreground">{t('producto.resenas.vacioDetalle')}</p>
       </div>
     );
@@ -165,7 +165,7 @@ function Resenas({ resenas }) {
   return (
     <div className="grid gap-10 lg:grid-cols-[18rem_1fr] lg:gap-14">
       <div className="grid content-start gap-4">
-        <p className="font-serif text-display leading-none">
+        <p className="font-display text-display leading-none">
           {formatNumber(resenas.promedio, idioma, {
             minimumFractionDigits: 1,
             maximumFractionDigits: 1,
@@ -192,7 +192,7 @@ function Resenas({ resenas }) {
                   aria-hidden="true"
                 >
                   <span
-                    className="block h-full rounded-full bg-maiz"
+                    className="block h-full rounded-full bg-puna"
                     style={{ width: `${porcentaje}%` }}
                   />
                 </span>

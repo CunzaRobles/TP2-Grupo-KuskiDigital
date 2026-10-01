@@ -218,29 +218,43 @@
   },
   "home": {
     "hero": {
-      "eyebrow": "Cusco · 1.050 bis 3.760 m ü. M.",
-      "titulo": "Das Beste der Anden – mit Namen und Gemeinde",
-      "descripcion": "Bio-Kaffee, Superfoods, Alpaka-Textilien und Kunsthandwerk, rückverfolgbar bis zur Gemeinde, die sie herstellt.",
+      "titulo": "Vom Tal bis zur Puna",
+      "descripcion": "Kaffee vom Nebelwald, Quinoa aus dem Heiligen Tal und Alpaka aus dem Hochland von Cusco. Jedes Produkt trägt die Höhe der Gemeinde, die es herstellt.",
       "cta": "Katalog entdecken",
       "imagenAlt": "Machu Picchu und die Berge von Cusco bei Sonnenuntergang"
     },
+    "perfil": {
+      "resumen_one": "Höhe von {{count}} Erzeugergemeinde: {{min}} m ü. M. in {{desde}}.",
+      "resumen_other": "Höhe der {{count}} Erzeugergemeinden: von {{min}} m ü. M. in {{desde}} bis {{max}} m ü. M. in {{hasta}}.",
+      "puna": "Puna · ab {{valor}} m ü. M."
+    },
     "categorias": {
-      "eyebrow": "Vier Linien, ein Ursprung",
-      "titulo": "Nach Kategorie stöbern",
-      "descripcion": "Von der Kaffeefinca am Nebelwald bis zum Webstuhl im Hochland: Jede Linie stammt aus einer anderen Gemeinde.",
+      "titulo": "Vier Linien, vier Höhen",
+      "descripcion": "Von der Kaffeefinca am Nebelwald bis zum Webstuhl im Hochland: Jede Linie liegt auf der Höhe der Gemeinden, die sie herstellen.",
       "productos_one": "{{count}} Produkt",
       "productos_other": "{{count}} Produkte"
     },
     "destacados": {
-      "eyebrow": "Saisonale Auswahl",
       "titulo": "Highlights unserer Gemeinden",
-      "descripcion": "Erfahre, woher jedes Produkt stammt und in welcher Höhe es angebaut wird.",
+      "descripcion": "Jedes Produkt mit seiner Gemeinde und der Höhe, in der es angebaut oder gewebt wird.",
       "verTodo": "Gesamten Katalog ansehen"
     },
+    "recorrido": {
+      "lista": "Erzeugergemeinden, von der niedrigsten zur höchsten Lage",
+      "unidad": "m ü. M.",
+      "zonas": {
+        "yunga": "Yunga",
+        "quechua": "Quechua",
+        "suni": "Suni",
+        "puna": "Puna"
+      },
+      "verProductos_one": "Ihr Produkt ansehen",
+      "verProductos_other": "Ihre {{count}} Produkte ansehen",
+      "horizonte": "Oberhalb von {{valor}} Metern beginnt die Puna."
+    },
     "trazabilidad": {
-      "eyebrow": "Rückverfolgbarkeit",
-      "titulo": "Jedes Produkt hat einen Ort auf der Karte",
-      "descripcion": "Wir arbeiten direkt mit Erzeugergemeinden in Cusco. Tippe auf eine Markierung, um zu sehen, wer anbaut oder webt, was du kaufst.",
+      "titulo": "Durch Cusco nach oben, Gemeinde für Gemeinde",
+      "descripcion": "Scrolle nach unten und reise vom Tal bis zum Gipfel durch die Erzeugergemeinden. Danach findest du sie auf der Karte.",
       "cifras": {
         "comunidades": "Erzeugergemeinden",
         "familias": "Begünstigte Familien",

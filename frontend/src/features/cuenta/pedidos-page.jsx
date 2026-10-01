@@ -1,6 +1,6 @@
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Link, useSearchParams } from 'react-router';
+import { useSearchParams } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/empty-state';
 import { Price } from '@/components/ui/price';
@@ -8,6 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { SectionError } from '@/features/home/section-heading';
 import { EstadoPedido, Tracking } from '@/features/pedidos/tracking';
 import { formatDate } from '@/lib/format';
+import { Link } from '@/lib/motion/enlaces';
 import { banderaPais, nombrePais } from '@/lib/paises';
 import { cn } from '@/lib/utils';
 import { usePedidos } from './api';

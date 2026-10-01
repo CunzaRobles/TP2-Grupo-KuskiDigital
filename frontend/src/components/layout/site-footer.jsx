@@ -1,7 +1,7 @@
 import { Lock, MapPin, ShieldCheck } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
-import { AndeanDivider } from '@/components/ui/andean-divider';
+import { MarcasRegla } from '@/components/ui/marcas-regla';
+import { Link } from '@/lib/motion/enlaces';
 import { Logo } from './logo';
 
 // Columnas de enlaces del footer. Las rutas se completan en las fases siguientes.
@@ -77,19 +77,20 @@ export function SiteFooter() {
   const { t } = useTranslation();
 
   return (
-    <footer className="bg-cafe text-crema">
-      <AndeanDivider className="text-maiz" />
+    // Única banda Puna de la tienda: texto Niebla, acentos Ichu (6.56:1). Cochinilla no va aquí.
+    <footer className="bg-puna text-niebla [--ring:var(--color-niebla)]">
+      <MarcasRegla className="text-ichu" />
 
       <div className="container-page grid gap-12 py-16 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-16">
         <div className="grid content-start gap-6">
           <Logo tone="light" />
-          <p className="max-w-sm text-crema/75">{t('footer.descripcion')}</p>
-          <p className="flex items-center gap-2 text-sm text-crema/75">
-            <MapPin className="size-4 text-maiz" aria-hidden="true" />
+          <p className="max-w-sm text-niebla/80">{t('footer.descripcion')}</p>
+          <p className="flex items-center gap-2 text-sm text-niebla/80">
+            <MapPin className="size-4 text-ichu" aria-hidden="true" />
             {t('footer.ubicacion')}
           </p>
           <div className="grid gap-3">
-            <p className="eyebrow text-maiz">{t('footer.redes')}</p>
+            <p className="text-sm font-semibold text-ichu">{t('footer.redes')}</p>
             <ul className="flex gap-2">
               {REDES.map(({ nombre, href, icono }) => (
                 <li key={nombre}>
@@ -98,7 +99,7 @@ export function SiteFooter() {
                     target="_blank"
                     rel="noreferrer"
                     aria-label={nombre}
-                    className="inline-flex size-10 items-center justify-center rounded-full border border-crema/25 transition duration-200 ease-andino hover:border-maiz hover:bg-maiz hover:text-cafe"
+                    className="inline-flex size-10 items-center justify-center rounded-full border border-niebla/30 transition-colors duration-200 ease-andino hover:border-niebla hover:bg-niebla hover:text-puna"
                   >
                     <svg
                       viewBox="0 0 24 24"
@@ -125,7 +126,7 @@ export function SiteFooter() {
               aria-labelledby={`footer-${clave}`}
               className="grid content-start gap-4"
             >
-              <p id={`footer-${clave}`} className="eyebrow text-maiz">
+              <p id={`footer-${clave}`} className="text-sm font-semibold text-ichu">
                 {t(`footer.columnas.${clave}`)}
               </p>
               <ul className="grid gap-2.5">
@@ -133,7 +134,7 @@ export function SiteFooter() {
                   <li key={to}>
                     <Link
                       to={to}
-                      className="text-sm text-crema/80 transition-colors hover:text-alpaca hover:underline hover:underline-offset-4"
+                      className="text-sm text-niebla/80 transition-colors hover:text-white hover:underline hover:underline-offset-4"
                     >
                       {t(texto)}
                     </Link>
@@ -145,21 +146,21 @@ export function SiteFooter() {
         </div>
       </div>
 
-      <div className="border-t border-crema/15">
+      <div className="border-t border-niebla/15">
         <div className="container-page flex flex-col gap-6 py-8 md:flex-row md:items-center md:justify-between">
-          <p className="text-sm text-crema/70">
+          <p className="text-sm text-niebla/75">
             {t('footer.derechos', { year: new Date().getFullYear() })}
           </p>
 
           {/* Sello de pago seguro (la pasarela es simulada; ver backend/src/adapters/payments) */}
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
             <p className="flex items-center gap-2.5">
-              <span className="inline-flex size-9 items-center justify-center rounded-full bg-verde text-alpaca">
+              <span className="inline-flex size-9 items-center justify-center rounded-full bg-musgo text-white">
                 <ShieldCheck className="size-5" aria-hidden="true" />
               </span>
               <span className="grid text-sm leading-tight">
-                <span className="font-semibold text-alpaca">{t('footer.pagoSeguro')}</span>
-                <span className="flex items-center gap-1 text-xs text-crema/70">
+                <span className="font-semibold text-white">{t('footer.pagoSeguro')}</span>
+                <span className="flex items-center gap-1 text-xs text-niebla/75">
                   <Lock className="size-3" aria-hidden="true" />
                   {t('footer.pagoSeguroDetalle')}
                 </span>
@@ -169,7 +170,7 @@ export function SiteFooter() {
               {METODOS_PAGO.map((metodo) => (
                 <li
                   key={metodo}
-                  className="rounded-md border border-crema/20 bg-crema/5 px-2 py-1 text-xs font-bold tracking-wide text-crema/85"
+                  className="rounded-sm border border-niebla/25 px-2 py-1 text-xs font-bold tracking-wide text-niebla/85"
                 >
                   {metodo}
                 </li>

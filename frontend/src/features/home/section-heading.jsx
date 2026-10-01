@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-// Encabezado editorial de sección: antetítulo, título en Fraunces y acción opcional a la derecha.
+// Encabezado de sección: título (Unbounded), descripción y acción opcional a la derecha.
+// La tienda nueva no usa antetítulo; `eyebrow` queda solo para páginas aún no rediseñadas.
 export function SectionHeading({ id, eyebrow, title, description, action, className }) {
   return (
     <div
@@ -13,7 +14,7 @@ export function SectionHeading({ id, eyebrow, title, description, action, classN
       )}
     >
       <div className="grid max-w-2xl gap-4">
-        <p className="eyebrow text-link">{eyebrow}</p>
+        {eyebrow && <p className="eyebrow text-link">{eyebrow}</p>}
         <h2 id={id} className="text-h2">
           {title}
         </h2>
@@ -32,7 +33,7 @@ export function SectionError({ onRetry, className }) {
     <div
       role="alert"
       className={cn(
-        'flex flex-col items-center gap-4 rounded-xl border border-dashed px-6 py-12 text-center',
+        'flex flex-col items-center gap-4 border border-dashed px-6 py-12 text-center',
         className,
       )}
     >

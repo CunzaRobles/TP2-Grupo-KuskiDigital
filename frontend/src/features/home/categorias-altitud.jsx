@@ -1,26 +1,44 @@
-import { ArrowUpRight } from 'lucide-react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCategorias } from '@/features/catalogo/api';
+import { formatNumber } from '@/lib/format';
+import { Link } from '@/lib/motion/enlaces';
 import { cn } from '@/lib/utils';
+import { altitudMedia, posicionEnRegla } from './altitud';
 import { SectionError, SectionHeading } from './section-heading';
 
-// Grilla bento de 4 celdas de distinto tamaño (la primera categoría es la protagonista).
-// Móvil: una ancha, una panorámica y dos cuadradas. Escritorio: 4×2 con la primera en 2×2.
-const CELDAS = [
-  'col-span-2 aspect-4/3 md:row-span-2 md:aspect-auto',
-  'col-span-2 aspect-video md:aspect-auto',
-  'col-span-1 aspect-square md:aspect-auto',
-  'col-span-1 aspect-square md:aspect-auto',
-];
+// Desde md, cada tarjeta baja según su altitud: la categoría más alta queda arriba (escalera
+// del valle a la cumbre). La cifra de altitud va sobre la imagen para que sean las cifras las
+// que suben; las proporciones de imagen varían para que no sean todas iguales.
+const DESNIVEL_REM = 12;
+const PROPORCIONES = ['md:aspect-4/5', 'md:aspect-3/4', 'md:aspect-square', 'md:aspect-2/3'];
 
-const GRILLA =
-  'grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4 md:grid-rows-[repeat(2,minmax(15rem,1fr))]';
+const desnivelDe = (categoria) => {
+  const media = altitudMedia(categoria);
+  return media == null ? 0 : (1 - posicionEnRegla(media)) * DESNIVEL_REM;
+};
+
+function RangoAltitud({ categoria }) {
+  const { t, i18n } = useTranslation();
+  const { altitudMin, altitudMax } = categoria;
+  if (altitudMin == null) return null;
+
+  const idioma = i18n.resolvedLanguage;
+  const valor =
+    altitudMin === altitudMax
+      ? formatNumber(altitudMin, idioma)
+      : `${formatNumber(altitudMin, idioma)}–${formatNumber(altitudMax, idioma)}`;
+
+  return (
+    <p className="font-display text-xl font-medium tracking-tight tabular-nums sm:text-2xl">
+      {t('producto.altitud', { valor })}
+    </p>
+  );
+}
 
 function CategoriaCard({ categoria, indice }) {
   const { t } = useTranslation();
-  const principal = indice === 0;
   const nombre = t(`catalogo.categorias.${categoria.slug}.nombre`, {
     defaultValue: categoria.nombre,
   });
@@ -28,70 +46,54 @@ function CategoriaCard({ categoria, indice }) {
   return (
     <Link
       to={`/catalogo?categoria=${categoria.slug}`}
-      className={cn(
-        'group relative isolate flex overflow-hidden rounded-2xl bg-cafe text-alpaca shadow-card',
-        CELDAS[indice],
-      )}
+      className="group grid grid-cols-[minmax(0,1fr)_6.5rem] items-center gap-5 border-t border-border py-5 md:grid-cols-1 md:items-start md:gap-4 md:border-t-2 md:border-foreground md:pt-3 md:pb-0"
     >
-      {categoria.imagenUrl && (
-        <img
-          src={categoria.imagenUrl}
-          alt=""
-          loading="lazy"
-          decoding="async"
-          className="absolute inset-0 -z-20 size-full object-cover transition-transform duration-400 ease-andino group-hover:scale-105"
-        />
-      )}
       <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-10 bg-linear-to-t from-cafe via-cafe/55 via-45% to-cafe/0 transition-opacity duration-400 ease-andino group-hover:opacity-90"
-      />
-
-      <div className="mt-auto flex w-full items-end justify-between gap-4 p-4 sm:p-6">
-        <div className="grid gap-1.5">
-          {categoria.totalProductos != null && (
-            <p className="eyebrow text-maiz">
-              {t('home.categorias.productos', { count: categoria.totalProductos })}
-            </p>
-          )}
-          <h3
-            className={cn('font-serif leading-tight', principal ? 'text-h2' : 'text-h4 sm:text-h3')}
-          >
-            {nombre}
-          </h3>
-          <p
-            className={cn(
-              'max-w-sm text-sm text-alpaca/80',
-              indice === 0 && 'hidden sm:block',
-              indice === 1 && 'hidden lg:block',
-              indice > 1 && 'hidden',
-            )}
-          >
-            {t(`catalogo.categorias.${categoria.slug}.descripcion`, {
-              defaultValue: categoria.descripcion,
-            })}
+        className={cn(
+          'relative order-2 aspect-square overflow-hidden bg-muted',
+          PROPORCIONES[indice % PROPORCIONES.length],
+        )}
+      >
+        {categoria.imagenUrl && (
+          <img
+            src={categoria.imagenUrl}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 size-full object-cover transition-transform duration-300 ease-andino group-hover:scale-[1.03]"
+          />
+        )}
+      </div>
+      <div className="grid gap-1.5">
+        <RangoAltitud categoria={categoria} />
+        <h3 className="text-h4 transition-colors group-hover:text-link">{nombre}</h3>
+        {categoria.totalProductos != null && (
+          <p className="text-sm text-muted-foreground">
+            {t('home.categorias.productos', { count: categoria.totalProductos })}
           </p>
-        </div>
-        <span
-          aria-hidden="true"
-          className="hidden size-11 shrink-0 items-center justify-center rounded-full border border-alpaca/40 transition duration-300 ease-andino group-hover:border-maiz group-hover:bg-maiz group-hover:text-cafe sm:inline-flex"
-        >
-          <ArrowUpRight className="size-5 transition-transform duration-300 ease-andino group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-        </span>
+        )}
       </div>
     </Link>
   );
 }
 
-export function CategoriasBento() {
+export function CategoriasAltitud() {
   const { t } = useTranslation();
-  const { data: categorias, isPending, isError, refetch } = useCategorias();
+  const { data, isPending, isError, refetch } = useCategorias();
+
+  // Del valle a la cumbre: por altitud media; las categorías sin productos activos, al final
+  const categorias = useMemo(
+    () =>
+      (data ?? []).toSorted(
+        (a, b) => (altitudMedia(a) ?? Infinity) - (altitudMedia(b) ?? Infinity),
+      ),
+    [data],
+  );
 
   return (
-    <section aria-labelledby="categorias-titulo" className="container-page grid gap-10 py-section">
+    <section aria-labelledby="categorias-titulo" className="container-page grid gap-10 pb-section">
       <SectionHeading
         id="categorias-titulo"
-        eyebrow={t('home.categorias.eyebrow')}
         title={t('home.categorias.titulo')}
         description={t('home.categorias.descripcion')}
       />
@@ -99,15 +101,26 @@ export function CategoriasBento() {
       {isError ? (
         <SectionError onRetry={refetch} />
       ) : (
-        <div className={GRILLA} aria-busy={isPending || undefined}>
+        <ul
+          className="grid border-b border-border md:grid-cols-4 md:items-start md:gap-6 md:border-b-0 lg:gap-10"
+          aria-busy={isPending || undefined}
+        >
           {isPending
-            ? CELDAS.map((celda, i) => <Skeleton key={i} className={cn('rounded-2xl', celda)} />)
-            : categorias
-                .slice(0, CELDAS.length)
-                .map((categoria, i) => (
-                  <CategoriaCard key={categoria.id} categoria={categoria} indice={i} />
-                ))}
-        </div>
+            ? PROPORCIONES.map((proporcion) => (
+                <li key={proporcion}>
+                  <Skeleton className={cn('h-28 md:h-auto', proporcion)} />
+                </li>
+              ))
+            : categorias.slice(0, 4).map((categoria, i) => (
+                <li
+                  key={categoria.id}
+                  className="md:mt-(--desnivel)"
+                  style={{ '--desnivel': `${desnivelDe(categoria)}rem` }}
+                >
+                  <CategoriaCard categoria={categoria} indice={i} />
+                </li>
+              ))}
+        </ul>
       )}
     </section>
   );

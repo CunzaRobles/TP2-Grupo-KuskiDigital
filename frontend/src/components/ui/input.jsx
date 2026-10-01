@@ -7,7 +7,7 @@ export function Input({ className, type = 'text', ...props }) {
       type={type}
       data-slot="input"
       className={cn(
-        'h-11 w-full min-w-0 rounded-md border border-input bg-card px-3.5 text-base text-foreground shadow-soft',
+        'h-11 w-full min-w-0 rounded-field border border-input bg-card px-3.5 text-base text-foreground shadow-field',
         'transition-[border-color,box-shadow] duration-200 ease-andino placeholder:text-muted-foreground',
         'focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/20 focus-visible:outline-none',
         'aria-invalid:border-destructive aria-invalid:ring-destructive/20',

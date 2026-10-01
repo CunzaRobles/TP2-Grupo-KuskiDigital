@@ -36,7 +36,7 @@ export function QuantitySelector({
     <div
       data-slot="quantity-selector"
       className={cn(
-        'inline-flex items-center overflow-hidden rounded-full border border-input bg-card',
+        'inline-flex items-center overflow-hidden rounded-field border border-input bg-card',
         disabled && 'opacity-50',
         className,
       )}

@@ -15,7 +15,7 @@ const LADOS = {
     'inset-y-0 right-0 h-full w-full max-w-md border-l data-[state=open]:slide-in-from-right data-[state=closed]:slide-out-to-right',
   left: 'inset-y-0 left-0 h-full w-full max-w-sm border-r data-[state=open]:slide-in-from-left data-[state=closed]:slide-out-to-left',
   bottom:
-    'inset-x-0 bottom-0 max-h-[85dvh] rounded-t-2xl border-t data-[state=open]:slide-in-from-bottom data-[state=closed]:slide-out-to-bottom',
+    'inset-x-0 bottom-0 max-h-[85dvh] rounded-t-dialog border-t data-[state=open]:slide-in-from-bottom data-[state=closed]:slide-out-to-bottom',
 };
 
 export function DrawerContent({ side = 'right', className, children, ...props }) {
@@ -28,7 +28,7 @@ export function DrawerContent({ side = 'right', className, children, ...props })
       <DrawerPrimitive.Content
         data-slot="drawer-content"
         className={cn(
-          'fixed z-50 flex flex-col bg-popover text-popover-foreground shadow-drawer',
+          'fixed z-50 flex flex-col bg-popover text-popover-foreground shadow-sheet',
           'duration-300 ease-andino data-[state=open]:animate-in data-[state=closed]:animate-out',
           LADOS[side],
           className,
@@ -60,7 +60,7 @@ export function DrawerFooter({ className, ...props }) {
 }
 
 export function DrawerTitle({ className, ...props }) {
-  return <DrawerPrimitive.Title className={cn('text-h3 font-serif', className)} {...props} />;
+  return <DrawerPrimitive.Title className={cn('text-h3 font-heading', className)} {...props} />;
 }
 
 export function DrawerDescription({ className, ...props }) {

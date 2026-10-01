@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Link, Navigate, useNavigate, useSearchParams } from 'react-router';
+import { Navigate, useSearchParams } from 'react-router';
 import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Field } from '@/components/ui/field';
@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 import { mensajeError } from '@/lib/errores';
 import { useFormulario } from '@/lib/formulario';
+import { Link } from '@/lib/motion/enlaces';
+import { useNavigate } from '@/lib/motion/use-navigate';
 import { useLogin, useSesion } from './api';
 import { AuthLayout } from './auth-layout';
 import { destinoSeguro, loginSchema } from './schemas';

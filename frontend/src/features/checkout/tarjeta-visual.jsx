@@ -8,7 +8,7 @@ import { detectarMarca, formatearNumero } from './tarjeta';
 function LogoMarca({ marca }) {
   if (marca === 'visa') {
     return (
-      <span className="font-serif text-2xl font-bold tracking-tight italic" aria-label="Visa">
+      <span className="font-sans text-2xl font-bold tracking-tight italic" aria-label="Visa">
         VISA
       </span>
     );
@@ -24,7 +24,7 @@ function LogoMarca({ marca }) {
   if (marca === 'amex') {
     return (
       <span
-        className="rounded bg-alpaca/90 px-1.5 text-xs font-bold text-[#1f72cd]"
+        className="rounded bg-white/90 px-1.5 text-xs font-bold text-[#1f72cd]"
         aria-label="American Express"
       >
         AMEX
@@ -49,8 +49,8 @@ export function TarjetaVisual({ tarjeta }) {
         layout
         transition={transicion('lenta')}
         className={cn(
-          'relative isolate flex aspect-[1.586] flex-col justify-between overflow-hidden rounded-2xl p-5 text-alpaca shadow-lift',
-          'bg-linear-135 from-cafe via-tierra-700 to-terracota-700',
+          'relative isolate flex aspect-[1.586] flex-col justify-between overflow-hidden rounded-2xl p-5 text-white shadow-lift',
+          'bg-puna',
         )}
       >
         {/* Motivo textil sutil */}
@@ -69,19 +69,19 @@ export function TarjetaVisual({ tarjeta }) {
         </svg>
 
         <div className="flex items-start justify-between">
-          <span className="h-8 w-11 rounded-md bg-linear-to-br from-maiz-300 to-maiz" />
+          <span className="h-8 w-11 rounded-md bg-ichu" />
           <LogoMarca marca={marca} />
         </div>
         <p className="font-mono text-lg tracking-widest tabular-nums sm:text-xl">{numero}</p>
         <div className="flex items-end justify-between gap-4 text-xs">
           <div className="grid min-w-0 gap-0.5">
-            <span className="text-alpaca/60 uppercase">{t('checkout.pago.tarjeta.titular')}</span>
+            <span className="text-white/60 uppercase">{t('checkout.pago.tarjeta.titular')}</span>
             <span className="truncate text-sm font-semibold uppercase">
               {tarjeta.titular || t('checkout.pago.tarjeta.titularEjemplo')}
             </span>
           </div>
           <div className="grid gap-0.5 text-right">
-            <span className="text-alpaca/60 uppercase">{t('checkout.pago.tarjeta.vence')}</span>
+            <span className="text-white/60 uppercase">{t('checkout.pago.tarjeta.vence')}</span>
             <span className="text-sm font-semibold tabular-nums">
               {tarjeta.vencimiento || 'MM/AA'}
             </span>

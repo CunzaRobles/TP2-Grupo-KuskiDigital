@@ -21,7 +21,7 @@ export function AuthLayout({ eyebrow, titulo, descripcion, children }) {
 
   return (
     <div className="container-page grid items-stretch gap-10 py-10 sm:py-14 lg:grid-cols-2 lg:gap-16">
-      <aside className="relative isolate hidden overflow-hidden rounded-2xl bg-cafe text-alpaca shadow-card lg:flex">
+      <aside className="relative isolate hidden overflow-hidden rounded-2xl bg-puna text-white shadow-card lg:flex">
         <img
           src={FOTO}
           alt=""
@@ -29,16 +29,16 @@ export function AuthLayout({ eyebrow, titulo, descripcion, children }) {
           decoding="async"
         />
         <div
-          className="absolute inset-0 -z-10 bg-linear-to-t from-cafe via-cafe/60 to-cafe/10"
+          className="absolute inset-0 -z-10 bg-linear-to-t from-puna via-puna/60 to-puna/10"
           aria-hidden="true"
         />
         <div className="mt-auto grid gap-6 p-10">
-          <p className="max-w-sm font-serif text-h3 leading-tight">{t('auth.lema')}</p>
-          <AndeanDivider className="w-40 text-maiz" />
+          <p className="max-w-sm font-heading text-h3 leading-tight">{t('auth.lema')}</p>
+          <AndeanDivider className="w-40 text-ichu" />
           <ul className="grid gap-3 text-sm">
             {VENTAJAS.map(({ icono: Icono, clave }) => (
               <li key={clave} className="flex items-center gap-3">
-                <Icono className="size-4 shrink-0 text-maiz" aria-hidden="true" />
+                <Icono className="size-4 shrink-0 text-ichu" aria-hidden="true" />
                 {t(clave)}
               </li>
             ))}

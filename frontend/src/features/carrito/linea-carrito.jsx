@@ -1,11 +1,11 @@
 import { ImageOff, Trash2, TriangleAlert } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
 import { Price } from '@/components/ui/price';
 import { QuantitySelector } from '@/components/ui/quantity-selector';
 import { Skeleton } from '@/components/ui/skeleton';
 import { transicion } from '@/lib/motion';
+import { Link } from '@/lib/motion/enlaces';
 import { cn } from '@/lib/utils';
 import { useCarrito } from './carrito-context';
 import { MAX_POR_PRODUCTO } from './carrito-storage';
@@ -66,7 +66,10 @@ export function LineaCarrito({ linea, moneda, variante = 'drawer', onNavegar }) 
         <div className="flex items-start justify-between gap-3">
           <div className="grid min-w-0 gap-1">
             <h3
-              className={cn('font-serif leading-snug', grande ? 'text-lg sm:text-xl' : 'text-base')}
+              className={cn(
+                'font-semibold leading-snug',
+                grande ? 'text-lg sm:text-xl' : 'text-base',
+              )}
             >
               <Link
                 to={`/producto/${linea.slug}`}
@@ -90,10 +93,7 @@ export function LineaCarrito({ linea, moneda, variante = 'drawer', onNavegar }) 
         </div>
 
         {linea.aviso && (
-          <p
-            className="flex items-center gap-1.5 text-sm font-medium text-terracota-700"
-            role="status"
-          >
+          <p className="flex items-center gap-1.5 text-sm font-medium text-error" role="status">
             <TriangleAlert className="size-4 shrink-0" aria-hidden="true" />
             {noDisponible
               ? t('carrito.aviso.NO_DISPONIBLE')

@@ -1,14 +1,13 @@
 import { MapPin, Mountain, Plus } from 'lucide-react';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
 import { Badge } from '@/components/ui/badge';
 import { Price } from '@/components/ui/price';
 import { Skeleton } from '@/components/ui/skeleton';
-import { toast } from '@/components/ui/toast';
-import { useCarrito } from '@/features/carrito/carrito-context';
-import { volarAlCarrito } from '@/features/carrito/volar-al-carrito';
+import { useAgregarProducto } from '@/features/carrito/use-agregar-producto';
+import { useEnlaceProducto } from '@/features/producto/use-enlace-producto';
 import { formatNumber } from '@/lib/format';
+import { Link } from '@/lib/motion/enlaces';
 import { cn } from '@/lib/utils';
 
 const IMAGEN = 'absolute inset-0 size-full object-cover transition duration-400 ease-andino';
@@ -25,12 +24,12 @@ function Origen({ comunidad, className }) {
   return (
     <div className={cn('grid grid-cols-1 gap-1 text-xs font-semibold', className)}>
       <span className="flex items-center gap-1.5">
-        <MapPin className="size-3.5 shrink-0 text-maiz" aria-hidden="true" />
+        <MapPin className="size-3.5 shrink-0 text-ichu" aria-hidden="true" />
         <span className="truncate">{comunidad.nombre}</span>
       </span>
       {comunidad.altitudMsnm != null && (
         <span className="flex items-center gap-1.5">
-          <Mountain className="size-3.5 shrink-0 text-maiz" aria-hidden="true" />
+          <Mountain className="size-3.5 shrink-0 text-ichu" aria-hidden="true" />
           {t('producto.altitud', {
             valor: formatNumber(comunidad.altitudMsnm, i18n.resolvedLanguage),
           })}
@@ -40,30 +39,26 @@ function Origen({ comunidad, className }) {
   );
 }
 
-export function ProductCard({ producto, className }) {
+// `compartirImagen`: la foto se expande hasta la ficha (false en los relacionados de una ficha).
+export function ProductCard({ producto, compartirImagen = true, className }) {
   const { t } = useTranslation();
-  const { agregar, iconoCarritoRef, abrir } = useCarrito();
+  const agregarProducto = useAgregarProducto();
   const imagenRef = useRef(null);
+  const { enlace, nombreImagen, propsEnlace } = useEnlaceProducto(producto.slug, {
+    compartida: compartirImagen,
+  });
 
   const [principal, secundaria] = producto.imagenes ?? [];
   const { comunidad, categoria } = producto;
-  const enlace = `/producto/${producto.slug}`;
 
-  const alAgregar = () => {
-    if (agregar(producto) > 0) {
-      volarAlCarrito(imagenRef.current, iconoCarritoRef.current);
-      toast.success(t('carrito.agregado'), {
-        description: producto.nombre,
-        action: { label: t('carrito.verCarrito'), onClick: abrir },
-      });
-    } else {
-      toast.info(t('carrito.sinMasStock'), { description: producto.nombre });
-    }
-  };
+  const alAgregar = () => agregarProducto(producto, imagenRef.current);
 
   return (
     <article className={cn('group relative flex flex-col gap-4', className)}>
-      <div className="relative aspect-4/5 overflow-hidden rounded-xl bg-muted shadow-soft">
+      <div
+        className="relative aspect-4/5 overflow-hidden rounded-xl bg-muted shadow-soft"
+        style={{ viewTransitionName: nombreImagen }}
+      >
         {principal && (
           <img
             ref={imagenRef}
@@ -99,7 +94,7 @@ export function ProductCard({ producto, className }) {
           <Origen
             comunidad={comunidad}
             className={cn(
-              'pointer-events-none absolute inset-x-0 bottom-0 bg-linear-to-t from-cafe/85 via-cafe/50 to-transparent p-4 pt-12 pr-16 text-alpaca',
+              'pointer-events-none absolute inset-x-0 bottom-0 bg-linear-to-t from-puna/85 via-puna/50 to-transparent p-4 pt-12 pr-16 text-white',
               'translate-y-2 opacity-0 transition duration-300 ease-andino',
               'group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:translate-y-0 group-hover:opacity-100',
               'pointer-coarse:hidden',
@@ -113,7 +108,7 @@ export function ProductCard({ producto, className }) {
           disabled={!producto.disponible}
           aria-label={t('carrito.agregarProducto', { nombre: producto.nombre })}
           className={cn(
-            'absolute right-3 bottom-3 z-10 inline-flex size-11 items-center justify-center rounded-full bg-alpaca text-cafe shadow-lift',
+            'absolute right-3 bottom-3 z-10 inline-flex size-11 items-center justify-center rounded-full bg-white text-puna shadow-lift',
             'transition duration-200 ease-andino hover:bg-primary hover:text-primary-foreground active:scale-95',
             'disabled:pointer-events-none disabled:opacity-50',
           )}
@@ -128,10 +123,11 @@ export function ProductCard({ producto, className }) {
             {t(`catalogo.categorias.${categoria.slug}.nombre`, { defaultValue: categoria.nombre })}
           </p>
         )}
-        <h3 className="font-serif text-lg leading-snug">
+        <h3 className="text-lg leading-snug font-semibold">
           {/* Enlace extendido: toda la tarjeta lleva a la ficha, salvo el botón "+" (z-10) */}
           <Link
             to={enlace}
+            {...propsEnlace}
             className="rounded-sm transition-colors after:absolute after:inset-0 after:content-[''] hover:text-link"
           >
             {producto.nombre}
@@ -141,7 +137,7 @@ export function ProductCard({ producto, className }) {
         {comunidad && (
           <Origen
             comunidad={comunidad}
-            className="hidden text-muted-foreground pointer-coarse:grid [&_svg]:text-verde"
+            className="hidden text-muted-foreground pointer-coarse:grid [&_svg]:text-musgo"
           />
         )}
         <Price amount={producto.precio?.monto} currency={producto.precio?.moneda} />

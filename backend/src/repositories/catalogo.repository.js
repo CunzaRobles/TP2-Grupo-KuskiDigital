@@ -8,6 +8,14 @@ const productosActivosDe = (columna, alias) =>
     `(SELECT COUNT(*)::int FROM productos p WHERE p.${columna} = "${alias}"."id" AND p.activo)`,
   );
 
+// MIN/MAX de altitud de las comunidades que producen los productos activos de la categoría.
+const altitudDeCategoria = (fn) =>
+  sequelize.literal(
+    `(SELECT ${fn}(c.altitud_msnm) FROM productos p
+        JOIN comunidades c ON c.id = p.comunidad_id
+       WHERE p.categoria_id = "Categoria"."id" AND p.activo)`,
+  );
+
 export const findCategorias = async () => {
   const filas = await Categoria.findAll({
     attributes: [
@@ -18,6 +26,8 @@ export const findCategorias = async () => {
       'imagenUrl',
       'orden',
       [productosActivosDe('categoria_id', 'Categoria'), 'totalProductos'],
+      [altitudDeCategoria('MIN'), 'altitudMin'],
+      [altitudDeCategoria('MAX'), 'altitudMax'],
     ],
     order: [
       ['orden', 'ASC'],
