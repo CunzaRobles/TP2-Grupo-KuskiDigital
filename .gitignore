@@ -7,6 +7,9 @@ dist/
 dist-ssr/
 build/
 
+# ===== Pruebas =====
+coverage/
+
 # ===== Variables de entorno (Sensible) =====
 .env
 .env.*

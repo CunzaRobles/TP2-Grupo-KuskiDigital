@@ -297,20 +297,23 @@ Sigue la estructura del wireframe: header → hero → categorías → destacado
 
 ## Scripts (desde la raíz)
 
-| Comando                   | Qué hace                                               |
-| ------------------------- | ------------------------------------------------------ |
-| `npm run dev`             | Frontend (Vite) y backend (`node --watch`) en paralelo |
-| `npm run build`           | Build de producción del frontend en `frontend/dist`    |
-| `npm run lint`            | ESLint en cada workspace                               |
-| `npm test`                | Pruebas de cada workspace (Vitest)                     |
-| `npm run e2e`             | Pruebas E2E con Cypress (requiere `npm run dev`)       |
-| `npm run db:migrate`      | Aplica las migraciones pendientes                      |
-| `npm run db:migrate:undo` | Deshace la última migración                            |
-| `npm run db:seed`         | Carga todos los seeders                                |
-| `npm run db:reset`        | Deshace todas las migraciones, migra y siembra         |
-| `npm run db:test`         | Comprueba la conexión y cuenta tablas y productos      |
-| `npm run format`          | Formatea el código con Prettier                        |
-| `npm run format:check`    | Comprueba el formato sin modificar archivos            |
+| Comando                    | Qué hace                                               |
+| -------------------------- | ------------------------------------------------------ |
+| `npm run dev`              | Frontend (Vite) y backend (`node --watch`) en paralelo |
+| `npm run build`            | Build de producción del frontend en `frontend/dist`    |
+| `npm run lint`             | ESLint en cada workspace                               |
+| `npm test`                 | Pruebas unitarias de cada workspace (Vitest, sin base) |
+| `npm run test:watch`       | Pruebas unitarias en modo observación                  |
+| `npm run test:coverage`    | Pruebas con cobertura (texto y HTML en `coverage/`)    |
+| `npm run test:integration` | Pruebas del backend contra Supabase (`DATABASE_URL`)   |
+| `npm run e2e`              | Pruebas E2E con Cypress (requiere `npm run dev`)       |
+| `npm run db:migrate`       | Aplica las migraciones pendientes                      |
+| `npm run db:migrate:undo`  | Deshace la última migración                            |
+| `npm run db:seed`          | Carga todos los seeders                                |
+| `npm run db:reset`         | Deshace todas las migraciones, migra y siembra         |
+| `npm run db:test`          | Comprueba la conexión y cuenta tablas y productos      |
+| `npm run format`           | Formatea el código con Prettier                        |
+| `npm run format:check`     | Comprueba el formato sin modificar archivos            |
 
 Para ejecutar un script en un solo workspace: `npm run <script> -w backend`.
 
@@ -327,8 +330,13 @@ Para ejecutar un script en un solo workspace: `npm run <script> -w backend`.
 
 ### Pruebas del backend
 
-- `backend/tests/*.test.js` (proyecto `unit`) usan Supertest con **toda** la capa de repositorios simulada en `tests/setup/mock-repositories.js`, así que **no necesitan base de datos** (sirven para CI). Si agregas un repositorio o una función de repositorio, agrégala también ahí.
-- `backend/tests/integration/` consulta la base real de Supabase y se ejecuta solo si existe `DATABASE_URL`; sin ella, se omite.
+- `backend/tests/*.test.js` (`vitest.config.js`, entorno `node`) usan Supertest con **toda** la capa de repositorios simulada en `tests/setup/mock-repositories.js`, así que **no necesitan base de datos** (sirven para CI). Si agregas un repositorio o una función de repositorio, agrégala también ahí.
+- `backend/tests/integration/` consulta la base real de Supabase. Tiene su propia config (`vitest.integration.config.js`) y **no** forma parte de `npm test`: se ejecuta con `npm run test:integration` y se omite si no existe `DATABASE_URL`.
+
+### Cobertura y VS Code
+
+- `npm run test:coverage` (raíz o workspace) genera el reporte de `@vitest/coverage-v8` en texto y en HTML (`frontend/coverage/index.html`, `backend/coverage/index.html`). Las carpetas `coverage/` están en `.gitignore`.
+- `.vscode/extensions.json` recomienda la extensión oficial de Vitest (`vitest.explorer`) para ejecutar y depurar pruebas desde el editor.
 
 ## Equipo
 
