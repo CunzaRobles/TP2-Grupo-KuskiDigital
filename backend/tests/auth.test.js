@@ -200,6 +200,46 @@ describe('GET /api/v1/auth/me y POST /api/v1/auth/logout', () => {
   });
 });
 
+describe('GET /api/v1/auth/sesion', () => {
+  it('sin cookie responde 200 con usuario null', async () => {
+    const res = await request(app).get('/api/v1/auth/sesion');
+
+    expect(res.status).toBe(200);
+    expect(res.body.data.usuario).toBeNull();
+    expect(usuarioRepository.findById).not.toHaveBeenCalled();
+  });
+
+  it('con un token manipulado responde usuario null', async () => {
+    const res = await request(app)
+      .get('/api/v1/auth/sesion')
+      .set('Cookie', `${cookieDe({ id: 7 })}x`);
+
+    expect(res.status).toBe(200);
+    expect(res.body.data.usuario).toBeNull();
+  });
+
+  it('con una cuenta desactivada responde usuario null', async () => {
+    usuarioRepository.findById.mockResolvedValue({ ...usuarioDb, activo: false });
+
+    const res = await request(app)
+      .get('/api/v1/auth/sesion')
+      .set('Cookie', cookieDe({ id: 7 }));
+
+    expect(res.body.data.usuario).toBeNull();
+  });
+
+  it('con sesión válida devuelve el perfil', async () => {
+    usuarioRepository.findById.mockResolvedValue(usuarioDb);
+
+    const res = await request(app)
+      .get('/api/v1/auth/sesion')
+      .set('Cookie', cookieDe({ id: 7 }));
+
+    expect(res.status).toBe(200);
+    expect(res.body.data.usuario.correo).toBe(usuarioDb.correo);
+  });
+});
+
 describe('middleware requireRol', () => {
   const appRoles = express();
   appRoles.use(cookieParser());

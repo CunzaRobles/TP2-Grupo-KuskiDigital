@@ -147,6 +147,28 @@ paths:
               schema: { $ref: '#/components/schemas/UsuarioRespuesta' }
         '401': { $ref: '#/components/responses/NoAutenticado' }
 
+  /auth/sesion:
+    get:
+      tags: [Auth]
+      summary: Sesión actual o null (sin error para invitados)
+      description: |
+        La tienda lo consulta al cargar. A diferencia de `/auth/me`, un invitado (o una cookie
+        inválida, o una cuenta desactivada) recibe `200` con `usuario: null` en lugar de `401`.
+      responses:
+        '200':
+          description: Perfil del usuario o null
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      usuario:
+                        nullable: true
+                        allOf: [{ $ref: '#/components/schemas/Usuario' }]
+
   # ───────────────────────── Catálogo ─────────────────────────
   /productos:
     get:

@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  calidad:
+    name: Lint, pruebas y build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # Cypress (E2E) no se ejecuta en este job: se evita descargar su binario en npm ci.
+      CYPRESS_INSTALL_BINARY: 0
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Formato (Prettier)
+        run: npm run format:check
+
+      - name: Lint (ESLint)
+        run: npm run lint
+
+      - name: Pruebas (frontend + backend)
+        run: npm test
+        env:
+          # Opcional. Con el secret DATABASE_URL configurado, también corren las pruebas de
+          # integración contra Supabase (solo lecturas). Sin él (p. ej. PRs desde forks) se omiten.
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Build del frontend
+        run: npm run build

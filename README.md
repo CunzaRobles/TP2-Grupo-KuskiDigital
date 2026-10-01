@@ -4,6 +4,21 @@ Tienda e-commerce de **Kuski Agroindustria S.A.** (Cusco, Perú): café orgánic
 
 Proyecto del curso Taller de Proyectos — Universidad Continental.
 
+[![CI](https://github.com/CunzaRobles/TP2-Grupo-KuskiDigital/actions/workflows/ci.yml/badge.svg)](https://github.com/CunzaRobles/TP2-Grupo-KuskiDigital/actions/workflows/ci.yml)
+
+## Puesta en marcha rápida
+
+```bash
+nvm use                                   # Node 24 (.nvmrc)
+npm install                               # ambos workspaces, un solo package-lock.json
+cp backend/.env.example backend/.env      # completa DATABASE_URL (ver "Configurar Supabase")
+npm run db:reset                          # crea las 19 tablas y carga los datos semilla
+npm run db:test                           # debe mostrar 19/19 tablas y 44 productos
+npm run dev                               # tienda en http://localhost:5173 · API en http://localhost:3000
+```
+
+Luego entra con uno de los [usuarios de prueba](#datos-de-prueba). El panel admin está en http://localhost:5173/admin.
+
 ## Estructura
 
 Monorepo con npm workspaces y un único `package-lock.json` en la raíz.
@@ -51,6 +66,18 @@ Monorepo con npm workspaces y un único `package-lock.json` en la raíz.
 - **Node.js 24** (con nvm: `nvm use`)
 - npm 11 (viene con Node 24)
 - La base de datos es PostgreSQL en **Supabase**; no hace falta Docker.
+
+## Configurar Supabase
+
+Supabase se usa **solo como PostgreSQL** (y Storage para las fotos que se suben desde el panel). No se usa Supabase Auth ni `supabase-js` en el frontend: todo pasa por la API Express.
+
+1. Crea un proyecto gratuito en [supabase.com](https://supabase.com) (región sugerida: _South America (São Paulo)_) y guarda la contraseña de la base.
+2. **Cadena de conexión:** _Project Settings → Database → Connection string → **Session pooler**_ (puerto 5432; funciona en redes IPv4). Cópiala en `DATABASE_URL` de `backend/.env` reemplazando `[YOUR-PASSWORD]`. La conexión usa SSL.
+3. **Tablas y datos:** `npm run db:reset` ejecuta la migración baseline (`backend/database/01_esquema_kuski_db.sql`: 19 tablas, ENUMs, vistas, triggers y **RLS activado sin políticas**, que bloquea la API pública de Supabase) y luego los seeders. Compruébalo con `npm run db:test`.
+4. **Storage (opcional, para subir fotos desde el panel):** _Storage → New bucket_ → nombre `productos`, marcado como **público**. Después copia _Project Settings → API_ → `Project URL` en `SUPABASE_URL` y la clave secreta (`service_role` o `sb_secret_…`) en `SUPABASE_SERVICE_ROLE_KEY`. Sin estas dos variables la tienda funciona igual: solo la subida de fotos responde `503 STORAGE_NO_CONFIGURADO` (los productos semilla usan fotos de Unsplash).
+5. En el _Security Advisor_ de Supabase no deben quedar errores: todas las tablas (incluida `sequelize_meta`) tienen RLS.
+
+> La `service_role` key da acceso total al proyecto: solo vive en `backend/.env`, nunca en el frontend ni en el repositorio.
 
 ## Instalación
 
@@ -107,9 +134,11 @@ npm run db:reset          # deshace todas las migraciones, migra y siembra de nu
 npm run db:test           # comprueba la conexión: tablas (19/19) y número de productos
 ```
 
-### Usuarios de prueba
+### Datos de prueba
 
-Solo para desarrollo; las contraseñas se guardan cifradas con bcrypt.
+#### Usuarios por rol
+
+Solo para desarrollo; las contraseñas se guardan cifradas con bcrypt. Los tres administradores entran por http://localhost:5173/admin/login y cada uno ve solo las secciones de su rol (ver la matriz de permisos en [Panel admin](#panel-admin-apiv1admin)).
 
 | Rol               | Correo                     | Contraseña          | Notas                     |
 | ----------------- | -------------------------- | ------------------- | ------------------------- |
@@ -118,6 +147,17 @@ Solo para desarrollo; las contraseñas se guardan cifradas con bcrypt.
 | `admin_logistica` | `logistica@kuski.pe`       | `KuskiAdmin2026!`   |                           |
 | `cliente`         | `maria.quispe@example.com` | `KuskiCliente2026!` | Perú, español, PEN, Cusco |
 | `cliente`         | `anna.becker@example.com`  | `KuskiCliente2026!` | Alemania, alemán, EUR     |
+
+#### Pagos simulados
+
+| Método      | Dato de prueba                                                                       | Resultado                                                                     |
+| ----------- | ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
+| Tarjeta     | `4111 1111 1111 1111`, vencimiento futuro, CVV de 3 dígitos                          | Aprobado, con número de operación                                             |
+| Tarjeta     | **`4000 0000 0000 0002`** (cualquiera terminada en `0002`)                           | **Rechazado** (`402 PAGO_RECHAZADO`): no se crea el pedido ni cambia el stock |
+| Yape / Plin | Celular peruano de 9 dígitos que empiece por 9 (p. ej. `987 654 321`); solo en soles | Aprobado, con código de aprobación de 6 dígitos                               |
+| PayPal      | Cualquier correo válido                                                              | Aprobado                                                                      |
+
+Los correos (bienvenida, confirmación del pedido, cambios de estado) se imprimen en la consola del backend.
 
 ## API
 
@@ -131,6 +171,7 @@ Las respuestas tienen la forma `{ data }` o `{ error: { code, message, details? 
 | POST           | `/auth/registro`                | Público | Crea un cliente e inicia sesión. Correo de bienvenida simulado.                                                                                                                       |
 | POST           | `/auth/login`                   | Público | Inicia sesión: JWT en la cookie httpOnly `kuski_token` (SameSite lax, Secure en producción).                                                                                          |
 | POST           | `/auth/logout`                  | Público | Borra la cookie de sesión.                                                                                                                                                            |
+| GET            | `/auth/sesion`                  | Público | Usuario actual o `null` (sin `401` para invitados). La tienda lo consulta al cargar, así no hay errores en la consola en cada visita.                                                 |
 | GET            | `/auth/me`                      | Sesión  | Usuario actual.                                                                                                                                                                       |
 | GET            | `/productos`                    | Público | Catálogo. Query: `categoria`, `comunidad`, `certificacion`, `precio_min`, `precio_max`, `q`, `orden`, `page`, `limit`, `moneda`.                                                      |
 | GET            | `/productos/destacados`         | Público | Destacados del home.                                                                                                                                                                  |
@@ -221,11 +262,11 @@ En desarrollo, Vite redirige las peticiones a `/api` hacia el backend. Por eso e
 ### Frontend y design system
 
 - **Design system:** abre http://localhost:5173/design (solo en desarrollo; no entra al build). Muestra la paleta con sus ratios de contraste, la escala tipográfica, radios, sombras, el motivo textil y todos los componentes de `components/ui` en modo claro (tienda) y oscuro (admin).
-- **Tokens:** `src/styles/tokens.css` define la paleta "editorial andino", la tipografía (Fraunces + Manrope desde Google Fonts), la escala tipográfica (`text-display`, `text-h1`…`text-h4`, `text-lead`, `eyebrow`), los radios, las sombras (`shadow-soft`, `shadow-card`, `shadow-lift`), los espaciados (`py-section`, `container-page`) y los tokens semánticos (`bg-primary`, `text-muted-foreground`…). `src/styles/tokens.test.js` verifica el contraste AA de todos los pares texto/fondo en claro y oscuro.
+- **Tokens:** `src/styles/tokens.css` define la paleta "editorial andino", la tipografía (Fraunces + Manrope, alojadas en `public/fonts` y declaradas en `src/styles/fonts.css`), la escala tipográfica (`text-display`, `text-h1`…`text-h4`, `text-lead`, `eyebrow`), los radios, las sombras (`shadow-soft`, `shadow-card`, `shadow-lift`), los espaciados (`py-section`, `container-page`) y los tokens semánticos (`bg-primary`, `text-muted-foreground`…). `src/styles/tokens.test.js` verifica el contraste AA de todos los pares texto/fondo en claro y oscuro.
 - **Modo oscuro:** solo existe en el panel admin (`<ThemeScope theme="dark">`); la tienda siempre es clara.
 - **Componentes (`components/ui`):** Button, Input, Field, Select, Badge, Card, Drawer, Dialog, Tabs, Skeleton, Toaster/toast, Stepper, Price, QuantitySelector, AndeanDivider y ThemeScope. Para añadir componentes de shadcn/ui: `npx shadcn@latest add <componente>` desde `frontend/` (usa `components.json`).
 - **API:** usa `http` de `src/lib/http.js` (envía la cookie de sesión y convierte `{ error }` en `ApiError`) dentro de TanStack Query. La moneda activa (`useCurrency()`, persistida en `localStorage`) se envía como `?moneda=`: el backend convierte los precios y `<Price>` solo los formatea.
-- **i18n:** `react-i18next` con detección del idioma del navegador; los textos viven en `src/locales/{es,en,de}.json`.
+- **i18n:** `react-i18next` con detección del idioma del navegador; los textos viven en `src/locales/{es,en,de}.json`. El español va en el bundle; inglés y alemán se descargan solo si se usan. `src/locales/locales.test.js` falla si a en/de les falta una clave, tienen un texto vacío o cambian una variable de interpolación.
 - **Movimiento:** Motion con `MotionConfig reducedMotion="user"` y duraciones de 200 a 400 ms (`src/lib/motion.js`). Con `prefers-reduced-motion`, las animaciones CSS también se desactivan.
 
 ### Home (`src/features/home`)
@@ -257,7 +298,7 @@ Sigue la estructura del wireframe: header → hero → categorías → destacado
 ### Carrito (`src/features/carrito`)
 
 - **Invitado:** vive en `localStorage` (`kuski.carrito`, sincronizado entre pestañas). Los precios en la moneda elegida, el stock actual y los avisos llegan de `POST /carrito/invitado`.
-- **Con sesión:** vive en la API (`/carrito`). Los cambios se ven al instante (actualización optimista) y se confirman con la respuesta; si falla, se muestra un aviso y se recarga el carrito. Al detectar la sesión (`GET /auth/me`, `features/auth/api.js`), el carrito de invitado se fusiona con `POST /carrito/fusionar` y se borra de `localStorage`.
+- **Con sesión:** vive en la API (`/carrito`). Los cambios se ven al instante (actualización optimista) y se confirman con la respuesta; si falla, se muestra un aviso y se recarga el carrito. Al detectar la sesión (`GET /auth/sesion`, `features/auth/api.js`), el carrito de invitado se fusiona con `POST /carrito/fusionar` y se borra de `localStorage`.
 - Ambos modos exponen la misma forma (`carrito-lineas.js`) a la interfaz: el **drawer lateral** (se abre desde el header y al agregar desde la ficha) y la página **`/carrito`** con el resumen. Los montos siempre están en la moneda elegida; el envío y el IGV se anuncian como "se calcula en el checkout" (nunca se ocultan). Con productos sin stock suficiente o no disponibles, el paso al checkout se bloquea hasta ajustarlos.
 
 ### Cuenta y acceso (`src/features/auth`, `src/features/cuenta`)
@@ -295,6 +336,36 @@ Sigue la estructura del wireframe: header → hero → categorías → destacado
 
 - Página con ilustración y voz de la marca, salida al catálogo o al inicio y accesos a las cuatro categorías.
 
+## Rendimiento, accesibilidad y SEO
+
+Medido con Lighthouse 13 sobre el build de producción (`npm run build` + `vite preview`, API local con los datos semilla):
+
+| Página   | Performance móvil | Performance escritorio | Accesibilidad | Buenas prácticas | SEO | LCP escritorio |
+| -------- | :---------------: | :--------------------: | :-----------: | :--------------: | :-: | :------------: |
+| Home     |        78         |           98           |      100      |       100        | 100 |     0,9 s      |
+| Catálogo |        71         |           97           |      100      |       100        | 100 |     1,2 s      |
+| Producto |        65         |           97           |      100      |       100        | 100 |     1,1 s      |
+| Checkout |        73         |           97           |      100      |       100        | 100 |     1,0 s      |
+
+El perfil móvil de Lighthouse simula un 4G lento (1,6 Mbps, 150 ms de latencia) y una CPU 4 veces más lenta. Ahí el límite es la arquitectura SPA: nada se pinta hasta descargar y ejecutar el JS inicial (~275 KB gzip, casi la mitad es `react-dom`), y en catálogo y producto la foto principal se conoce recién cuando responde la API. Superar 90 en ese perfil requeriría renderizado en servidor, fuera del alcance de este stack.
+
+Lo que se aplica:
+
+- **Code splitting por ruta:** solo el home va en el bundle inicial; catálogo, producto, carrito, login, registro, checkout, cuenta y todo el panel admin se descargan al entrar. Leaflet y Recharts van en chunks propios.
+- **Imágenes:** `src/lib/imagen.js` genera `srcset`/`sizes` para las fotos de Unsplash (servidas en AVIF/WebP con `auto=format`): una tarjeta en móvil descarga ~20 KB en lugar de ~200 KB. Las que no están en el primer pantallazo usan `loading="lazy"` y todas tienen relación de aspecto fija.
+- **Fuentes propias** con `preload` (sin hoja de estilos de terceros que bloquee el render).
+- **CLS 0:** skeletons con la misma altura que el contenido real y footer siempre bajo el pliegue.
+- `robots.txt` (excluye `/admin`), `<title>` por página y `lang` del `<html>` según el idioma activo.
+- Responsive verificado en 375, 768 y 1440 px en todas las páginas de la tienda y del panel (sin scroll horizontal; las tablas del panel se desplazan dentro de su caja).
+
+## Integración continua
+
+`.github/workflows/ci.yml` corre en cada pull request y en cada push a `main`, con Node 24 (`.nvmrc`): `npm ci` → `npm run format:check` → `npm run lint` → `npm test` → `npm run build`.
+
+- Las pruebas unitarias del backend usan repositorios simulados, así que no necesitan base de datos.
+- Las de integración (`backend/tests/integration/`, solo lecturas) corren si el repositorio tiene el secret **`DATABASE_URL`** (_Settings → Secrets and variables → Actions → New repository secret_, con la misma cadena del Session pooler). Sin el secret, o en PRs desde forks, se omiten y el job sigue en verde.
+- Cypress no se ejecuta en CI (necesita la app levantada y crea pedidos reales); su binario no se descarga (`CYPRESS_INSTALL_BINARY=0`).
+
 ## Scripts (desde la raíz)
 
 | Comando                   | Qué hace                                               |
@@ -316,7 +387,7 @@ Para ejecutar un script en un solo workspace: `npm run <script> -w backend`.
 
 ### Pruebas del frontend
 
-- `frontend/src/**/*.test.{js,jsx}` usan Vitest + Testing Library en jsdom: cliente HTTP, formateo de moneda, contexto de moneda, componentes base, router, contraste AA de los tokens, carrito (invitado, con sesión, fusión y actualización optimista), home, catálogo (filtros ⇄ URL, orden, búsqueda, drawer móvil, estado vacío), ficha de producto (galería, pestañas, agregar al carrito, agotado y 404), login y registro (validación, errores, redirección, fusión del carrito), checkout (cotización por país, métodos de envío, Yape, rechazo con la tarjeta 0002, dirección nueva, volver sin perder datos), tarjeta (marca, formato, Luhn, vencimiento), Mi cuenta y 404, con la API simulada (`src/test/tienda.jsx`).
+- `frontend/src/**/*.test.{js,jsx}` usan Vitest + Testing Library en jsdom (las páginas son lazy: `renderRuta` de `src/test/tienda.jsx` es asíncrono y espera la ruta inicial): cliente HTTP, formateo de moneda, contexto de moneda, componentes base, router, contraste AA de los tokens, carrito (invitado, con sesión, fusión y actualización optimista), home, catálogo (filtros ⇄ URL, orden, búsqueda, drawer móvil, estado vacío), ficha de producto (galería, pestañas, agregar al carrito, agotado y 404), login y registro (validación, errores, redirección, fusión del carrito), checkout (cotización por país, métodos de envío, Yape, rechazo con la tarjeta 0002, dirección nueva, volver sin perder datos), tarjeta (marca, formato, Luhn, vencimiento), imágenes responsivas, traducciones completas, Mi cuenta y 404, con la API simulada (`src/test/tienda.jsx`).
 
 ### Pruebas E2E (Cypress)
 

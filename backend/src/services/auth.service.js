@@ -69,3 +69,11 @@ export const perfil = async (id) => {
   }
   return toUsuarioDTO(usuario);
 };
+
+// Sesión de la tienda: null para invitados o si la cuenta ya no existe o está desactivada.
+// A diferencia de perfil(), no lanza 401: así el navegador no registra un error en cada visita.
+export const sesionActual = async (id) => {
+  if (!id) return null;
+  const usuario = await usuarioRepository.findById(id);
+  return usuario?.activo ? toUsuarioDTO(usuario) : null;
+};
