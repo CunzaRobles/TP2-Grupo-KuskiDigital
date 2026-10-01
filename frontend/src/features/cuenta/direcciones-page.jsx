@@ -199,7 +199,7 @@ export function DireccionesPage() {
           >
             <div className="grid gap-1.5">
               <p className="flex flex-wrap items-center gap-2 font-semibold">
-                <MapPin className="size-4 text-verde" aria-hidden="true" />
+                <MapPin className="size-4 text-musgo" aria-hidden="true" />
                 {d.nombreDestinatario}
                 {d.esPrincipal && (
                   <Badge variant="verde">{t('cuenta.direcciones.principal')}</Badge>

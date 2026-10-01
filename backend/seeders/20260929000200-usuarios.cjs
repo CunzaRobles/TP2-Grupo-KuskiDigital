@@ -4,7 +4,7 @@
 // (historias de usuario María Quispe y Anna Becker). Contraseñas cifradas con bcrypt.
 // Las credenciales están documentadas en el README (solo para desarrollo).
 
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const PASSWORD_ADMIN = 'KuskiAdmin2026!';
 const PASSWORD_CLIENTE = 'KuskiCliente2026!';

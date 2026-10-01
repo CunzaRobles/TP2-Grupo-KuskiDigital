@@ -1,10 +1,12 @@
 import { LogOut, MapPin, Package } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { NavLink, Outlet, useNavigate } from 'react-router';
+import { Outlet } from 'react-router';
 import { AndeanDivider } from '@/components/ui/andean-divider';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/toast';
 import { useLogout, useSesion } from '@/features/auth/api';
+import { NavLink } from '@/lib/motion/enlaces';
+import { useNavigate } from '@/lib/motion/use-navigate';
 import { cn } from '@/lib/utils';
 
 const SECCIONES = [

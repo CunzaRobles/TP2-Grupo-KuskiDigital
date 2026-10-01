@@ -1,16 +1,37 @@
 /*
- * Design tokens "editorial andino".
+ * Design tokens.
  *
- * 1) @theme: paleta de marca y escalas (tipografía, radios, sombras, espaciados, movimiento).
- *    Tailwind genera las utilidades: bg-terracota, text-h2, rounded-xl, shadow-soft, py-section…
- * 2) :root / .dark: tokens semánticos (background, primary, muted…) que usan los componentes.
- *    El modo oscuro solo se activa dentro del panel admin (clase .dark en su contenedor).
+ * Tienda: "Del valle a la puna" (Puna, Cochinilla como único acento, Ichu, Musgo, Niebla).
+ * Panel admin: conserva "editorial andino" (café, terracota, crema) dentro de la clase .admin
+ * (la pone ThemeScope), que redefine tokens semánticos, fuentes y escala tipográfica.
+ *
+ * 1) @theme: paletas y escalas. Tailwind genera las utilidades: bg-puna, text-h2, py-section…
+ * 2) :root (tienda) / .admin / .dark (admin oscuro): tokens semánticos que usan los componentes.
  *
  * Contraste AA verificado en src/styles/tokens.test.js (texto ≥ 4.5:1, bordes de controles ≥ 3:1).
  */
 
 @theme {
-  /* Paleta de marca (valores exactos de CLAUDE.md) */
+  /* Paleta de la tienda (valores exactos de CLAUDE.md) */
+  --color-puna: #1b2440;
+  --color-cochinilla: #a3123a;
+  --color-cochinilla-700: #7c1232;
+  --color-ichu: #c9a55a;
+  --color-musgo: #3e5a3a;
+  --color-niebla: #eef0ec;
+  --color-blanco: #ffffff;
+
+  /* Derivados aprobados: texto secundario, borde de controles y error */
+  --color-niebla-texto: #5b6270;
+  --color-niebla-borde: #838a82;
+  --color-error: #9a3412;
+
+  /* Tintes de Niebla para superficies (no son colores nuevos: Niebla con más Puna) */
+  --color-niebla-200: #e4e7e1;
+  --color-niebla-300: #dfe3dc;
+  --color-niebla-400: #d3d8d0;
+
+  /* Paleta del panel admin ("editorial andino") */
   --color-cafe: #2b1d14;
   --color-terracota: #b5532c;
   --color-maiz: #d9a441;
@@ -42,24 +63,30 @@
   --color-tierra-900: #261a12;
   --color-tierra-950: #1c130d;
 
-  /* Tipografía */
+  /*
+   * Tipografía de la tienda: Unbounded (h1, h2 y cifras de altitud) + Hanken Grotesk (texto,
+   * h3/h4, nombres de producto y precios). font-display y font-heading cambian en .admin.
+   * font-serif (Fraunces) solo se usa en el admin, que carga esa familia.
+   */
+  --font-display: 'Unbounded', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: 'Hanken Grotesk', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans: 'Hanken Grotesk', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-serif: 'Fraunces', 'Iowan Old Style', Georgia, serif;
-  --font-sans: 'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
 
-  /* Escala editorial (fluida). Tailwind mantiene además text-xs…text-9xl */
-  --text-display: clamp(2.75rem, 1.6rem + 5vw, 5.5rem);
-  --text-display--line-height: 1.02;
-  --text-display--letter-spacing: -0.025em;
-  --text-h1: clamp(2.25rem, 1.6rem + 2.8vw, 3.75rem);
+  /* Escala fluida. Unbounded es muy ancha: tamaños contenidos para que el alemán no desborde */
+  --text-display: clamp(2.25rem, 1.4rem + 4vw, 4.75rem);
+  --text-display--line-height: 1.04;
+  --text-display--letter-spacing: -0.03em;
+  --text-h1: clamp(2rem, 1.45rem + 2.4vw, 3.25rem);
   --text-h1--line-height: 1.08;
-  --text-h1--letter-spacing: -0.02em;
-  --text-h2: clamp(1.75rem, 1.4rem + 1.6vw, 2.75rem);
+  --text-h1--letter-spacing: -0.025em;
+  --text-h2: clamp(1.5rem, 1.2rem + 1.4vw, 2.375rem);
   --text-h2--line-height: 1.12;
-  --text-h2--letter-spacing: -0.015em;
-  --text-h3: clamp(1.375rem, 1.2rem + 0.8vw, 1.875rem);
-  --text-h3--line-height: 1.2;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h3: clamp(1.25rem, 1.1rem + 0.6vw, 1.625rem);
+  --text-h3--line-height: 1.25;
   --text-h3--letter-spacing: -0.01em;
-  --text-h4: 1.25rem;
+  --text-h4: 1.125rem;
   --text-h4--line-height: 1.3;
   --text-lead: clamp(1.125rem, 1.05rem + 0.35vw, 1.3125rem);
   --text-lead--line-height: 1.6;
@@ -87,22 +114,141 @@
   --spacing-header: 4.5rem;
   --spacing-header-compact: 3.5rem;
 
-  /* Movimiento (200–400 ms). Los mismos valores viven en src/lib/motion.js */
+  /* Curvas como utilidades (ease-andino, ease-suave); duraciones en --duracion-* de :root */
   --ease-andino: cubic-bezier(0.22, 1, 0.36, 1);
-  --animate-shimmer: shimmer 1.6s ease-in-out infinite;
-
-  @keyframes shimmer {
-    0% {
-      background-position: 100% 0;
-    }
-    100% {
-      background-position: -100% 0;
-    }
-  }
+  --ease-suave: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-/* Tienda (y admin en modo claro) */
+/*
+ * Alias semánticos en @theme inline: la utilidad usa directamente var(--radio-*) y
+ * var(--elevacion-*), que :root (tienda) y .admin definen con valores distintos.
+ */
+@theme inline {
+  /*
+   * Radios semánticos con jerarquía (la tienda los redefine en :root y el admin en .admin):
+   * indicadores (badges, contadores, pasos, botones de icono) rounded-full → ítems de lista →
+   * campos y botones → superficies (tarjetas, avisos) → popovers y toasts → diálogos.
+   * Las fotos no llevan radio.
+   */
+  --radius-item: var(--radio-item);
+  --radius-field: var(--radio-campo);
+  --radius-button: var(--radio-boton);
+  --radius-surface: var(--radio-superficie);
+  --radius-popover: var(--radio-popover);
+  --radius-dialog: var(--radio-dialogo);
+
+  /*
+   * Elevación semántica: solo las capas que flotan sobre la página (popovers, diálogos, toasts,
+   * drawers) proyectan sombra en la tienda. Campos y superficies se separan con bordes finos.
+   */
+  --shadow-field: var(--elevacion-campo);
+  --shadow-surface: var(--elevacion-superficie);
+  --shadow-surface-hover: var(--elevacion-superficie-hover);
+  --shadow-overlay: var(--elevacion-capa);
+  --shadow-sheet: var(--elevacion-panel);
+}
+
+/* Tienda */
 :root {
+  --background: var(--color-niebla);
+  --foreground: var(--color-puna);
+  --surface: var(--color-blanco);
+  --card: var(--color-blanco);
+  --card-foreground: var(--color-puna);
+  --popover: var(--color-blanco);
+  --popover-foreground: var(--color-puna);
+  --primary: var(--color-cochinilla);
+  --primary-hover: var(--color-cochinilla-700);
+  --primary-foreground: var(--color-blanco);
+  --secondary: var(--color-niebla-200);
+  --secondary-hover: var(--color-niebla-300);
+  --secondary-foreground: var(--color-puna);
+  --muted: var(--color-niebla-200);
+  --muted-foreground: var(--color-niebla-texto);
+  /* Ichu solo como relleno detrás de texto Puna (nunca como texto sobre Niebla) */
+  --accent: var(--color-ichu);
+  --accent-foreground: var(--color-puna);
+  --link: var(--color-cochinilla);
+  --border: var(--color-niebla-400);
+  --input: var(--color-niebla-borde);
+  --ring: var(--color-cochinilla);
+  --destructive: var(--color-error);
+  --destructive-foreground: var(--color-blanco);
+  --success: var(--color-musgo);
+  --success-foreground: var(--color-blanco);
+  --overlay: rgb(27 36 64 / 0.5);
+  --pattern: var(--color-niebla-borde);
+  --chart-1: var(--color-cochinilla);
+  --chart-muted: var(--color-niebla-borde);
+  --chart-grid: var(--color-niebla-300);
+  --aviso: var(--color-ichu);
+  --aviso-foreground: var(--color-puna);
+  --rating: var(--color-puna);
+  --selection: var(--color-ichu);
+  --selection-foreground: var(--color-puna);
+  --display-weight: 500;
+  --heading-weight: 600;
+
+  --radio-item: 0.125rem;
+  --radio-campo: 0.375rem;
+  --radio-boton: 0.375rem;
+  --radio-superficie: 0.625rem;
+  --radio-popover: 0.75rem;
+  --radio-dialogo: 1rem;
+
+  --elevacion-campo: 0 0 #0000;
+  --elevacion-superficie: 0 0 #0000;
+  --elevacion-superficie-hover: 0 0 #0000;
+  --elevacion-capa: 0 1px 2px rgb(27 36 64 / 0.06), 0 16px 40px -12px rgb(27 36 64 / 0.28);
+  --elevacion-panel: -12px 0 48px -16px rgb(27 36 64 / 0.32);
+
+  /* Movimiento (espejo de src/lib/motion/tokens.js; tokens.test.js comprueba que coincidan) */
+  --duracion-ruta: 180ms;
+  --duracion-rapida: 200ms;
+  --duracion-base: 300ms;
+  --duracion-lenta: 400ms;
+  --curva-salida: cubic-bezier(0.22, 1, 0.36, 1);
+  --curva-suave: cubic-bezier(0.65, 0, 0.35, 1);
+  color-scheme: light;
+}
+
+/* Panel admin, modo claro ("editorial andino") */
+.admin {
+  --font-display: var(--font-serif);
+  --font-heading: var(--font-serif);
+  --font-sans: 'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --text-display: clamp(2.75rem, 1.6rem + 5vw, 5.5rem);
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.025em;
+  --text-h1: clamp(2.25rem, 1.6rem + 2.8vw, 3.75rem);
+  --text-h1--line-height: 1.08;
+  --text-h1--letter-spacing: -0.02em;
+  --text-h2: clamp(1.75rem, 1.4rem + 1.6vw, 2.75rem);
+  --text-h2--line-height: 1.12;
+  --text-h2--letter-spacing: -0.015em;
+  --text-h3: clamp(1.375rem, 1.2rem + 0.8vw, 1.875rem);
+  --text-h3--line-height: 1.2;
+  --text-h3--letter-spacing: -0.01em;
+  --text-h4: 1.25rem;
+  --text-h4--line-height: 1.3;
+  --display-weight: 500;
+  --heading-weight: 500;
+  font-family: var(--font-sans);
+
+  --radio-item: var(--radius-md);
+  --radio-campo: var(--radius-md);
+  --radio-boton: 9999px;
+  --radio-superficie: var(--radius-xl);
+  --radio-popover: var(--radius-lg);
+  --radio-dialogo: var(--radius-2xl);
+
+  --elevacion-campo: 0 1px 2px rgb(43 29 20 / 0.04), 0 2px 8px rgb(43 29 20 / 0.05);
+  --elevacion-superficie: var(--elevacion-campo);
+  --elevacion-superficie-hover:
+    0 2px 4px rgb(43 29 20 / 0.06), 0 18px 40px -12px rgb(43 29 20 / 0.22);
+  --elevacion-capa: var(--elevacion-superficie-hover);
+  --elevacion-panel: -12px 0 48px -16px rgb(43 29 20 / 0.3);
+
   --background: var(--color-alpaca);
   --foreground: var(--color-cafe);
   --surface: var(--color-crema);
@@ -134,6 +280,11 @@
   --chart-1: var(--color-terracota);
   --chart-muted: var(--color-tierra-400);
   --chart-grid: var(--color-tierra-200);
+  --aviso: var(--color-maiz);
+  --aviso-foreground: var(--color-terracota-700);
+  --rating: var(--color-maiz);
+  --selection: var(--color-maiz);
+  --selection-foreground: var(--color-cafe);
   color-scheme: light;
 }
 

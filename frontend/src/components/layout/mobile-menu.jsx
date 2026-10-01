@@ -1,7 +1,4 @@
-import { ArrowRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { NavLink } from 'react-router';
-import { AndeanDivider } from '@/components/ui/andean-divider';
 import {
   Drawer,
   DrawerBody,
@@ -11,6 +8,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from '@/components/ui/drawer';
+import { NavLink } from '@/lib/motion/enlaces';
 import { cn } from '@/lib/utils';
 import { Logo } from './logo';
 import { CurrencySelect, LanguageSelect } from './preference-selects';
@@ -41,16 +39,12 @@ export function MobileMenu({ open, onOpenChange, enlaces }) {
                       onClick={cerrar}
                       className={({ isActive }) =>
                         cn(
-                          'group flex items-center justify-between py-4 font-serif text-h3 transition-colors hover:text-link',
+                          'flex items-center py-4 font-heading text-h3 font-semibold transition-colors hover:text-link',
                           isActive && 'text-link',
                         )
                       }
                     >
                       {t(clave)}
-                      <ArrowRight
-                        className="size-5 -translate-x-1 opacity-0 transition duration-300 ease-andino group-hover:translate-x-0 group-hover:opacity-100"
-                        aria-hidden="true"
-                      />
                     </NavLink>
                   </li>
                 ),
@@ -58,10 +52,8 @@ export function MobileMenu({ open, onOpenChange, enlaces }) {
             </ul>
           </nav>
 
-          <AndeanDivider variant="ornament" />
-
           <div className="grid gap-3">
-            <p className="eyebrow text-muted-foreground">{t('nav.preferencias')}</p>
+            <p className="text-sm font-semibold text-muted-foreground">{t('nav.preferencias')}</p>
             <div className="flex flex-wrap gap-2">
               <LanguageSelect className="border-input bg-card" />
               <CurrencySelect className="border-input bg-card" />

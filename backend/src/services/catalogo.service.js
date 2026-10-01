@@ -9,7 +9,19 @@ export const PAISES_EXPORTACION_HISTORICOS = [
   'GB', 'CH', 'AT', 'SE', 'NO', 'DK', 'FI', 'IE', 'PT', 'PL', 'JP', 'KR', 'CN', 'AU', 'NZ',
 ];
 
-export const listarCategorias = () => catalogoRepository.findCategorias();
+const aEnteroONull = (valor) => (valor == null ? null : Number(valor));
+
+// Rango de altitud de origen (msnm) y comunidad principal de cada categoría; null si no tiene
+// productos activos.
+export const listarCategorias = async () =>
+  (await catalogoRepository.findCategorias()).map(({ comunidadPrincipal, ...c }) => ({
+    ...c,
+    altitudMin: aEnteroONull(c.altitudMin),
+    altitudMax: aEnteroONull(c.altitudMax),
+    comunidadPrincipal: comunidadPrincipal
+      ? { ...comunidadPrincipal, altitudMsnm: aEnteroONull(comunidadPrincipal.altitudMsnm) }
+      : null,
+  }));
 
 export const listarCertificaciones = () => catalogoRepository.findCertificaciones();
 

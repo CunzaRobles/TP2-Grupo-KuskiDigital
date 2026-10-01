@@ -1,7 +1,8 @@
 import multer from 'multer';
 import { AppError } from '../utils/app-error.js';
 
-export const TAMANO_MAX_IMAGEN = 5 * 1024 * 1024; // 5 MB
+// 4 MB: Vercel corta las peticiones de más de 4,5 MB antes de llegar a la función.
+export const TAMANO_MAX_IMAGEN = 4 * 1024 * 1024;
 export const TIPOS_IMAGEN = ['image/jpeg', 'image/png', 'image/webp'];
 
 // La imagen queda en memoria (req.file.buffer) y el servicio la sube al storage:
@@ -16,7 +17,7 @@ const subida = multer({
 });
 
 const ERRORES_MULTER = {
-  LIMIT_FILE_SIZE: [413, 'ARCHIVO_DEMASIADO_GRANDE', 'La imagen supera el máximo de 5 MB'],
+  LIMIT_FILE_SIZE: [413, 'ARCHIVO_DEMASIADO_GRANDE', 'La imagen supera el máximo de 4 MB'],
   LIMIT_FILE_COUNT: [400, 'DEMASIADOS_ARCHIVOS', 'Sube una imagen por petición'],
   LIMIT_UNEXPECTED_FILE: [400, 'CAMPO_ARCHIVO_INVALIDO', 'La imagen debe ir en el campo "imagen"'],
 };

@@ -26,7 +26,14 @@ export const env = {
   // En desarrollo y pruebas hay un secreto por defecto para no bloquear el arranque.
   JWT_SECRET: process.env.JWT_SECRET ?? 'kuski-dev-secret-no-usar-en-produccion',
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN ?? '7d',
-  CORS_ORIGIN: process.env.CORS_ORIGIN ?? 'http://localhost:5173',
+  // Orígenes permitidos por CORS: FRONTEND_URL (puede llevar varios separados por comas)
+  // y, fuera de producción, el servidor de Vite.
+  CORS_ORIGINS: [
+    ...(process.env.FRONTEND_URL ?? '').split(','),
+    ...(esProduccion ? [] : ['http://localhost:5173']),
+  ]
+    .map((o) => o.trim().replace(/\/$/, ''))
+    .filter(Boolean),
   // Latencia simulada de la pasarela de pago (0 en pruebas para no ralentizarlas).
   PAGO_LATENCIA_MIN_MS: entero(process.env.PAGO_LATENCIA_MIN_MS, NODE_ENV === 'test' ? 0 : 1000),
   PAGO_LATENCIA_MAX_MS: entero(process.env.PAGO_LATENCIA_MAX_MS, NODE_ENV === 'test' ? 0 : 2000),

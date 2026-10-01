@@ -3,6 +3,7 @@ import * as authService from '../services/auth.service.js';
 
 const SIETE_DIAS_MS = 7 * 24 * 60 * 60 * 1000;
 
+// Sin `domain`: la cookie queda en el dominio del frontend, que reenvía /api a la API.
 const opcionesCookie = {
   httpOnly: true,
   sameSite: 'lax',
@@ -30,7 +31,9 @@ export const logout = (_req, res) => {
   res.json({ data: { ok: true } });
 };
 
+// Sin sesión responde 200 con usuario null (no 401): la tienda lo consulta en cada carga y un
+// visitante anónimo no es un error.
 export const me = async (req, res) => {
-  const usuario = await authService.perfil(req.usuario.id);
+  const usuario = req.usuario ? await authService.perfil(req.usuario.id) : null;
   res.json({ data: { usuario } });
 };

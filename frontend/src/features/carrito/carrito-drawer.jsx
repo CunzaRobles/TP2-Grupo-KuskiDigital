@@ -1,7 +1,6 @@
 import { ArrowRight, Truck } from 'lucide-react';
 import { AnimatePresence } from 'motion/react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
 import { Button } from '@/components/ui/button';
 import {
   Drawer,
@@ -14,6 +13,7 @@ import {
 } from '@/components/ui/drawer';
 import { EmptyState } from '@/components/ui/empty-state';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Link } from '@/lib/motion/enlaces';
 import { cn } from '@/lib/utils';
 import { RUTA_CHECKOUT } from './rutas';
 import { useCarrito } from './carrito-context';
@@ -102,10 +102,15 @@ export function CarritoDrawer() {
                 aria-live="polite"
               >
                 <span className="font-semibold">{t('carrito.subtotal')}</span>
-                <MontoCarrito monto={carrito.subtotal} moneda={carrito.moneda} animate size="lg" />
+                <MontoCarrito
+                  monto={carrito.subtotal}
+                  moneda={carrito.moneda}
+                  animate="conteo"
+                  size="lg"
+                />
               </div>
               <p className="flex gap-2 text-sm text-muted-foreground">
-                <Truck className="mt-0.5 size-4 shrink-0 text-verde" aria-hidden="true" />
+                <Truck className="mt-0.5 size-4 shrink-0 text-musgo" aria-hidden="true" />
                 {t('carrito.notaEnvio')}
               </p>
               <Button asChild size="lg" onClick={cerrar} disabled={hayAvisos}>
@@ -119,9 +124,7 @@ export function CarritoDrawer() {
                 </Link>
               </Button>
               {hayAvisos && (
-                <p className="text-center text-sm text-terracota-700">
-                  {t('carrito.ajustaAvisos')}
-                </p>
+                <p className="text-center text-sm text-error">{t('carrito.ajustaAvisos')}</p>
               )}
               <Button asChild variant="secondary" onClick={cerrar}>
                 <Link to="/carrito">{t('carrito.verResumen')}</Link>

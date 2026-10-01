@@ -1,13 +1,16 @@
 import { createBrowserRouter } from 'react-router';
-import { LoginPage } from '@/features/auth/login-page';
-import { RegistroPage } from '@/features/auth/registro-page';
 import { RequireAuth } from '@/features/auth/require-auth';
-import { CarritoPage } from '@/features/carrito/carrito-page';
-import { CatalogoPage } from '@/features/catalogo/catalogo-page';
-import { HomePage } from '@/features/home/home-page';
-import { ProductoRuta } from '@/features/producto/producto-page';
 import { TiendaLayout } from './layouts/tienda-layout';
+import { CargaInicial } from './pages/carga-inicial';
 import { NotFoundPage } from './pages/not-found-page';
+import {
+  cargarCarrito,
+  cargarCatalogo,
+  cargarHome,
+  cargarLogin,
+  cargarProducto,
+  cargarRegistro,
+} from './paginas-tienda';
 
 // El panel admin se carga en diferido: el visitante de la tienda no descarga su código.
 const guardiasAdmin = () => import('@/features/admin/require-admin');
@@ -25,10 +28,12 @@ const conPermiso = (permiso, children) => ({
 const rutasAdmin = [
   {
     path: '/admin/login',
+    HydrateFallback: CargaInicial,
     lazy: pagina(() => import('@/features/admin/admin-login-page'), 'AdminLoginPage'),
   },
   {
     path: '/admin',
+    HydrateFallback: CargaInicial,
     lazy: pagina(guardiasAdmin, 'RequireAdmin'),
     children: [
       {
@@ -116,6 +121,7 @@ const rutasDesarrollo = import.meta.env.DEV
   ? [
       {
         path: '/design',
+        HydrateFallback: CargaInicial,
         lazy: async () => ({
           Component: (await import('@/features/design-system/design-system-page')).DesignSystemPage,
         }),
@@ -127,13 +133,14 @@ export const routes = [
   {
     path: '/',
     Component: TiendaLayout,
+    HydrateFallback: CargaInicial,
     children: [
-      { index: true, Component: HomePage },
-      { path: 'catalogo', Component: CatalogoPage },
-      { path: 'producto/:slug', Component: ProductoRuta },
-      { path: 'carrito', Component: CarritoPage },
-      { path: 'login', Component: LoginPage },
-      { path: 'registro', Component: RegistroPage },
+      { index: true, lazy: pagina(cargarHome, 'HomePage') },
+      { path: 'catalogo', lazy: pagina(cargarCatalogo, 'CatalogoPage') },
+      { path: 'producto/:slug', lazy: pagina(cargarProducto, 'ProductoRuta') },
+      { path: 'carrito', lazy: pagina(cargarCarrito, 'CarritoPage') },
+      { path: 'login', lazy: pagina(cargarLogin, 'LoginPage') },
+      { path: 'registro', lazy: pagina(cargarRegistro, 'RegistroPage') },
       {
         Component: RequireAuth,
         children: [

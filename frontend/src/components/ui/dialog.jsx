@@ -34,7 +34,7 @@ export function DialogContent({ className, children, showClose = true, ...props 
         data-slot="dialog-content"
         className={cn(
           'fixed top-1/2 left-1/2 z-50 grid w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 gap-5',
-          'rounded-2xl border bg-popover p-6 text-popover-foreground shadow-lift sm:p-8',
+          'rounded-dialog border bg-popover p-6 text-popover-foreground shadow-overlay sm:p-8',
           'duration-300 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
           'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
           className,
@@ -69,7 +69,7 @@ export function DialogFooter({ className, ...props }) {
 }
 
 export function DialogTitle({ className, ...props }) {
-  return <DialogPrimitive.Title className={cn('text-h3 font-serif', className)} {...props} />;
+  return <DialogPrimitive.Title className={cn('text-h3 font-heading', className)} {...props} />;
 }
 
 export function DialogDescription({ className, ...props }) {

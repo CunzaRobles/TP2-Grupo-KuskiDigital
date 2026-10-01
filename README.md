@@ -73,17 +73,17 @@ Copia la plantilla y completa los valores:
 cp backend/.env.example backend/.env
 ```
 
-| Variable                                        | Descripción                                                                                             |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `PORT`                                          | Puerto de la API (por defecto `3000`).                                                                  |
-| `DATABASE_URL`                                  | Cadena de conexión de Supabase: _Project Settings → Database → Connection string → **Session pooler**_. |
-| `JWT_SECRET`                                    | Secreto para firmar los tokens JWT. Obligatorio en producción (en desarrollo hay uno por defecto).      |
-| `JWT_EXPIRES_IN`                                | Duración de la sesión (por defecto `7d`).                                                               |
-| `CORS_ORIGIN`                                   | Orígenes permitidos por CORS, separados por comas (por defecto `http://localhost:5173`).                |
-| `PAGO_LATENCIA_MIN_MS` / `PAGO_LATENCIA_MAX_MS` | Latencia simulada de la pasarela de pago (por defecto 1000–2000 ms; 0 en pruebas).                      |
-| `SUPABASE_URL`                                  | URL del proyecto de Supabase (_Project Settings → API_). Solo para Storage (fotos de productos).        |
-| `SUPABASE_SERVICE_ROLE_KEY`                     | Clave secreta (`service_role` o `sb_secret_…`). Solo vive en el backend, nunca en el frontend.          |
-| `SUPABASE_STORAGE_BUCKET`                       | Bucket público de las fotos de productos (por defecto `productos`).                                     |
+| Variable                                        | Descripción                                                                                                                                                 |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `PORT`                                          | Puerto de la API (por defecto `3000`).                                                                                                                      |
+| `DATABASE_URL`                                  | Cadena de conexión de Supabase: _Project Settings → Database → Connection string_. Local: **Session pooler** (5432); Vercel: **Transaction pooler** (6543). |
+| `JWT_SECRET`                                    | Secreto para firmar los tokens JWT. Obligatorio en producción (en desarrollo hay uno por defecto).                                                          |
+| `JWT_EXPIRES_IN`                                | Duración de la sesión (por defecto `7d`).                                                                                                                   |
+| `FRONTEND_URL`                                  | URL pública del frontend, permitida por CORS (varias separadas por comas). Fuera de producción también se permite `http://localhost:5173`.                  |
+| `PAGO_LATENCIA_MIN_MS` / `PAGO_LATENCIA_MAX_MS` | Latencia simulada de la pasarela de pago (por defecto 1000–2000 ms; 0 en pruebas).                                                                          |
+| `SUPABASE_URL`                                  | URL del proyecto de Supabase (_Project Settings → API_). Solo para Storage (fotos de productos).                                                            |
+| `SUPABASE_SERVICE_ROLE_KEY`                     | Clave secreta (`service_role` o `sb_secret_…`). Solo vive en el backend, nunca en el frontend.                                                              |
+| `SUPABASE_STORAGE_BUCKET`                       | Bucket público de las fotos de productos (por defecto `productos`).                                                                                         |
 
 `backend/.env` nunca se sube al repositorio.
 
@@ -131,12 +131,12 @@ Las respuestas tienen la forma `{ data }` o `{ error: { code, message, details? 
 | POST           | `/auth/registro`                | Público | Crea un cliente e inicia sesión. Correo de bienvenida simulado.                                                                                                                       |
 | POST           | `/auth/login`                   | Público | Inicia sesión: JWT en la cookie httpOnly `kuski_token` (SameSite lax, Secure en producción).                                                                                          |
 | POST           | `/auth/logout`                  | Público | Borra la cookie de sesión.                                                                                                                                                            |
-| GET            | `/auth/me`                      | Sesión  | Usuario actual.                                                                                                                                                                       |
+| GET            | `/auth/me`                      | Público | Usuario actual; sin sesión responde `usuario: null` (no 401).                                                                                                                         |
 | GET            | `/productos`                    | Público | Catálogo. Query: `categoria`, `comunidad`, `certificacion`, `precio_min`, `precio_max`, `q`, `orden`, `page`, `limit`, `moneda`.                                                      |
 | GET            | `/productos/destacados`         | Público | Destacados del home.                                                                                                                                                                  |
 | GET            | `/productos/:slug`              | Público | Ficha: imágenes, comunidad con coordenadas, certificaciones, reseñas, promedio y distribución.                                                                                        |
 | GET            | `/productos/:slug/relacionados` | Público | Relacionados: misma categoría primero, completa con destacados. Query: `moneda`, `limit` (4).                                                                                         |
-| GET            | `/categorias`                   | Público | Categorías con número de productos.                                                                                                                                                   |
+| GET            | `/categorias`                   | Público | Categorías con número de productos, rango de altitud de origen (`altitudMin`/`altitudMax`) y comunidad principal (`comunidadPrincipal`).                                              |
 | GET            | `/comunidades`                  | Público | Comunidades con coordenadas (mapa).                                                                                                                                                   |
 | GET            | `/certificaciones`              | Público | Certificaciones (filtro del catálogo).                                                                                                                                                |
 | GET            | `/estadisticas/trazabilidad`    | Público | Comunidades, familias, productos y países.                                                                                                                                            |
@@ -152,7 +152,7 @@ Las respuestas tienen la forma `{ data }` o `{ error: { code, message, details? 
 | GET / POST     | `/direcciones`                  | Sesión  | Mis direcciones (la principal primero) / guardar una (la primera es la principal; máx. 10).                                                                                           |
 | PATCH / DELETE | `/direcciones/:id`              | Sesión  | Editar o marcar como principal / borrar (si era la principal, pasa a serlo la más reciente).                                                                                          |
 
-Seguridad: helmet, CORS (solo `CORS_ORIGIN`, con credenciales), un límite de 300 peticiones cada 15 minutos por IP en `/api` y de 20 intentos en login y registro.
+Seguridad: helmet, CORS (solo `FRONTEND_URL` y, en desarrollo, `localhost:5173`, con credenciales), un límite de 300 peticiones cada 15 minutos por IP en `/api` y de 20 intentos en login y registro.
 
 ### Panel admin (`/api/v1/admin`)
 
@@ -220,24 +220,27 @@ En desarrollo, Vite redirige las peticiones a `/api` hacia el backend. Por eso e
 
 ### Frontend y design system
 
-- **Design system:** abre http://localhost:5173/design (solo en desarrollo; no entra al build). Muestra la paleta con sus ratios de contraste, la escala tipográfica, radios, sombras, el motivo textil y todos los componentes de `components/ui` en modo claro (tienda) y oscuro (admin).
-- **Tokens:** `src/styles/tokens.css` define la paleta "editorial andino", la tipografía (Fraunces + Manrope desde Google Fonts), la escala tipográfica (`text-display`, `text-h1`…`text-h4`, `text-lead`, `eyebrow`), los radios, las sombras (`shadow-soft`, `shadow-card`, `shadow-lift`), los espaciados (`py-section`, `container-page`) y los tokens semánticos (`bg-primary`, `text-muted-foreground`…). `src/styles/tokens.test.js` verifica el contraste AA de todos los pares texto/fondo en claro y oscuro.
-- **Modo oscuro:** solo existe en el panel admin (`<ThemeScope theme="dark">`); la tienda siempre es clara.
-- **Componentes (`components/ui`):** Button, Input, Field, Select, Badge, Card, Drawer, Dialog, Tabs, Skeleton, Toaster/toast, Stepper, Price, QuantitySelector, AndeanDivider y ThemeScope. Para añadir componentes de shadcn/ui: `npx shadcn@latest add <componente>` desde `frontend/` (usa `components.json`).
+- **Design system:** abre http://localhost:5173/design (solo en desarrollo; no entra al build). Muestra la paleta de la tienda con sus ratios de contraste (y la del admin), la tipografía, los radios y la elevación semánticos, el motivo de la regla, los tokens de movimiento (con una demo en GSAP) y todos los componentes de `components/ui` con los tokens de la tienda, del admin claro y del admin oscuro.
+- **Tokens:** `src/styles/tokens.css` define la paleta de la tienda "Del valle a la puna" (Puna, Cochinilla como único acento, Ichu, Musgo, Niebla y los derivados `niebla-texto`, `niebla-borde` y `error`), la tipografía (Unbounded + Hanken Grotesk desde Google Fonts; utilidades `font-display` y `font-heading`), la escala tipográfica (`text-display`, `text-h1`…`text-h4`, `text-lead`), los radios, las sombras, los espaciados (`py-section`, `container-page`) y los tokens semánticos (`bg-primary`, `text-muted-foreground`…). Las reglas de uso están en CLAUDE.md ("Dirección de diseño de la tienda"). `src/styles/tokens.test.js` verifica el contraste AA de la tienda, del admin claro y del admin oscuro, y las reglas de la paleta (Ichu nunca como texto sobre Niebla, Cochinilla nunca sobre Puna).
+- **Panel admin:** conserva la dirección "editorial andino" (café, terracota, crema; Fraunces + Manrope). `<ThemeScope>` aplica la clase `.admin`, que redefine tokens, fuentes y escala tipográfica, y carga Fraunces y Manrope solo cuando se abre el admin. El modo oscuro solo existe ahí (`<ThemeScope theme="dark">`); la tienda siempre es clara.
+- **`cn()`** (`src/lib/utils.js`) registra en tailwind-merge las sombras y tamaños de texto propios, para que `text-h3` no se confunda con un color ni `shadow-soft` sobreviva a `shadow-none`.
+- **Componentes (`components/ui`):** Button, Input, Field, Select, Badge, Card, Drawer, Dialog, Tabs, Skeleton, Toaster/toast, Stepper, Price, QuantitySelector, MarcasRegla, AndeanDivider (admin) y ThemeScope. Usan radios (`rounded-item`, `rounded-field`, `rounded-button`, `rounded-surface`, `rounded-popover`, `rounded-dialog`) y elevación (`shadow-field`, `shadow-surface`, `shadow-overlay`, `shadow-sheet`) semánticos: en la tienda solo proyecta sombra lo que flota, y `.admin` les da los valores de antes. Para añadir componentes de shadcn/ui: `npx shadcn@latest add <componente>` desde `frontend/` (usa `components.json`).
 - **API:** usa `http` de `src/lib/http.js` (envía la cookie de sesión y convierte `{ error }` en `ApiError`) dentro de TanStack Query. La moneda activa (`useCurrency()`, persistida en `localStorage`) se envía como `?moneda=`: el backend convierte los precios y `<Price>` solo los formatea.
-- **i18n:** `react-i18next` con detección del idioma del navegador; los textos viven en `src/locales/{es,en,de}.json`.
-- **Movimiento:** Motion con `MotionConfig reducedMotion="user"` y duraciones de 200 a 400 ms (`src/lib/motion.js`). Con `prefers-reduced-motion`, las animaciones CSS también se desactivan.
+- **i18n:** `react-i18next` con detección del idioma del navegador; los textos viven en `src/locales/{es,en,de}.json`. El español va en el bundle; inglés y alemán se descargan solo si se detectan o eligen (`main.jsx` espera esa carga antes del primer render).
+- **Movimiento (`src/lib/motion/`):** tokens de duración y curva compartidos por Motion, GSAP y CSS (`tokens.js` ↔ `--duracion-*` / `--curva-*`, verificados en `tokens.test.js`); `useReducedMotion`; GSAP con CustomEase registrado en `gsap.js` (SplitText en `split-text.js` y ScrollTrigger en `scroll-trigger.js`, aparte); `LenisProvider` (scroll suave solo en la tienda, con su propio `requestAnimationFrame` y descargado después del primer pintado; avisa a ScrollTrigger en cada frame cuando GSAP está cargado; se detiene con los modales). Motion se usa con `LazyMotion` y componentes `m`: las funciones de animación (`funciones.js`) se descargan con el navegador en reposo. En la tienda hay un solo momento animado (el recorrido de categorías de la home); el resto responde a acciones del usuario. Con `prefers-reduced-motion` no hay Lenis, ni View Transitions, ni animaciones CSS.
+- **Carga y rendimiento:** cada página de la tienda es una ruta diferida (`app/paginas-tienda.js`); catálogo y ficha se precargan con el navegador en reposo. GSAP solo lo descarga la Home, y ScrollTrigger solo el recorrido de categorías, que se monta con `lazy` bajo el hero. Un plugin de `vite.config.js` precarga desde el `<head>` el chunk de la Home y la foto del hero (solo en `/`) y la traducción del idioma detectado. Las fotos de Unsplash se piden con `srcset`/`sizes` (`lib/imagenes.js`, WebP/AVIF con `auto=format`) y la segunda foto de una tarjeta solo se descarga al pasar el puntero. Las fuentes de Google no bloquean el primer pintado (`display=swap`). Lighthouse de la Home (build de producción con `vite preview`): ~85 en móvil y ~96 en escritorio, con CLS ≈ 0.
+- **Transiciones entre páginas:** fundido corto con la View Transitions API (`Link`/`NavLink` de `lib/motion/enlaces.jsx` y `useNavigate` de `lib/motion/use-navigate.js` la activan por defecto; el header no se funde). Sin soporte, `TransicionRuta` funde la página entrante con Motion. La foto de una tarjeta de producto se expande hasta la foto principal de la ficha (elemento compartido `producto-imagen`, `features/producto/use-enlace-producto.js`, que precarga la ficha al pasar el cursor, enfocar o tocar).
 
 ### Home (`src/features/home`)
 
 Sigue la estructura del wireframe: header → hero → categorías → destacados → trazabilidad → footer.
 
-- **Header** (`components/layout/site-header.jsx`): fijo; en el home arranca transparente sobre el hero y al hacer scroll se compacta y gana fondo. Tiene selector de idioma y moneda, contador animado del carrito (abre el drawer del carrito) y menú móvil (`mobile-menu.jsx`, panel lateral).
-- **Hero:** foto a pantalla completa con parallax leve (se desactiva con `prefers-reduced-motion`) y un único CTA, "Explorar catálogo".
-- **Categorías:** grilla bento de 4 celdas desde `GET /categorias`; cada una enlaza a `/catalogo?categoria=<slug>`.
-- **Destacados:** `GET /productos/destacados?moneda=`. La tarjeta (`features/catalogo/product-card.jsx`, reutilizable en el catálogo) cambia a la segunda foto al pasar el cursor y muestra comunidad y altitud (en pantallas táctiles, bajo el nombre). El botón "+" agrega al carrito sin salir de la página, hace volar la foto hasta el icono del carrito y muestra un aviso con "Ver carrito".
-- **Trazabilidad:** contadores que se animan al entrar en pantalla (`GET /estadisticas/trazabilidad`) y mapa react-leaflet de las comunidades (`GET /comunidades`) con pines propios y popup (altitud, productos, familias). Leaflet se carga en diferido cuando el mapa se acerca a la pantalla. CARTO Positron ahora exige API key, así que por defecto se usan los tiles equivalentes de Stadia "Alidade Smooth" (configurables con `VITE_MAP_TILES_URL`).
-- **Footer:** divisor textil, enlaces, redes y sello de pago seguro.
+- **Header** (`components/layout/site-header.jsx`): fijo, con fondo Niebla sólido; al hacer scroll se compacta. Tiene selector de idioma y moneda, contador animado del carrito (abre el drawer del carrito) y menú móvil (`mobile-menu.jsx`, panel lateral).
+- **Hero**: título (entra por líneas con SplitText), texto (visible desde el primer pintado: es el elemento LCP), un único CTA "Explorar catálogo", foto y el perfil de altitud de las comunidades (`perfil-altitud.jsx`, desde `GET /comunidades`).
+- **Categorías: recorrido "Del valle a la puna"** (`categorias-altitud.jsx`): en escritorio (≥ 64rem de ancho y 40rem de alto) la sección queda fija con GSAP ScrollTrigger (`pin` + `scrub`) durante un viewport por categoría. Un altímetro de cinta en el borde (Ichu sobre Puna) sube de 1,050 a 3,760 msnm; la cifra se calcula a partir del tiempo de la línea de tiempo y se escribe directo en el DOM. El fondo cambia de piso según la altitud (Musgo → Ichu → Puna, por opacidad), tres planos de montaña SVG bajan a distinta velocidad (`yPercent`) y cada categoría aparece a la altitud de su comunidad principal (`comunidadPrincipal` de `GET /categorias`) con foto, origen y enlace a `/catalogo?categoria=<slug>`. Solo se animan transform y opacity. Si un enlace recibe el foco con el teclado, el scroll salta a su panel. En móvil no hay pin (lista vertical con el altímetro como línea lateral que se llena al bajar); con `prefers-reduced-motion`, versión estática (en escritorio, en cuatro columnas).
+- **Destacados:** `GET /productos/destacados?moneda=` en una grilla editorial con bordes y flujo denso: una protagonista (2×2), una ancha con la foto a la izquierda y el resto normales; el enlace al catálogo completa la última fila. El hover solo cambia a la segunda foto; altitud y comunidad se ven siempre en texto pequeño. El botón "+" (`boton-agregar.jsx`, compartido con la tarjeta del catálogo) agrega al carrito sin salir de la página: la foto viaja en arco hasta el icono del carrito, el contador rebota al llegar y el botón confirma "Agregado" durante 1.5 s (también para lectores de pantalla).
+- **Trazabilidad:** el mapa react-leaflet de las comunidades (`GET /comunidades`), con pines propios y popup (altitud, productos, familias), junto a una lista lateral (`comunidades-altitud.jsx`) de menor a mayor altitud con región natural y productos. Pin y fila están enlazados: al pasar el cursor o el foco por uno se resalta el otro. Debajo, cifras estáticas (`GET /estadisticas/trazabilidad`). Leaflet se carga en diferido cuando el mapa se acerca a la pantalla. CARTO Positron ahora exige API key, así que por defecto se usan los tiles equivalentes de Stadia "Alidade Smooth" (configurables con `VITE_MAP_TILES_URL`).
+- **Footer:** banda Puna (junto con el final del recorrido de categorías), con las marcas de la regla de altitud como borde (`components/ui/marcas-regla.jsx`), enlaces, redes y sello de pago seguro.
 - Cada bloque muestra skeletons mientras carga y un error con "Reintentar" si su petición falla, sin romper el resto de la página.
 
 ### Catálogo (`/catalogo`, `src/features/catalogo`)
@@ -294,6 +297,23 @@ Sigue la estructura del wireframe: header → hero → categorías → destacado
 ### 404
 
 - Página con ilustración y voz de la marca, salida al catálogo o al inicio y accesos a las cuatro categorías.
+
+## Despliegue (Vercel)
+
+Dos proyectos de Vercel sobre el mismo repositorio; la base sigue en Supabase.
+
+| Proyecto    | Root Directory | Tipo                                                       | Configuración                                                                  |
+| ----------- | -------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `kuski-api` | `backend`      | Función Express (zero-config: `src/app.js` exporta la app) | `backend/vercel.json` (región `gru1`, São Paulo, junto a Supabase `sa-east-1`) |
+| `kuski-web` | `frontend`     | Sitio estático de Vite (`npm run build` → `dist`)          | `frontend/vercel.json`                                                         |
+
+- **Mismo origen:** `frontend/vercel.json` reenvía `/api/*` a `https://kuski-api.vercel.app/api/*` (si el proyecto de la API tiene otro nombre, cambia esa URL) y todo lo demás a `index.html` para React Router. El frontend llama siempre a `/api/v1/...`, así que la cookie de sesión (`httpOnly`, `secure`, `sameSite: lax`, sin `domain`) queda en el dominio de la tienda.
+- **Base de datos:** en Vercel `DATABASE_URL` usa el Transaction pooler (6543) y el pool es de 3 conexiones (5 en local). Sequelize no usa prepared statements con nombre, así que es compatible con ese modo.
+- **Migraciones y seeders no se ejecutan en el build:** se corren a mano (`npm run db:migrate`) desde la máquina del responsable de backend.
+- **Imágenes:** se suben a Supabase Storage desde memoria (nada en disco). Máximo 4 MB por imagen, porque Vercel corta los cuerpos de más de 4,5 MB.
+- **Swagger UI** (`/api/v1/docs`) carga `swagger-ui-dist` desde jsDelivr (versión fijada) y lee `docs/openapi.yaml`, que Vercel incluye en la función.
+- `app.set('trust proxy', 1)` hace que la cookie `secure` y el límite por IP funcionen detrás del proxy de Vercel.
+- El mapa usa Stadia por defecto: en producción hay que registrar el dominio de la tienda en Stadia (gratis) o definir `VITE_MAP_TILES_URL`.
 
 ## Scripts (desde la raíz)
 

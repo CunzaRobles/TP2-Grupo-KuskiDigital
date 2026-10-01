@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 // Mismos límites que el backend (middleware/upload.js y admin-producto.service.js).
 export const TIPOS_IMAGEN = ['image/jpeg', 'image/png', 'image/webp'];
-export const TAMANO_MAX = 5 * 1024 * 1024;
+export const TAMANO_MAX = 4 * 1024 * 1024;
 export const MAX_IMAGENES = 8;
 
 let secuencia = 0;
