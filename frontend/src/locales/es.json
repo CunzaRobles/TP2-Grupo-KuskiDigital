@@ -923,7 +923,9 @@
       "ayudaCredenciales": "Revisa que el correo esté bien escrito y que no tengas activadas las mayúsculas.",
       "enviar": "Iniciar sesión",
       "sinCuenta": "¿Aún no tienes cuenta?",
-      "crearCuenta": "Crear una cuenta"
+      "crearCuenta": "Crear una cuenta",
+      "esEquipo": "¿Eres parte del equipo Kuski?",
+      "panelAdmin": "Ingresar al panel de administración"
     },
     "registro": {
       "eyebrow": "Únete a Kuski",

@@ -923,7 +923,9 @@
       "ayudaCredenciales": "Check that your email is spelled correctly and Caps Lock is off.",
       "enviar": "Sign in",
       "sinCuenta": "Don’t have an account yet?",
-      "crearCuenta": "Create an account"
+      "crearCuenta": "Create an account",
+      "esEquipo": "Part of the Kuski team?",
+      "panelAdmin": "Go to the admin panel"
     },
     "registro": {
       "eyebrow": "Join Kuski",
