@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-// bcrypt simulado: la prueba no calcula hashes reales.
-vi.mock('bcrypt', () => ({ default: { compare: vi.fn(), hash: vi.fn() } }));
+// bcryptjs simulado: la prueba no calcula hashes reales.
+vi.mock('bcryptjs', () => ({ default: { compare: vi.fn(), hash: vi.fn() } }));
 
-const { default: bcrypt } = await import('bcrypt');
+const { default: bcrypt } = await import('bcryptjs');
 const usuarioRepository = await import('../../src/repositories/usuario.repository.js');
 const { login } = await import('../../src/services/auth.service.js');
 
