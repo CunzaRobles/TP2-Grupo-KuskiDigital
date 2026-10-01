@@ -11,11 +11,9 @@ import * as usuarioRepository from '../repositories/usuario.repository.js';
 import { AppError } from '../utils/app-error.js';
 import { ROLES_ADMIN } from '../models/enums.js';
 import { aNumero, convertirDesdePen, redondear } from '../utils/money.js';
+import { formatearCodigo } from '../utils/pedidos.js';
 import { agruparItems, calcular, construirLineas } from './cotizacion.service.js';
 import * as direccionService from './direccion.service.js';
-
-// KD-000001: el número visible sale del id del pedido.
-export const formatearCodigo = (id) => `KD-${String(id).padStart(6, '0')}`;
 
 // Pasos del tracking visual y el estado del pedido que completa cada uno.
 const PASOS_TRACKING = [

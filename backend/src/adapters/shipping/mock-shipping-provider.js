@@ -20,6 +20,10 @@ const sumarDias = (fecha, dias) => {
   return d.toISOString().slice(0, 10);
 };
 
+// Costo de una tarifa (zona + método) para un peso: costo_base_pen + costo_por_kg_pen × kg.
+export const calcularCostoEnvio = ({ costoBasePen, costoPorKgPen }, pesoG) =>
+  redondear(Number(costoBasePen) + Number(costoPorKgPen) * (pesoG / 1000));
+
 /**
  * Proveedor de envíos simulado sobre la tabla tarifas_envio:
  * costo = costo_base_pen + costo_por_kg_pen × peso en kg.
@@ -35,14 +39,13 @@ export class MockShippingProvider extends ShippingProvider {
   async cotizar({ paisCodigo, pesoG }) {
     const zona = zonaDePais(paisCodigo);
     const tarifas = await this.obtenerTarifasPorZona(zona);
-    const kg = pesoG / 1000;
 
     const opciones = tarifas
       .map((t) => ({
         tarifaEnvioId: t.id,
         metodo: t.metodo,
         transportista: t.transportista,
-        costoPen: redondear(Number(t.costoBasePen) + Number(t.costoPorKgPen) * kg),
+        costoPen: calcularCostoEnvio(t, pesoG),
         diasMin: t.diasMin,
         diasMax: t.diasMax,
       }))
