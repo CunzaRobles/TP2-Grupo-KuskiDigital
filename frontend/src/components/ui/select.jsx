@@ -14,7 +14,7 @@ export function SelectTrigger({ className, size = 'md', children, ...props }) {
       className={cn(
         'flex w-full items-center justify-between gap-2 rounded-field border border-input bg-card px-3.5 text-foreground shadow-field',
         'transition-[border-color,box-shadow] duration-200 ease-andino data-placeholder:text-muted-foreground',
-        'focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/20 focus-visible:outline-none',
+        'focus-visible:border-ring focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring',
         'aria-invalid:border-destructive disabled:cursor-not-allowed disabled:opacity-50',
         '[&>span]:truncate',
         size === 'sm' ? 'h-9 text-sm' : 'h-11 text-base',

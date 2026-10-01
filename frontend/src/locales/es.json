@@ -34,6 +34,8 @@
     "abrir_other": "Abrir carrito, {{count}} productos",
     "vacio": "Tu carrito está vacío",
     "agregado": "Agregado al carrito",
+    "agregadoCorto": "Agregado",
+    "agregadoProducto": "{{nombre}} agregado al carrito",
     "agregarProducto": "Agregar {{nombre}} al carrito",
     "sinMasStock": "Ya tienes en el carrito todo el stock disponible",
     "verCarrito": "Ver carrito",
@@ -266,7 +268,7 @@
     },
     "trazabilidad": {
       "titulo": "Sube por Cusco, comunidad por comunidad",
-      "descripcion": "Las comunidades productoras, del valle a la cumbre. Después, ubícalas en el mapa.",
+      "descripcion": "Las comunidades productoras, del valle a la cumbre. Pasa por un pin o por una comunidad de la lista para ubicarla.",
       "cifras": {
         "comunidades": "Comunidades productoras",
         "familias": "Familias beneficiadas",

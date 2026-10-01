@@ -60,3 +60,22 @@
   background: rgb(255 255 255 / 0.85);
   color: var(--muted-foreground);
 }
+
+/* Pin resaltado desde la lista lateral (o al pasar por él): más grande y en Cochinilla */
+.kuski-pin.is-activo svg {
+  transform: scale(1.25);
+}
+
+.kuski-pin.is-activo path {
+  fill: var(--color-cochinilla);
+}
+
+.kuski-pin.is-activo circle {
+  fill: var(--color-niebla);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kuski-pin svg {
+    transition: none;
+  }
+}

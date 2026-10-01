@@ -118,10 +118,11 @@ export function SiteHeader() {
             aria-label={t('carrito.abrir', { count: totalUnidades })}
           >
             <ShoppingBag className="size-5" aria-hidden="true" />
+            {/* Aparece con el primer producto; al llegar cada producto rebota (volar-al-carrito) */}
             <AnimatePresence initial={false}>
               {totalUnidades > 0 && (
                 <motion.span
-                  key={totalUnidades}
+                  data-slot="contador-carrito"
                   initial={{ scale: 0.4, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0.4, opacity: 0 }}

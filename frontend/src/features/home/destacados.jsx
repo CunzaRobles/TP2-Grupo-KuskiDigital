@@ -1,11 +1,11 @@
-import { Plus } from 'lucide-react';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Badge } from '@/components/ui/badge';
 import { Price } from '@/components/ui/price';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useDestacados } from '@/features/catalogo/api';
-import { useAgregarProducto } from '@/features/carrito/use-agregar-producto';
+import { BotonAgregar } from '@/features/carrito/boton-agregar';
+import { ENLACE_EXTENDIDO } from '@/features/catalogo/enlace-extendido';
 import { useEnlaceProducto } from '@/features/producto/use-enlace-producto';
 import { formatNumber } from '@/lib/format';
 import { Link } from '@/lib/motion/enlaces';
@@ -15,9 +15,28 @@ import { SectionError, SectionHeading } from './section-heading';
 
 const CANTIDAD = 8;
 
-// Grilla con líneas finas (sin sombras): 2 columnas en móvil, 3 en sm y 4 en lg. El primer
-// destacado es grande (2×1 en móvil, 2×2 desde sm). El enlace al catálogo ocupa las celdas que
-// sobran en la última fila, así la grilla nunca queda con huecos.
+/*
+ * Grilla editorial con líneas finas (sin sombras), en flujo denso para que no queden huecos:
+ * 2 columnas en móvil, 3 en sm y 4 en lg.
+ *   - protagonista (el primero): 2×1 en móvil y 2×2 desde sm, con la foto más grande.
+ *   - ancha (la sexta): ocupa 2 columnas, con la foto a la izquierda desde sm.
+ *   - normal: 1 celda.
+ * El enlace al catálogo ocupa las celdas que sobran en la última fila.
+ */
+const VARIANTES = { 0: 'protagonista', 5: 'ancha' };
+const varianteDe = (i) => VARIANTES[i] ?? 'normal';
+
+const CELDA = {
+  protagonista: 'col-span-2 sm:row-span-2',
+  ancha: 'col-span-2',
+  normal: '',
+};
+// Celdas que ocupa cada variante por punto de quiebre
+const CELDAS = {
+  base: { protagonista: 2, ancha: 2, normal: 1 },
+  sm: { protagonista: 4, ancha: 2, normal: 1 },
+  lg: { protagonista: 4, ancha: 2, normal: 1 },
+};
 const GRILLA = { base: 2, sm: 3, lg: 4 };
 const SPAN = {
   base: ['', 'col-span-1', 'col-span-2'],
@@ -25,40 +44,44 @@ const SPAN = {
   lg: ['', 'lg:col-span-1', 'lg:col-span-2', 'lg:col-span-3', 'lg:col-span-4'],
 };
 
-// Celdas que ocupan n productos: el grande ocupa 2 en móvil y 4 desde sm
-const restoDeFila = (columnas, celdas) => columnas - (celdas % columnas) || columnas;
+const celdasOcupadas = (n, bp) =>
+  Array.from({ length: n }, (_, i) => CELDAS[bp][varianteDe(i)]).reduce((a, b) => a + b, 0);
+const restoDeFila = (bp, n) => GRILLA[bp] - (celdasOcupadas(n, bp) % GRILLA[bp]) || GRILLA[bp];
 
 const spanEnlace = (n) =>
   cn(
-    SPAN.base[restoDeFila(GRILLA.base, n + 1)],
-    SPAN.sm[restoDeFila(GRILLA.sm, n + 3)],
-    SPAN.lg[restoDeFila(GRILLA.lg, n + 3)],
+    SPAN.base[restoDeFila('base', n)],
+    SPAN.sm[restoDeFila('sm', n)],
+    SPAN.lg[restoDeFila('lg', n)],
   );
 
-const CELDA_GRANDE = 'col-span-2 sm:row-span-2';
 const IMAGEN =
   'absolute inset-0 size-full object-cover transition-opacity duration-300 ease-andino';
 
-function Destacado({ producto, grande }) {
+const FOTO = {
+  protagonista: 'aspect-4/3 sm:aspect-auto sm:min-h-80 sm:flex-1',
+  ancha: 'aspect-4/3 sm:aspect-auto sm:h-full sm:min-h-56 sm:w-3/5 sm:shrink-0',
+  normal: 'aspect-4/5',
+};
+
+function Destacado({ producto, variante }) {
   const { t, i18n } = useTranslation();
-  const agregarProducto = useAgregarProducto();
   const imagenRef = useRef(null);
   const { enlace, nombreImagen, propsEnlace } = useEnlaceProducto(producto.slug);
   const [principal, secundaria] = producto.imagenes ?? [];
   const { comunidad } = producto;
+  const protagonista = variante === 'protagonista';
 
   return (
     <article
       className={cn(
         'group relative flex h-full flex-col gap-4 bg-background p-3 sm:p-4',
-        grande && 'sm:p-6',
+        protagonista && 'sm:gap-5 sm:p-6',
+        variante === 'ancha' && 'sm:flex-row sm:items-stretch sm:gap-6',
       )}
     >
       <div
-        className={cn(
-          'relative aspect-4/5 overflow-hidden bg-muted',
-          grande && 'aspect-4/3 sm:aspect-auto sm:min-h-72 sm:flex-1',
-        )}
+        className={cn('relative overflow-hidden bg-muted', FOTO[variante])}
         style={{ viewTransitionName: nombreImagen }}
       >
         {principal && (
@@ -71,7 +94,7 @@ function Destacado({ producto, grande }) {
             className={cn(IMAGEN, secundaria && 'group-hover:opacity-0')}
           />
         )}
-        {/* Al pasar el cursor se ve la segunda foto (respuesta a la acción del usuario) */}
+        {/* El hover solo cambia a la segunda foto (respuesta a la acción del usuario) */}
         {secundaria && (
           <img
             src={secundaria.url}
@@ -89,20 +112,11 @@ function Destacado({ producto, grande }) {
         )}
       </div>
 
-      <div className="flex items-end justify-between gap-3">
+      <div className="flex flex-1 items-end justify-between gap-3">
         <div className="grid min-w-0 gap-1">
-          <h3 className={cn('leading-snug', grande ? 'text-h3' : 'text-base sm:text-lg')}>
-            {/* Enlace extendido: toda la celda lleva a la ficha, salvo el botón "+" (z-10) */}
-            <Link
-              to={enlace}
-              {...propsEnlace}
-              className="transition-colors after:absolute after:inset-0 after:content-[''] hover:text-link"
-            >
-              {producto.nombre}
-            </Link>
-          </h3>
+          {/* Procedencia siempre visible, en texto pequeño */}
           {comunidad && (
-            <p className="flex flex-wrap gap-x-1.5 text-sm text-muted-foreground">
+            <p className="flex flex-wrap gap-x-1.5 text-xs text-muted-foreground">
               {comunidad.altitudMsnm != null && (
                 <span className="font-semibold text-foreground tabular-nums">
                   {t('producto.altitud', {
@@ -113,34 +127,42 @@ function Destacado({ producto, grande }) {
               <span title={comunidad.nombre}>{nombreCorto(comunidad.nombre)}</span>
             </p>
           )}
+          <h3
+            className={cn(
+              'leading-snug',
+              protagonista
+                ? 'text-h3'
+                : variante === 'ancha'
+                  ? 'text-lg sm:text-xl'
+                  : 'text-base sm:text-lg',
+            )}
+          >
+            {/* Enlace extendido: toda la celda lleva a la ficha (y muestra el foco), salvo el "+" */}
+            <Link to={enlace} {...propsEnlace} className={ENLACE_EXTENDIDO}>
+              {producto.nombre}
+            </Link>
+          </h3>
           <Price
             amount={producto.precio?.monto}
             currency={producto.precio?.moneda}
-            size={grande ? 'lg' : 'md'}
+            size={protagonista ? 'lg' : 'md'}
           />
         </div>
-        <button
-          type="button"
-          onClick={() => agregarProducto(producto, imagenRef.current)}
-          disabled={!producto.disponible}
-          aria-label={t('carrito.agregarProducto', { nombre: producto.nombre })}
-          className={cn(
-            'relative z-10 inline-flex size-11 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground',
-            'transition-[background-color,transform] duration-200 ease-andino hover:bg-primary-hover active:scale-95',
-            'disabled:pointer-events-none disabled:bg-muted disabled:text-muted-foreground',
-          )}
-        >
-          <Plus className="size-5" aria-hidden="true" />
-        </button>
+        <BotonAgregar producto={producto} imagenRef={imagenRef} />
       </div>
     </article>
   );
 }
 
-function DestacadoSkeleton({ grande }) {
+function DestacadoSkeleton({ variante }) {
   return (
-    <div className={cn('flex h-full flex-col gap-4 bg-background p-3 sm:p-4', grande && 'sm:p-6')}>
-      <Skeleton className={cn('aspect-4/5', grande && 'aspect-4/3 sm:aspect-auto sm:flex-1')} />
+    <div
+      className={cn(
+        'flex h-full flex-col gap-4 bg-background p-3 sm:p-4',
+        variante === 'protagonista' && 'sm:p-6',
+      )}
+    >
+      <Skeleton className={cn('rounded-none', FOTO[variante])} />
       <Skeleton className="h-5 w-4/5" />
       <Skeleton className="h-4 w-1/2" />
     </div>
@@ -167,24 +189,24 @@ export function Destacados() {
         <SectionError onRetry={refetch} />
       ) : (
         <ul
-          className="grid grid-cols-2 gap-px border border-border bg-border sm:grid-cols-3 lg:grid-cols-4"
+          className="grid grid-flow-row-dense grid-cols-2 gap-px border border-border bg-border sm:grid-cols-3 lg:grid-cols-4"
           aria-busy={isPending || undefined}
         >
           {isPending
             ? Array.from({ length: CANTIDAD }, (_, i) => (
-                <li key={i} className={cn(i === 0 && CELDA_GRANDE)}>
-                  <DestacadoSkeleton grande={i === 0} />
+                <li key={i} className={CELDA[varianteDe(i)]}>
+                  <DestacadoSkeleton variante={varianteDe(i)} />
                 </li>
               ))
             : productos.map((producto, i) => (
-                <li key={producto.id} className={cn(i === 0 && CELDA_GRANDE)}>
-                  <Destacado producto={producto} grande={i === 0} />
+                <li key={producto.id} className={CELDA[varianteDe(i)]}>
+                  <Destacado producto={producto} variante={varianteDe(i)} />
                 </li>
               ))}
           <li className={spanEnlace(total)}>
             <Link
               to="/catalogo"
-              className="flex h-full min-h-32 items-end bg-background p-4 font-display text-lg font-medium tracking-tight underline-offset-4 transition-colors hover:bg-muted hover:underline sm:p-6"
+              className="flex h-full min-h-32 items-end bg-background p-4 font-display text-lg font-medium tracking-tight underline-offset-4 transition-colors hover:bg-muted hover:underline focus-visible:-outline-offset-2 sm:p-6"
             >
               {t('home.destacados.verTodo')}
             </Link>

@@ -36,7 +36,7 @@ export function Galeria({ imagenes, nombre, agotado = false }) {
 
   if (!actual) {
     return (
-      <div className="flex aspect-4/5 items-center justify-center rounded-2xl bg-muted">
+      <div className="flex aspect-4/5 items-center justify-center bg-muted">
         <ImageOff className="size-10 text-muted-foreground" aria-hidden="true" />
       </div>
     );
@@ -50,7 +50,7 @@ export function Galeria({ imagenes, nombre, agotado = false }) {
           onClick={() => setVisor(true)}
           onMouseMove={alMover}
           aria-label={t('producto.galeria.ampliar')}
-          className="group relative block aspect-4/5 w-full cursor-zoom-in overflow-hidden rounded-2xl bg-muted shadow-card"
+          className="group relative block aspect-4/5 w-full cursor-zoom-in overflow-hidden bg-muted"
           style={{ viewTransitionName: transicionando ? NOMBRE_IMAGEN_PRODUCTO : undefined }}
         >
           <AnimatePresence initial={false} mode="popLayout">

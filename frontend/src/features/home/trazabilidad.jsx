@@ -1,5 +1,5 @@
 import { useInView } from 'motion/react';
-import { lazy, Suspense, useRef } from 'react';
+import { lazy, Suspense, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useComunidades, useTrazabilidad } from '@/features/catalogo/api';
@@ -11,7 +11,7 @@ const MapaComunidades = lazy(() => import('./mapa-comunidades'));
 
 const CIFRAS = ['comunidades', 'familias', 'paises', 'productos'];
 
-// Cifras estáticas (sin contadores animados: el único momento animado es el recorrido de categorías).
+// Cifras estáticas, en una fila bajo el mapa (sin contadores animados).
 function Cifras() {
   const { t, i18n } = useTranslation();
   const idioma = i18n.resolvedLanguage;
@@ -21,7 +21,10 @@ function Cifras() {
 
   return (
     <div className="grid content-start gap-6">
-      <dl className="grid grid-cols-2 gap-x-6 gap-y-6" aria-busy={isPending || undefined}>
+      <dl
+        className="grid grid-cols-2 gap-x-6 gap-y-6 lg:grid-cols-4"
+        aria-busy={isPending || undefined}
+      >
         {CIFRAS.map((clave) => (
           <div key={clave} className="grid gap-1 border-t border-border pt-3">
             <dt className="order-2 text-sm text-muted-foreground">
@@ -49,7 +52,7 @@ function Cifras() {
   );
 }
 
-function Mapa() {
+function Mapa({ activa, onActivar }) {
   const { t } = useTranslation();
   const ref = useRef(null);
   // Leaflet y los tiles solo se descargan cuando el mapa está por entrar en pantalla
@@ -69,17 +72,18 @@ function Mapa() {
         <Skeleton className="size-full rounded-none" />
       ) : (
         <Suspense fallback={<Skeleton className="size-full rounded-none" />}>
-          <MapaComunidades comunidades={comunidades} />
+          <MapaComunidades comunidades={comunidades} activa={activa} onActivar={onActivar} />
         </Suspense>
       )}
     </div>
   );
 }
 
-// Trazabilidad: las comunidades del valle a la cumbre y, después, el mapa de Cusco con sus pines
-// y las cifras de impacto.
+// Trazabilidad: el mapa de Cusco con sus pines junto a la lista de comunidades, del valle a la
+// cumbre. Pin y fila están enlazados: al pasar por uno se resalta el otro. Debajo, las cifras.
 export function Trazabilidad() {
   const { t } = useTranslation();
+  const [activa, setActiva] = useState(null);
 
   return (
     <section aria-labelledby="trazabilidad-titulo" className="border-t border-border bg-surface">
@@ -89,11 +93,13 @@ export function Trazabilidad() {
           title={t('home.trazabilidad.titulo')}
           description={t('home.trazabilidad.descripcion')}
         />
-        <ComunidadesAltitud />
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,8fr)_minmax(0,4fr)] lg:gap-12">
-          <Mapa />
-          <Cifras />
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,8fr)_minmax(0,4fr)] lg:gap-10">
+          <div className="lg:sticky lg:top-[calc(var(--spacing-header-compact)+1.5rem)] lg:self-start">
+            <Mapa activa={activa} onActivar={setActiva} />
+          </div>
+          <ComunidadesAltitud activa={activa} onActivar={setActiva} />
         </div>
+        <Cifras />
       </div>
     </section>
   );

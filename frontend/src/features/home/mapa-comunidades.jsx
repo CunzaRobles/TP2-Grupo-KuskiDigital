@@ -1,6 +1,6 @@
 import L from 'leaflet';
 import { Mountain, Package, Users } from 'lucide-react';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { formatNumber } from '@/lib/format';
@@ -8,13 +8,41 @@ import { ATRIBUCION, PIN, TILES } from '@/lib/mapa';
 import { Link } from '@/lib/motion/enlaces';
 
 // Mapa de comunidades productoras. Se carga en diferido (Leaflet pesa ~150 kB) cuando el
-// bloque de trazabilidad se acerca a la pantalla.
+// bloque de trazabilidad se acerca a la pantalla. Está enlazado con la lista lateral: pasar el
+// cursor (o el foco) por un pin activa su comunidad (`onActivar`), y la comunidad `activa`
+// resalta su pin. El resaltado cambia una clase del pin ya dibujado: reemplazar el icono
+// recrearía el elemento y se perdería el foco del teclado.
 
 const CENTRO_CUSCO = [-13.35, -72.0];
 
-export default function MapaComunidades({ comunidades }) {
+const Z_RESALTADO = 1000;
+
+export default function MapaComunidades({ comunidades, activa = null, onActivar = () => {} }) {
   const { t, i18n } = useTranslation();
   const idioma = i18n.resolvedLanguage;
+  const marcadores = useRef(new Map());
+
+  useEffect(() => {
+    for (const [id, marcador] of marcadores.current) {
+      const resaltado = id === activa;
+      marcador.getElement()?.classList.toggle('is-activo', resaltado);
+      marcador.setZIndexOffset(resaltado ? Z_RESALTADO : 0);
+    }
+  }, [activa]);
+
+  // Eventos de cada pin: cursor, toque (abre el popup) y foco con teclado
+  const eventosDe = (id) => ({
+    add: (e) => {
+      marcadores.current.set(id, e.target);
+      const elemento = e.target.getElement();
+      elemento?.addEventListener('focus', () => onActivar(id));
+      elemento?.addEventListener('blur', () => onActivar(null));
+    },
+    remove: () => marcadores.current.delete(id),
+    mouseover: () => onActivar(id),
+    mouseout: () => onActivar(null),
+    popupopen: () => onActivar(id),
+  });
 
   const conCoordenadas = useMemo(
     () => comunidades.filter((c) => c.latitud != null && c.longitud != null),
@@ -45,6 +73,7 @@ export default function MapaComunidades({ comunidades }) {
           icon={PIN}
           title={c.nombre}
           alt={c.nombre}
+          eventHandlers={eventosDe(c.id)}
         >
           <Popup>
             <div className="grid gap-3 font-sans text-foreground">

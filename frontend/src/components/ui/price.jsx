@@ -1,9 +1,15 @@
-import { AnimatePresence, motion } from 'motion/react';
-import { useContext } from 'react';
+import {
+  animate as animar,
+  AnimatePresence,
+  motion,
+  useMotionValue,
+  useTransform,
+} from 'motion/react';
+import { useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CurrencyContext } from '@/lib/currency';
 import { formatMoney } from '@/lib/format';
-import { transicion } from '@/lib/motion';
+import { transicion, useReducedMotion } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 
 const TAMANOS = {
@@ -14,9 +20,40 @@ const TAMANOS = {
 };
 
 /**
+ * Conteo: el monto cuenta desde el valor anterior hasta el nuevo (p. ej. el subtotal del
+ * carrito al cambiar una cantidad). Se escribe en el DOM sin re-renderizar. Con movimiento
+ * reducido salta al valor final. Al cambiar de moneda o idioma se monta de nuevo (no cuenta
+ * entre monedas distintas).
+ */
+function MontoConteo({ amount, moneda, idioma }) {
+  const reducido = useReducedMotion();
+  const valor = useMotionValue(Number(amount));
+  const texto = useTransform(valor, (v) => formatMoney(v, moneda, idioma));
+
+  useEffect(() => {
+    const destino = Number(amount);
+    if (reducido || !Number.isFinite(destino)) {
+      valor.jump(destino);
+      return undefined;
+    }
+    const controles = animar(valor, destino, transicion('lenta'));
+    return () => controles.stop();
+  }, [amount, reducido, valor]);
+
+  // Los lectores de pantalla leen solo el valor final, no cada paso del conteo
+  return (
+    <>
+      <motion.span aria-hidden="true">{texto}</motion.span>
+      <span className="sr-only">{formatMoney(amount, moneda, idioma)}</span>
+    </>
+  );
+}
+
+/**
  * Monto formateado según la moneda activa (o `currency`) y el idioma.
  * El monto ya viene convertido por la API. Con `animate`, el cambio de valor se anima
- * (p. ej. al recalcular el envío al cambiar de país).
+ * (p. ej. al recalcular el envío al cambiar de país); con `animate="conteo"` el número cuenta
+ * hasta el nuevo valor.
  */
 export function Price({
   amount,
@@ -44,7 +81,9 @@ export function Price({
       )}
       {...props}
     >
-      {animate ? (
+      {animate === 'conteo' ? (
+        <MontoConteo key={`${moneda}-${idioma}`} amount={amount} moneda={moneda} idioma={idioma} />
+      ) : animate ? (
         <span className="relative inline-flex overflow-hidden">
           <AnimatePresence mode="popLayout" initial={false}>
             <motion.span

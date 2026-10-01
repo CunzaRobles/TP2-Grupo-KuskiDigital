@@ -102,7 +102,12 @@ export function CarritoDrawer() {
                 aria-live="polite"
               >
                 <span className="font-semibold">{t('carrito.subtotal')}</span>
-                <MontoCarrito monto={carrito.subtotal} moneda={carrito.moneda} animate size="lg" />
+                <MontoCarrito
+                  monto={carrito.subtotal}
+                  moneda={carrito.moneda}
+                  animate="conteo"
+                  size="lg"
+                />
               </div>
               <p className="flex gap-2 text-sm text-muted-foreground">
                 <Truck className="mt-0.5 size-4 shrink-0 text-musgo" aria-hidden="true" />

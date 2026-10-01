@@ -1,4 +1,5 @@
 import { Search, SlidersHorizontal } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
@@ -24,6 +25,7 @@ import {
 } from '@/components/ui/select';
 import { SectionError } from '@/features/home/section-heading';
 import { useCurrency } from '@/lib/currency';
+import { transicion } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 import { useCategorias, useComunidades, useProductos } from './api';
 import {
@@ -227,22 +229,35 @@ export function CatalogoPage() {
           ) : (
             <ul
               className={cn(
-                'grid grid-cols-2 gap-x-4 gap-y-10 transition-opacity duration-300 sm:gap-x-6 xl:grid-cols-3',
+                'relative grid grid-cols-2 gap-x-4 gap-y-10 transition-opacity duration-300 sm:gap-x-6 xl:grid-cols-3',
                 isPlaceholderData && 'opacity-60',
               )}
               aria-busy={isPending || isPlaceholderData || undefined}
             >
-              {isPending
-                ? Array.from({ length: 6 }, (_, i) => (
-                    <li key={i}>
-                      <ProductCardSkeleton />
-                    </li>
-                  ))
-                : items.map((producto) => (
-                    <li key={producto.id}>
+              {isPending ? (
+                Array.from({ length: 6 }, (_, i) => (
+                  <li key={i}>
+                    <ProductCardSkeleton />
+                  </li>
+                ))
+              ) : (
+                // Al filtrar u ordenar, las tarjetas que siguen se reacomodan hasta su nuevo lugar
+                // (animación de layout); solo las que salen o entran se funden.
+                <AnimatePresence mode="popLayout" initial={false}>
+                  {items.map((producto) => (
+                    <motion.li
+                      key={producto.id}
+                      layout
+                      initial={{ opacity: 0, scale: 0.97 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.97 }}
+                      transition={transicion('lenta')}
+                    >
                       <ProductCard producto={producto} />
-                    </li>
+                    </motion.li>
                   ))}
+                </AnimatePresence>
+              )}
             </ul>
           )}
 

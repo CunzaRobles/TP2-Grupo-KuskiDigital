@@ -322,6 +322,19 @@ describe('HomePage', () => {
     expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
   });
 
+  it('el botón "+" confirma con "Agregado" y lo anuncia', async () => {
+    const user = userEvent.setup();
+    renderHome();
+
+    const agregar = await screen.findByRole('button', {
+      name: 'Agregar Café Geisha de Quillabamba al carrito',
+    });
+    await user.click(agregar);
+
+    expect(agregar).toHaveTextContent('Agregado');
+    expect(screen.getByText('Café Geisha de Quillabamba agregado al carrito')).toBeInTheDocument();
+  });
+
   it('precarga la ficha al pasar el cursor por un destacado (para el elemento compartido)', async () => {
     const user = userEvent.setup();
     const fetchMock = stubApi();
@@ -362,6 +375,25 @@ describe('HomePage', () => {
       '/catalogo?comunidad=1',
     );
     expect(within(paradas[1]).queryByRole('link')).not.toBeInTheDocument();
+  });
+
+  it('resalta la comunidad de la lista al pasar el cursor o el foco (enlazada con su pin)', async () => {
+    const user = userEvent.setup();
+    renderHome();
+
+    const lista = await screen.findByRole('list', {
+      name: 'Comunidades productoras, de menor a mayor altitud',
+    });
+    const [primera, segunda] = within(lista).getAllByRole('listitem');
+
+    await user.hover(segunda);
+    expect(segunda).toHaveAttribute('data-activa');
+    expect(primera).not.toHaveAttribute('data-activa');
+    await user.unhover(segunda);
+    expect(segunda).not.toHaveAttribute('data-activa');
+
+    within(primera).getByRole('link').focus();
+    await waitFor(() => expect(primera).toHaveAttribute('data-activa'));
   });
 
   it('muestra las cifras de trazabilidad para lectores de pantalla', async () => {

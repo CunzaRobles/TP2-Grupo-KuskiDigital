@@ -34,6 +34,8 @@
     "abrir_other": "Warenkorb öffnen, {{count}} Artikel",
     "vacio": "Dein Warenkorb ist leer",
     "agregado": "In den Warenkorb gelegt",
+    "agregadoCorto": "Hinzugefügt",
+    "agregadoProducto": "{{nombre}} wurde in den Warenkorb gelegt",
     "agregarProducto": "{{nombre}} in den Warenkorb legen",
     "sinMasStock": "Du hast bereits den gesamten verfügbaren Bestand im Warenkorb",
     "verCarrito": "Warenkorb ansehen",
@@ -266,7 +268,7 @@
     },
     "trazabilidad": {
       "titulo": "Durch Cusco nach oben, Gemeinde für Gemeinde",
-      "descripcion": "Die Erzeugergemeinden, vom Tal bis zum Gipfel. Danach findest du sie auf der Karte.",
+      "descripcion": "Die Erzeugergemeinden, vom Tal bis zum Gipfel. Fahre über eine Markierung oder eine Gemeinde in der Liste, um sie auf der Karte zu finden.",
       "cifras": {
         "comunidades": "Erzeugergemeinden",
         "familias": "Begünstigte Familien",

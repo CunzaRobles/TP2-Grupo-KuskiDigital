@@ -1,4 +1,13 @@
-import { BadgeCheck, MapPin, Mountain, ShieldCheck, ShoppingBag, Truck, Zap } from 'lucide-react';
+import {
+  BadgeCheck,
+  Check,
+  MapPin,
+  Mountain,
+  ShieldCheck,
+  ShoppingBag,
+  Truck,
+  Zap,
+} from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Badge } from '@/components/ui/badge';
@@ -10,6 +19,7 @@ import { toast } from '@/components/ui/toast';
 import { useCarrito } from '@/features/carrito/carrito-context';
 import { MAX_POR_PRODUCTO } from '@/features/carrito/carrito-storage';
 import { RUTA_CHECKOUT } from '@/features/carrito/rutas';
+import { useConfirmacion } from '@/features/carrito/use-confirmacion';
 import { useNombres } from '@/features/catalogo/use-nombres';
 import { formatNumber } from '@/lib/format';
 import { Link } from '@/lib/motion/enlaces';
@@ -59,6 +69,7 @@ export function PanelCompra({ producto, onVerTab, className }) {
   const nombres = useNombres();
   const { agregar, abrir, cantidadEn } = useCarrito();
   const [cantidad, setCantidad] = useState(1);
+  const [agregado, confirmar] = useConfirmacion();
 
   const { categoria, comunidad, resenas } = producto;
   const enCarrito = cantidadEn(producto.id);
@@ -70,6 +81,7 @@ export function PanelCompra({ producto, onVerTab, className }) {
     const agregado = agregar(producto, cantidadValida);
     if (agregado > 0) {
       setCantidad(1);
+      confirmar();
       abrir();
     } else {
       toast.info(t('carrito.sinMasStock'), { description: producto.nombre });
@@ -168,9 +180,14 @@ export function PanelCompra({ producto, onVerTab, className }) {
             max={Math.max(restante, 1)}
             disabled={!puedeAgregar}
           />
-          <Button size="lg" className="flex-1" onClick={alAgregar} disabled={!puedeAgregar}>
-            <ShoppingBag aria-hidden="true" />
-            {t('producto.agregar')}
+          <Button
+            size="lg"
+            className={cn('flex-1', agregado && 'bg-musgo hover:bg-musgo')}
+            onClick={alAgregar}
+            disabled={!puedeAgregar && !agregado}
+          >
+            {agregado ? <Check aria-hidden="true" /> : <ShoppingBag aria-hidden="true" />}
+            {agregado ? t('carrito.agregadoCorto') : t('producto.agregar')}
           </Button>
         </div>
         <Button

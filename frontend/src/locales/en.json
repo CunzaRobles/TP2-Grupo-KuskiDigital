@@ -34,6 +34,8 @@
     "abrir_other": "Open cart, {{count}} items",
     "vacio": "Your cart is empty",
     "agregado": "Added to cart",
+    "agregadoCorto": "Added",
+    "agregadoProducto": "{{nombre}} added to your cart",
     "agregarProducto": "Add {{nombre}} to cart",
     "sinMasStock": "Your cart already holds all the available stock",
     "verCarrito": "View cart",
@@ -266,7 +268,7 @@
     },
     "trazabilidad": {
       "titulo": "Climb through Cusco, community by community",
-      "descripcion": "The producer communities, from the valley to the summit. Then find them on the map.",
+      "descripcion": "The producer communities, from the valley to the summit. Hover over a pin or a community in the list to find it on the map.",
       "cifras": {
         "comunidades": "Producer communities",
         "familias": "Families benefited",
