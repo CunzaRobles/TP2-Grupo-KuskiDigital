@@ -3,6 +3,7 @@ import * as authService from '../services/auth.service.js';
 
 const SIETE_DIAS_MS = 7 * 24 * 60 * 60 * 1000;
 
+// Sin `domain`: la cookie queda en el dominio del frontend, que reenvía /api a la API.
 const opcionesCookie = {
   httpOnly: true,
   sameSite: 'lax',

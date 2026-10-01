@@ -1094,7 +1094,7 @@ paths:
       tags: [Admin]
       summary: Subir una imagen a Supabase Storage
       description: |
-        **Roles:** gerente. `multipart/form-data` con el archivo en `imagen` (JPG, PNG o WebP, máx. 5 MB;
+        **Roles:** gerente. `multipart/form-data` con el archivo en `imagen` (JPG, PNG o WebP, máx. 4 MB;
         se comprueba el contenido real del archivo). Se guarda en el bucket `productos` y su URL
         pública en `producto_imagenes`. La primera imagen queda como principal. Máximo 8 por producto.
       security: [{ cookieSesion: [] }]

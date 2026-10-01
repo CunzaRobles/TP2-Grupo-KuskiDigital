@@ -73,17 +73,17 @@ Copia la plantilla y completa los valores:
 cp backend/.env.example backend/.env
 ```
 
-| Variable                                        | Descripción                                                                                             |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `PORT`                                          | Puerto de la API (por defecto `3000`).                                                                  |
-| `DATABASE_URL`                                  | Cadena de conexión de Supabase: _Project Settings → Database → Connection string → **Session pooler**_. |
-| `JWT_SECRET`                                    | Secreto para firmar los tokens JWT. Obligatorio en producción (en desarrollo hay uno por defecto).      |
-| `JWT_EXPIRES_IN`                                | Duración de la sesión (por defecto `7d`).                                                               |
-| `CORS_ORIGIN`                                   | Orígenes permitidos por CORS, separados por comas (por defecto `http://localhost:5173`).                |
-| `PAGO_LATENCIA_MIN_MS` / `PAGO_LATENCIA_MAX_MS` | Latencia simulada de la pasarela de pago (por defecto 1000–2000 ms; 0 en pruebas).                      |
-| `SUPABASE_URL`                                  | URL del proyecto de Supabase (_Project Settings → API_). Solo para Storage (fotos de productos).        |
-| `SUPABASE_SERVICE_ROLE_KEY`                     | Clave secreta (`service_role` o `sb_secret_…`). Solo vive en el backend, nunca en el frontend.          |
-| `SUPABASE_STORAGE_BUCKET`                       | Bucket público de las fotos de productos (por defecto `productos`).                                     |
+| Variable                                        | Descripción                                                                                                                                                 |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `PORT`                                          | Puerto de la API (por defecto `3000`).                                                                                                                      |
+| `DATABASE_URL`                                  | Cadena de conexión de Supabase: _Project Settings → Database → Connection string_. Local: **Session pooler** (5432); Vercel: **Transaction pooler** (6543). |
+| `JWT_SECRET`                                    | Secreto para firmar los tokens JWT. Obligatorio en producción (en desarrollo hay uno por defecto).                                                          |
+| `JWT_EXPIRES_IN`                                | Duración de la sesión (por defecto `7d`).                                                                                                                   |
+| `FRONTEND_URL`                                  | URL pública del frontend, permitida por CORS (varias separadas por comas). Fuera de producción también se permite `http://localhost:5173`.                  |
+| `PAGO_LATENCIA_MIN_MS` / `PAGO_LATENCIA_MAX_MS` | Latencia simulada de la pasarela de pago (por defecto 1000–2000 ms; 0 en pruebas).                                                                          |
+| `SUPABASE_URL`                                  | URL del proyecto de Supabase (_Project Settings → API_). Solo para Storage (fotos de productos).                                                            |
+| `SUPABASE_SERVICE_ROLE_KEY`                     | Clave secreta (`service_role` o `sb_secret_…`). Solo vive en el backend, nunca en el frontend.                                                              |
+| `SUPABASE_STORAGE_BUCKET`                       | Bucket público de las fotos de productos (por defecto `productos`).                                                                                         |
 
 `backend/.env` nunca se sube al repositorio.
 
@@ -152,7 +152,7 @@ Las respuestas tienen la forma `{ data }` o `{ error: { code, message, details? 
 | GET / POST     | `/direcciones`                  | Sesión  | Mis direcciones (la principal primero) / guardar una (la primera es la principal; máx. 10).                                                                                           |
 | PATCH / DELETE | `/direcciones/:id`              | Sesión  | Editar o marcar como principal / borrar (si era la principal, pasa a serlo la más reciente).                                                                                          |
 
-Seguridad: helmet, CORS (solo `CORS_ORIGIN`, con credenciales), un límite de 300 peticiones cada 15 minutos por IP en `/api` y de 20 intentos en login y registro.
+Seguridad: helmet, CORS (solo `FRONTEND_URL` y, en desarrollo, `localhost:5173`, con credenciales), un límite de 300 peticiones cada 15 minutos por IP en `/api` y de 20 intentos en login y registro.
 
 ### Panel admin (`/api/v1/admin`)
 
@@ -294,6 +294,23 @@ Sigue la estructura del wireframe: header → hero → categorías → destacado
 ### 404
 
 - Página con ilustración y voz de la marca, salida al catálogo o al inicio y accesos a las cuatro categorías.
+
+## Despliegue (Vercel)
+
+Dos proyectos de Vercel sobre el mismo repositorio; la base sigue en Supabase.
+
+| Proyecto    | Root Directory | Tipo                                                       | Configuración                                                                  |
+| ----------- | -------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `kuski-api` | `backend`      | Función Express (zero-config: `src/app.js` exporta la app) | `backend/vercel.json` (región `gru1`, São Paulo, junto a Supabase `sa-east-1`) |
+| `kuski-web` | `frontend`     | Sitio estático de Vite (`npm run build` → `dist`)          | `frontend/vercel.json`                                                         |
+
+- **Mismo origen:** `frontend/vercel.json` reenvía `/api/*` a `https://kuski-api.vercel.app/api/*` (si el proyecto de la API tiene otro nombre, cambia esa URL) y todo lo demás a `index.html` para React Router. El frontend llama siempre a `/api/v1/...`, así que la cookie de sesión (`httpOnly`, `secure`, `sameSite: lax`, sin `domain`) queda en el dominio de la tienda.
+- **Base de datos:** en Vercel `DATABASE_URL` usa el Transaction pooler (6543) y el pool es de 3 conexiones (5 en local). Sequelize no usa prepared statements con nombre, así que es compatible con ese modo.
+- **Migraciones y seeders no se ejecutan en el build:** se corren a mano (`npm run db:migrate`) desde la máquina del responsable de backend.
+- **Imágenes:** se suben a Supabase Storage desde memoria (nada en disco). Máximo 4 MB por imagen, porque Vercel corta los cuerpos de más de 4,5 MB.
+- **Swagger UI** (`/api/v1/docs`) carga `swagger-ui-dist` desde jsDelivr (versión fijada) y lee `docs/openapi.yaml`, que Vercel incluye en la función.
+- `app.set('trust proxy', 1)` hace que la cookie `secure` y el límite por IP funcionen detrás del proxy de Vercel.
+- El mapa usa Stadia por defecto: en producción hay que registrar el dominio de la tienda en Stadia (gratis) o definir `VITE_MAP_TILES_URL`.
 
 ## Scripts (desde la raíz)
 
