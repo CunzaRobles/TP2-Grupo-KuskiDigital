@@ -2,6 +2,7 @@ import { Menu, ShoppingBag, UserRound } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { useSesion } from '@/features/auth/api';
 import { useCarrito } from '@/features/carrito/carrito-context';
@@ -19,9 +20,15 @@ const ENLACES_NAV = [
   { to: '/nosotros', clave: 'nav.nosotros' },
 ];
 
+// Sobre la foto del hero el header es transparente con texto Niebla: se redefinen los tokens
+// que usan sus hijos (botones ghost, enlaces, foco). Cochinilla no va sobre fondo oscuro.
+const SOBRE_HERO =
+  'border-transparent bg-transparent [--foreground:var(--color-niebla)] [--link:var(--color-niebla)] [--ring:var(--color-niebla)] [--muted-foreground:rgb(238_240_236/0.8)] [--secondary:rgb(238_240_236/0.14)] [--background:var(--color-puna)]';
+
 /**
- * Header persistente (fijo) con fondo Niebla sólido y línea inferior. Al hacer scroll se
- * compacta: es la única transición del header y responde al usuario.
+ * Header persistente (fijo). En la home, transparente sobre el hero hasta que se hace scroll;
+ * en el resto, y al bajar, fondo Niebla sólido con línea inferior y versión compacta. Las
+ * transiciones responden al scroll del usuario.
  */
 export function SiteHeader() {
   const { t } = useTranslation();
@@ -29,9 +36,17 @@ export function SiteHeader() {
   const { totalUnidades, iconoCarritoRef, abrir: abrirCarrito } = useCarrito();
   const { data: usuario } = useSesion();
   const [menuAbierto, setMenuAbierto] = useState(false);
+  const { pathname } = useLocation();
+  const sobreHero = pathname === '/' && !scrolled;
 
   return (
-    <header className="fixed inset-x-0 top-0 z-40 border-b border-border bg-background [view-transition-name:site-header]">
+    <header
+      data-sobre-hero={sobreHero || undefined}
+      className={cn(
+        'fixed inset-x-0 top-0 z-40 border-b text-foreground transition-[background-color,border-color] duration-200 ease-andino [view-transition-name:site-header]',
+        sobreHero ? SOBRE_HERO : 'border-border bg-background',
+      )}
+    >
       <div
         className={cn(
           'container-page flex items-center gap-2 transition-[height] duration-200 ease-andino sm:gap-4',
@@ -50,7 +65,7 @@ export function SiteHeader() {
         </Button>
 
         <Link to="/" className="rounded-md" aria-label="Kuski Digital">
-          <Logo compact={scrolled} />
+          <Logo compact={scrolled} tone={sobreHero ? 'light' : 'dark'} />
         </Link>
 
         <nav aria-label={t('nav.principal')} className="ml-8 hidden md:block">

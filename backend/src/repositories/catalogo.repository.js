@@ -16,6 +16,19 @@ const altitudDeCategoria = (fn) =>
        WHERE p.categoria_id = "Categoria"."id" AND p.activo)`,
   );
 
+// Comunidad que aporta más productos activos a la categoría (empate: la de menor altitud).
+// json_build_object llega ya como objeto desde pg.
+const comunidadPrincipalDe = () =>
+  sequelize.literal(
+    `(SELECT json_build_object('id', c.id, 'nombre', c.nombre, 'altitudMsnm', c.altitud_msnm)
+        FROM productos p
+        JOIN comunidades c ON c.id = p.comunidad_id
+       WHERE p.categoria_id = "Categoria"."id" AND p.activo
+       GROUP BY c.id
+       ORDER BY COUNT(*) DESC, c.altitud_msnm ASC, c.id ASC
+       LIMIT 1)`,
+  );
+
 export const findCategorias = async () => {
   const filas = await Categoria.findAll({
     attributes: [
@@ -28,6 +41,7 @@ export const findCategorias = async () => {
       [productosActivosDe('categoria_id', 'Categoria'), 'totalProductos'],
       [altitudDeCategoria('MIN'), 'altitudMin'],
       [altitudDeCategoria('MAX'), 'altitudMax'],
+      [comunidadPrincipalDe(), 'comunidadPrincipal'],
     ],
     order: [
       ['orden', 'ASC'],

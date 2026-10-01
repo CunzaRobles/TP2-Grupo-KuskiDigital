@@ -6,8 +6,8 @@ import { CarritoDrawer } from '@/features/carrito/carrito-drawer';
 import { LenisProvider } from '@/lib/motion/lenis-provider';
 import { TransicionRuta } from '@/lib/motion/transicion-ruta';
 
-// Layout de la tienda (siempre en modo claro). El header es fijo y sólido: el contenido deja
-// su espacio con pt-header en todas las páginas. Scroll suave con Lenis (solo en la tienda: el
+// Layout de la tienda (siempre en modo claro). El header es fijo: el contenido deja su espacio
+// con pt-header en todas las páginas (el hero de la home lo recupera con -mt-header). Scroll suave con Lenis (solo en la tienda: el
 // admin mantiene el scroll nativo) y fundido corto entre rutas.
 export function TiendaLayout() {
   const { t } = useTranslation();

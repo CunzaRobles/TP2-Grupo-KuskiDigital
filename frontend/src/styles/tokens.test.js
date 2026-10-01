@@ -115,6 +115,9 @@ describe('paleta de la tienda', () => {
     // Banda Puna (footer): texto Niebla, acentos Ichu
     ['niebla', 'puna', 4.5],
     ['ichu', 'puna', 4.5],
+    // Recorrido de categorías: texto Niebla en el valle (Musgo), Puna en la ladera (Ichu)
+    ['niebla', 'musgo', 4.5],
+    ['puna', 'ichu', 4.5],
   ])('%s sobre %s ≥ %s:1', (fg, bg, minimo) => {
     expect(contrastRatio(color(fg), color(bg))).toBeGreaterThanOrEqual(minimo);
   });

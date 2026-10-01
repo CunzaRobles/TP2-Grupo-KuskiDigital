@@ -11,12 +11,16 @@ export const PAISES_EXPORTACION_HISTORICOS = [
 
 const aEnteroONull = (valor) => (valor == null ? null : Number(valor));
 
-// Rango de altitud de origen (msnm) de cada categoría; null si no tiene productos activos.
+// Rango de altitud de origen (msnm) y comunidad principal de cada categoría; null si no tiene
+// productos activos.
 export const listarCategorias = async () =>
-  (await catalogoRepository.findCategorias()).map((c) => ({
+  (await catalogoRepository.findCategorias()).map(({ comunidadPrincipal, ...c }) => ({
     ...c,
     altitudMin: aEnteroONull(c.altitudMin),
     altitudMax: aEnteroONull(c.altitudMax),
+    comunidadPrincipal: comunidadPrincipal
+      ? { ...comunidadPrincipal, altitudMsnm: aEnteroONull(comunidadPrincipal.altitudMsnm) }
+      : null,
   }));
 
 export const listarCertificaciones = () => catalogoRepository.findCertificaciones();

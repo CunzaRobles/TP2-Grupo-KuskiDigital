@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -35,13 +35,14 @@ const PRODUCTOS = [
   },
 ];
 
-// [slug, altitudMin, altitudMax] (rangos reales de Supabase), en el orden de la API
+// [slug, altitudMin, altitudMax, comunidad principal] (datos reales de Supabase), en el orden
+// de la API
 const CATEGORIAS = [
-  ['cafe', 1050, 1050],
-  ['superalimentos', 2792, 3345],
-  ['textiles', 3200, 3760],
-  ['artesania', 3122, 3122],
-].map(([slug, altitudMin, altitudMax], i) => ({
+  ['cafe', 1050, 1050, 'Comunidad Cafetalera de Quillabamba', 1050],
+  ['superalimentos', 2792, 3345, 'Comunidad de Ollantaytambo', 2792],
+  ['textiles', 3200, 3760, 'Comunidad Alpaquera de Lares', 3200],
+  ['artesania', 3122, 3122, 'Comunidad Artesana de Andahuaylillas', 3122],
+].map(([slug, altitudMin, altitudMax, comunidad, altitudMsnm], i) => ({
   id: i + 1,
   nombre: slug,
   slug,
@@ -50,7 +51,21 @@ const CATEGORIAS = [
   totalProductos: 11,
   altitudMin,
   altitudMax,
+  comunidadPrincipal: { id: i + 10, nombre: comunidad, altitudMsnm },
 }));
+
+// Simula la pantalla: escritorio (min-width) y/o movimiento reducido
+const simularPantalla = ({ escritorio = false, reducido = false }) =>
+  vi.spyOn(window, 'matchMedia').mockImplementation((query) => ({
+    matches:
+      (escritorio && query.includes('min-width')) ||
+      (reducido && query.includes('prefers-reduced-motion: reduce')),
+    media: query,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+  }));
 
 const COMUNIDADES = [
   {
@@ -127,6 +142,7 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.unstubAllGlobals();
+  vi.restoreAllMocks();
 });
 
 describe('HomePage', () => {
@@ -164,36 +180,107 @@ describe('HomePage', () => {
     expect(within(hero).getAllByRole('link')).toHaveLength(1);
   });
 
-  it('ordena las categorías por altitud con su rango de origen', async () => {
+  it('indica el inicio del altímetro con la comunidad más baja', async () => {
     renderHome();
 
-    const seccion = screen.getByRole('region', { name: 'Cuatro líneas, cuatro alturas' });
-    await within(seccion).findAllByText('11 productos');
-    const enlaces = within(seccion).getAllByRole('link');
-    expect(enlaces.map((a) => a.getAttribute('href'))).toEqual([
-      '/catalogo?categoria=cafe',
-      '/catalogo?categoria=superalimentos',
-      '/catalogo?categoria=artesania',
-      '/catalogo?categoria=textiles',
+    const hero = screen.getByRole('region', { name: 'Del valle a la puna' });
+    expect(within(hero).getByText('Baja para subir')).toBeInTheDocument();
+    expect(await within(hero).findByText('1,050 msnm')).toBeInTheDocument();
+    expect(within(hero).getByText('Quillabamba · baja para subir')).toBeInTheDocument();
+    expect(within(hero).getByRole('img', { name: /valle del Urubamba/ })).toBeInTheDocument();
+  });
+
+  it('el header es transparente sobre el hero y sólido al hacer scroll', async () => {
+    renderHome();
+
+    const header = screen.getByRole('banner');
+    expect(header).toHaveAttribute('data-sobre-hero');
+
+    window.scrollY = 200;
+    fireEvent.scroll(window);
+    await waitFor(() => expect(header).not.toHaveAttribute('data-sobre-hero'));
+    expect(header).toHaveClass('bg-background');
+    window.scrollY = 0;
+  });
+
+  it('ordena las categorías por la altitud de su comunidad principal (móvil)', async () => {
+    renderHome();
+
+    const lista = await screen.findByRole('list', {
+      name: 'Categorías, de menor a mayor altitud',
+    });
+    const pisos = within(lista).getAllByRole('listitem');
+    expect(pisos.map((p) => within(p).getByRole('heading', { level: 3 }).textContent)).toEqual([
+      'Café',
+      'Superalimentos',
+      'Artesanía',
+      'Textiles',
     ]);
-    expect(enlaces[0]).toHaveTextContent('1,050 msnm');
-    expect(enlaces[3]).toHaveTextContent('3,200–3,760 msnm');
+    expect(pisos[0]).toHaveTextContent('1,050 msnm');
+    expect(pisos[0]).toHaveTextContent('Origen: Comunidad Cafetalera de Quillabamba');
+    expect(pisos[3]).toHaveTextContent('3,200 msnm');
+    expect(pisos[3]).toHaveTextContent('De 3,200 a 3,760 msnm · 11 productos');
+    expect(screen.queryByTestId('recorrido-categorias')).not.toBeInTheDocument();
   });
 
   it('enlaza las 4 categorías al catálogo filtrado', async () => {
     renderHome();
 
     const seccion = screen.getByRole('region', { name: 'Cuatro líneas, cuatro alturas' });
-    expect(await within(seccion).findAllByText('11 productos')).toHaveLength(4);
-    expect(within(seccion).getAllByRole('link')).toHaveLength(4);
-    expect(within(seccion).getByRole('link', { name: /Café/ })).toHaveAttribute(
+    expect(await within(seccion).findAllByText(/11 productos/)).toHaveLength(4);
+    expect(
+      within(seccion)
+        .getAllByRole('link')
+        .map((a) => a.textContent),
+    ).toEqual(['Ver café', 'Ver superalimentos', 'Ver artesanía', 'Ver textiles']);
+    expect(within(seccion).getByRole('link', { name: 'Ver café' })).toHaveAttribute(
       'href',
       '/catalogo?categoria=cafe',
     );
-    expect(within(seccion).getByRole('link', { name: /Artesanía/ })).toHaveAttribute(
+    expect(within(seccion).getByRole('link', { name: 'Ver artesanía' })).toHaveAttribute(
       'href',
       '/catalogo?categoria=artesania',
     );
+  });
+
+  it('en escritorio muestra el recorrido con altímetro, fondos por piso y montañas', async () => {
+    simularPantalla({ escritorio: true });
+    renderHome();
+
+    const recorrido = await screen.findByTestId('recorrido-categorias');
+    const seccion = screen.getByRole('region', { name: 'Cuatro líneas, cuatro alturas' });
+    expect(seccion).toContainElement(recorrido);
+    expect(
+      within(seccion)
+        .getAllByRole('link')
+        .map((a) => a.getAttribute('href')),
+    ).toEqual([
+      '/catalogo?categoria=cafe',
+      '/catalogo?categoria=superalimentos',
+      '/catalogo?categoria=artesania',
+      '/catalogo?categoria=textiles',
+    ]);
+    // Fondos de ladera (Ichu) y altura (Puna) y tres planos de montaña, todos decorativos
+    expect(recorrido.querySelectorAll('[data-fondo]')).toHaveLength(2);
+    expect(recorrido.querySelectorAll('[data-plano]')).toHaveLength(3);
+    // El altímetro parte en la comunidad más baja; solo el primer panel es visible al inicio
+    const altimetro = recorrido.querySelector('[data-cinta]').closest('[aria-hidden]');
+    expect(altimetro).toHaveTextContent('1,050');
+    const paneles = recorrido.querySelectorAll('[data-panel]');
+    expect(paneles[0]).not.toHaveClass('opacity-0');
+    expect([...paneles].slice(1).every((p) => p.classList.contains('opacity-0'))).toBe(true);
+  });
+
+  it('con movimiento reducido no hay recorrido: versión estática con las 4 categorías', async () => {
+    simularPantalla({ escritorio: true, reducido: true });
+    renderHome();
+
+    const lista = await screen.findByRole('list', {
+      name: 'Categorías, de menor a mayor altitud',
+    });
+    expect(within(lista).getAllByRole('listitem')).toHaveLength(4);
+    expect(within(lista).getByText('3,122')).toBeInTheDocument();
+    expect(screen.queryByTestId('recorrido-categorias')).not.toBeInTheDocument();
   });
 
   it('muestra los destacados con comunidad, altitud y estado de stock', async () => {

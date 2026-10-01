@@ -4,14 +4,14 @@ import { useTranslation } from 'react-i18next';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useComunidades, useTrazabilidad } from '@/features/catalogo/api';
 import { formatNumber } from '@/lib/format';
-import { RecorridoAltitud } from './recorrido-altitud';
+import { ComunidadesAltitud } from './comunidades-altitud';
 import { SectionError, SectionHeading } from './section-heading';
 
 const MapaComunidades = lazy(() => import('./mapa-comunidades'));
 
 const CIFRAS = ['comunidades', 'familias', 'paises', 'productos'];
 
-// Cifras estáticas (sin contadores animados: el único movimiento de la home es el recorrido).
+// Cifras estáticas (sin contadores animados: el único momento animado es el recorrido de categorías).
 function Cifras() {
   const { t, i18n } = useTranslation();
   const idioma = i18n.resolvedLanguage;
@@ -76,8 +76,8 @@ function Mapa() {
   );
 }
 
-// Trazabilidad: el recorrido de altitud por las comunidades y, después, el mapa de Cusco con
-// sus pines y las cifras de impacto.
+// Trazabilidad: las comunidades del valle a la cumbre y, después, el mapa de Cusco con sus pines
+// y las cifras de impacto.
 export function Trazabilidad() {
   const { t } = useTranslation();
 
@@ -89,7 +89,7 @@ export function Trazabilidad() {
           title={t('home.trazabilidad.titulo')}
           description={t('home.trazabilidad.descripcion')}
         />
-        <RecorridoAltitud />
+        <ComunidadesAltitud />
         <div className="grid gap-10 lg:grid-cols-[minmax(0,8fr)_minmax(0,4fr)] lg:gap-12">
           <Mapa />
           <Cifras />

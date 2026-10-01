@@ -33,3 +33,28 @@ export const ordenarPorAltitud = (comunidades = []) =>
 // Altitud media del rango de una categoría (null si no tiene productos activos).
 export const altitudMedia = ({ altitudMin, altitudMax }) =>
   altitudMin == null || altitudMax == null ? null : (altitudMin + altitudMax) / 2;
+
+// Pisos de color del recorrido de categorías, por altitud: valle (Musgo), ladera (Ichu) y
+// altura (Puna). La puna real empieza a 4,000 m: "altura" no afirma que se llegue a ella.
+export const PISOS = [
+  { id: 'valle', desde: -Infinity },
+  { id: 'ladera', desde: 2000 },
+  { id: 'altura', desde: 3000 },
+];
+
+export const pisoDe = (altitud) => PISOS.findLast((p) => altitud >= p.desde).id;
+
+// Altitud a la que aparece una categoría en el recorrido: la de su comunidad principal (la que
+// aporta más productos) o, si no viene, el inicio de su rango.
+export const altitudDeCategoria = ({ comunidadPrincipal, altitudMin }) =>
+  comunidadPrincipal?.altitudMsnm ?? altitudMin ?? null;
+
+// Categorías del valle a la cumbre según su altitud; las que no tienen productos, al final.
+export const ordenarCategorias = (categorias = []) =>
+  categorias.toSorted(
+    (a, b) => (altitudDeCategoria(a) ?? Infinity) - (altitudDeCategoria(b) ?? Infinity),
+  );
+
+// Marcas de una regla vertical como fondo CSS: `intervalos` líneas de 1 px de abajo arriba.
+export const marcasRegla = (intervalos) =>
+  `repeating-linear-gradient(to top, currentColor 0 1px, transparent 1px calc(100% / ${intervalos}))`;

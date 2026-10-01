@@ -219,9 +219,11 @@
   "home": {
     "hero": {
       "titulo": "Del valle a la puna",
-      "descripcion": "Café de ceja de selva, quinua del Valle Sagrado y alpaca de las tierras altas de Cusco. Cada producto lleva la altitud de la comunidad que lo produce.",
+      "descripcion": "Café, quinua y alpaca de comunidades de Cusco. Cada producto indica quién lo hizo y a qué altitud.",
       "cta": "Explorar catálogo",
-      "imagenAlt": "Machu Picchu y las montañas de Cusco al atardecer"
+      "imagenAlt": "El valle del Urubamba, con un pueblo al pie de los cerros y un nevado al fondo",
+      "inicio": "{{lugar}} · baja para subir",
+      "desliza": "Baja para subir"
     },
     "perfil": {
       "resumen_one": "Altitud de {{count}} comunidad productora: {{min}} msnm en {{desde}}.",
@@ -230,9 +232,19 @@
     },
     "categorias": {
       "titulo": "Cuatro líneas, cuatro alturas",
-      "descripcion": "Del cafetal de ceja de selva al telar de altura: cada línea está a la altitud de las comunidades que la producen.",
+      "descripcion": "Del cafetal de ceja de selva al telar de altura: baja por la página y sube con ellas, cada una a la altitud de la comunidad que la produce.",
       "productos_one": "{{count}} producto",
-      "productos_other": "{{count}} productos"
+      "productos_other": "{{count}} productos",
+      "lista": "Categorías, de menor a mayor altitud",
+      "origen": "Origen: {{comunidad}}",
+      "rango": "De {{min}} a {{max}} msnm",
+      "verCategoria": "Ver {{nombre}}",
+      "ver": {
+        "cafe": "Ver café",
+        "superalimentos": "Ver superalimentos",
+        "textiles": "Ver textiles",
+        "artesania": "Ver artesanía"
+      }
     },
     "destacados": {
       "titulo": "Destacados de nuestras comunidades",
@@ -254,7 +266,7 @@
     },
     "trazabilidad": {
       "titulo": "Sube por Cusco, comunidad por comunidad",
-      "descripcion": "Baja por la página y recorre las comunidades productoras del valle a la cumbre. Después, ubícalas en el mapa.",
+      "descripcion": "Las comunidades productoras, del valle a la cumbre. Después, ubícalas en el mapa.",
       "cifras": {
         "comunidades": "Comunidades productoras",
         "familias": "Familias beneficiadas",

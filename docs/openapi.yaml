@@ -304,6 +304,8 @@ paths:
       description: >-
         `altitudMin` y `altitudMax` son el MIN/MAX de `altitud_msnm` de las comunidades de los
         productos activos de cada categoría (`null` si no tiene productos activos).
+        `comunidadPrincipal` es la comunidad que aporta más productos activos (empate: la de
+        menor altitud).
       responses:
         '200':
           description: Categorías ordenadas
@@ -1872,6 +1874,13 @@ components:
         totalProductos: { type: integer, example: 11 }
         altitudMin: { type: [integer, 'null'], example: 1050, description: msnm }
         altitudMax: { type: [integer, 'null'], example: 1050, description: msnm }
+        comunidadPrincipal:
+          type: [object, 'null']
+          description: Comunidad con más productos activos en la categoría
+          properties:
+            id: { type: integer }
+            nombre: { type: string, example: Comunidad Cafetalera de Quillabamba }
+            altitudMsnm: { type: integer, example: 1050 }
 
     Comunidad:
       type: object

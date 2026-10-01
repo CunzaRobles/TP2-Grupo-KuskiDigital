@@ -219,9 +219,11 @@
   "home": {
     "hero": {
       "titulo": "From the valley to the puna",
-      "descripcion": "Cloud-forest coffee, quinoa from the Sacred Valley and alpaca from the Cusco highlands. Every product carries the altitude of the community that makes it.",
+      "descripcion": "Coffee, quinoa and alpaca from communities in Cusco. Every product shows who made it and at what altitude.",
       "cta": "Explore the catalogue",
-      "imagenAlt": "Machu Picchu and the mountains of Cusco at sunset"
+      "imagenAlt": "The Urubamba valley, with a village at the foot of the hills and a snow peak behind",
+      "inicio": "{{lugar}} · scroll down to climb",
+      "desliza": "Scroll down to climb"
     },
     "perfil": {
       "resumen_one": "Altitude of {{count}} producer community: {{min}} m a.s.l. in {{desde}}.",
@@ -230,9 +232,19 @@
     },
     "categorias": {
       "titulo": "Four lines, four altitudes",
-      "descripcion": "From cloud-forest coffee farms to high-altitude looms: each line sits at the altitude of the communities that make it.",
+      "descripcion": "From cloud-forest coffee farms to high-altitude looms: scroll down and climb with them, each at the altitude of the community that makes it.",
       "productos_one": "{{count}} product",
-      "productos_other": "{{count}} products"
+      "productos_other": "{{count}} products",
+      "lista": "Categories, from lowest to highest altitude",
+      "origen": "Origin: {{comunidad}}",
+      "rango": "From {{min}} to {{max}} m a.s.l.",
+      "verCategoria": "Shop {{nombre}}",
+      "ver": {
+        "cafe": "Shop coffee",
+        "superalimentos": "Shop superfoods",
+        "textiles": "Shop textiles",
+        "artesania": "Shop crafts"
+      }
     },
     "destacados": {
       "titulo": "Highlights from our communities",
@@ -254,7 +266,7 @@
     },
     "trazabilidad": {
       "titulo": "Climb through Cusco, community by community",
-      "descripcion": "Scroll down the page and travel through the producer communities from the valley to the summit. Then find them on the map.",
+      "descripcion": "The producer communities, from the valley to the summit. Then find them on the map.",
       "cifras": {
         "comunidades": "Producer communities",
         "familias": "Families benefited",

@@ -219,9 +219,11 @@
   "home": {
     "hero": {
       "titulo": "Vom Tal bis zur Puna",
-      "descripcion": "Kaffee vom Nebelwald, Quinoa aus dem Heiligen Tal und Alpaka aus dem Hochland von Cusco. Jedes Produkt trägt die Höhe der Gemeinde, die es herstellt.",
+      "descripcion": "Kaffee, Quinoa und Alpaka aus Gemeinden in Cusco. Bei jedem Produkt steht, wer es gemacht hat und auf welcher Höhe.",
       "cta": "Katalog entdecken",
-      "imagenAlt": "Machu Picchu und die Berge von Cusco bei Sonnenuntergang"
+      "imagenAlt": "Das Urubamba-Tal mit einem Dorf am Fuß der Berge und einem Schneegipfel dahinter",
+      "inicio": "{{lugar}} · nach unten scrollen, um aufzusteigen",
+      "desliza": "Nach unten scrollen, um aufzusteigen"
     },
     "perfil": {
       "resumen_one": "Höhe von {{count}} Erzeugergemeinde: {{min}} m ü. M. in {{desde}}.",
@@ -230,9 +232,19 @@
     },
     "categorias": {
       "titulo": "Vier Linien, vier Höhen",
-      "descripcion": "Von der Kaffeefinca am Nebelwald bis zum Webstuhl im Hochland: Jede Linie liegt auf der Höhe der Gemeinden, die sie herstellen.",
+      "descripcion": "Von der Kaffeefinca am Nebelwald bis zum Webstuhl im Hochland: Scrolle nach unten und steige mit ihnen auf, jede auf der Höhe der Gemeinde, die sie herstellt.",
       "productos_one": "{{count}} Produkt",
-      "productos_other": "{{count}} Produkte"
+      "productos_other": "{{count}} Produkte",
+      "lista": "Kategorien, von der niedrigsten zur höchsten Lage",
+      "origen": "Herkunft: {{comunidad}}",
+      "rango": "Von {{min}} bis {{max}} m ü. M.",
+      "verCategoria": "{{nombre}} ansehen",
+      "ver": {
+        "cafe": "Kaffee ansehen",
+        "superalimentos": "Superfoods ansehen",
+        "textiles": "Textilien ansehen",
+        "artesania": "Kunsthandwerk ansehen"
+      }
     },
     "destacados": {
       "titulo": "Highlights unserer Gemeinden",
@@ -254,7 +266,7 @@
     },
     "trazabilidad": {
       "titulo": "Durch Cusco nach oben, Gemeinde für Gemeinde",
-      "descripcion": "Scrolle nach unten und reise vom Tal bis zum Gipfel durch die Erzeugergemeinden. Danach findest du sie auf der Karte.",
+      "descripcion": "Die Erzeugergemeinden, vom Tal bis zum Gipfel. Danach findest du sie auf der Karte.",
       "cifras": {
         "comunidades": "Erzeugergemeinden",
         "familias": "Begünstigte Familien",
