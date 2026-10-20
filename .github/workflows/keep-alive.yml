@@ -1,0 +1,42 @@
+name: Keep-alive Supabase
+
+# Defecto EV-01 (informe de Evaluación de Software): Supabase Free pausa el
+# proyecto tras 7 días sin actividad y la tienda se queda sin catálogo.
+# /api/v1/health hace una consulta real a Kuski_DB, así que llamarlo cada
+# 3 días cuenta como actividad y evita la pausa.
+on:
+  schedule:
+    # 13:00 UTC = 08:00 de Lima, cada 3 días.
+    - cron: '0 13 */3 * *'
+  # Permite ejecutarlo a mano: Actions → Keep-alive Supabase → Run workflow.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    name: Ping a /api/v1/health
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      HEALTH_URL: https://kuski-digital.vercel.app/api/v1/health
+    steps:
+      # Hasta 3 intentos separados por 20 s: la primera petición puede tardar
+      # unos 12 s por el arranque en frío de la función de Vercel. Si los 3
+      # fallan, el job termina con exit 1 y GitHub avisa por correo.
+      - name: Consultar el health check
+        run: |
+          for intento in 1 2 3; do
+            echo "Intento $intento: $HEALTH_URL"
+            if curl -fsS --max-time 30 "$HEALTH_URL"; then
+              echo
+              echo "Kuski_DB respondió en el intento $intento."
+              exit 0
+            fi
+            if [ "$intento" -lt 3 ]; then
+              sleep 20
+            fi
+          done
+          echo "::error::El health check falló 3 veces; revisa Supabase y Vercel."
+          exit 1

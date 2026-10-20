@@ -315,6 +315,12 @@ Dos proyectos de Vercel sobre el mismo repositorio; la base sigue en Supabase.
 - `app.set('trust proxy', 1)` hace que la cookie `secure` y el límite por IP funcionen detrás del proxy de Vercel.
 - El mapa usa Stadia por defecto: en producción hay que registrar el dominio de la tienda en Stadia (gratis) o definir `VITE_MAP_TILES_URL`.
 
+### Keep-alive de Supabase
+
+Supabase Free pausa el proyecto tras 7 días sin actividad (defecto EV-01). El workflow `.github/workflows/keep-alive.yml` llama a `GET https://kuski-digital.vercel.app/api/v1/health`, que hace una consulta real a Kuski_DB, **cada 3 días a las 08:00 de Lima** (`0 13 */3 * *` en UTC). Hace hasta 3 intentos separados por 20 s (por el arranque en frío); si todos fallan, el job falla y GitHub avisa por correo.
+
+Para ejecutarlo a mano: **Actions → Keep-alive Supabase → Run workflow**.
+
 ## Scripts (desde la raíz)
 
 | Comando                    | Qué hace                                               |
