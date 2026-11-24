@@ -11,15 +11,14 @@
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Fuentes sin bloquear el primer pintado (display=swap). Unbounded solo en 500–600. -->
+    <!-- Fuentes sin bloquear el primer pintado (display=swap). Unbounded solo en 500–600.
+         Las aplica el script en línea que inyecta vite.config.js (cargarFuentes): un onload="…"
+         en línea lo bloquearía la Content-Security-Policy de vercel.json. -->
     <link
       rel="preload"
       as="style"
+      data-fuentes
       href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400..700&family=Unbounded:wght@500..600&display=swap"
-      onload="
-        this.onload = null;
-        this.rel = 'stylesheet';
-      "
     />
     <noscript>
       <link

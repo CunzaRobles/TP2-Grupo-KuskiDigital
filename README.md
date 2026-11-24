@@ -345,6 +345,11 @@ Dos proyectos de Vercel sobre el mismo repositorio; la base sigue en Supabase.
 - **Swagger UI** (`/api/v1/docs`) carga `swagger-ui-dist` desde jsDelivr (versión fijada) y lee `docs/openapi.yaml`, que Vercel incluye en la función.
 - `app.set('trust proxy', 1)` hace que la cookie `secure` y el límite por IP funcionen detrás del proxy de Vercel.
 - El mapa usa Stadia por defecto: en producción hay que registrar el dominio de la tienda en Stadia (gratis) o definir `VITE_MAP_TILES_URL`.
+- **Cabeceras de seguridad** (`frontend/vercel.json`): en todas las páginas de la tienda (`/((?!api/).*)`; `/api/*` lleva las de helmet desde el backend, y sumarles esta CSP rompería Swagger UI) se envían Content-Security-Policy, `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin` y `Permissions-Policy` sin cámara, micrófono ni geolocalización. `/assets/*` (nombres con hash de Vite) se cachea un año (`immutable`).
+  - La CSP permite solo lo que la tienda carga: Google Fonts (`fonts.googleapis.com` y `fonts.gstatic.com`), fotos de `images.unsplash.com` y del Storage de Supabase, teselas de `tiles.stadiamaps.com`, `blob:` para las vistas previas del admin y la API (mismo origen por el rewrite, o `kuski-api.vercel.app`). **Si cambias `VITE_MAP_TILES_URL`, el proyecto de Supabase o el de la API, agrega el nuevo origen a la CSP.**
+  - Scripts: sin `'unsafe-inline'` ni `'unsafe-eval'`. Los dos scripts en línea de `index.html` (cargador de fuentes y precarga de la Home) están en `frontend/scripts-en-linea.js` con código estático y se autorizan por su hash; `src/test/cabeceras-seguridad.test.js` falla si el hash no coincide. Zod corre con `jitless` (`main.jsx`) para no intentar `new Function`.
+  - Estilos: `'unsafe-inline'` en `style-src` es necesario porque Sonner y el bloqueo de scroll de Radix insertan `<style>` con contenido dinámico.
+  - `npm run preview` sirve el build con estas mismas cabeceras (`vite.config.js` las lee de `vercel.json`), así las violaciones aparecen en la consola antes de desplegar.
 
 ### Keep-alive de Supabase
 
