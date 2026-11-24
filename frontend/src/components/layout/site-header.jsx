@@ -43,7 +43,7 @@ export function SiteHeader() {
     <header
       data-sobre-hero={sobreHero || undefined}
       className={cn(
-        'fixed inset-x-0 top-0 z-40 border-b text-foreground transition-[background-color,border-color] duration-200 ease-andino [view-transition-name:site-header]',
+        'fixed inset-x-0 top-0 z-40 border-b text-foreground print:hidden transition-[background-color,border-color] duration-200 ease-andino [view-transition-name:site-header]',
         sobreHero ? SOBRE_HERO : 'border-border bg-background',
       )}
     >

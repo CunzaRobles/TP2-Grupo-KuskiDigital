@@ -308,7 +308,8 @@
     },
     "pagoSeguro": "100 % sichere Zahlung",
     "pagoSeguroDetalle": "SSL-verschlüsselte Verbindung",
-    "metodosPago": "Akzeptierte Zahlungsmethoden"
+    "metodosPago": "Akzeptierte Zahlungsmethoden",
+    "libroReclamaciones": "Beschwerdebuch"
   },
   "admin": {
     "titulo": "Verwaltungsbereich",
@@ -327,7 +328,8 @@
       "productos": "Produkte",
       "categorias": "Kategorien",
       "usuarios": "Benutzer",
-      "estadisticas": "Statistiken"
+      "estadisticas": "Statistiken",
+      "reclamaciones": "Beschwerden"
     },
     "grupos": {
       "general": "Überblick",
@@ -681,7 +683,40 @@
       "STORAGE_NO_CONFIGURADO": "Der Bildspeicher ist auf dem Server nicht konfiguriert.",
       "PRODUCTO_NO_ENCONTRADO": "Dieses Produkt wurde nicht gefunden.",
       "PEDIDO_NO_ENCONTRADO": "Diese Bestellung wurde nicht gefunden.",
-      "CORREO_EN_USO": "Ein Konto mit dieser E-Mail existiert bereits."
+      "CORREO_EN_USO": "Ein Konto mit dieser E-Mail existiert bereits.",
+      "RECLAMACION_TRANSICION_INVALIDA": "Dieses Formular wurde bereits beantwortet oder hat den Status geändert. Lade die Tabelle neu.",
+      "RECLAMACION_NO_ENCONTRADA": "Dieses Formular ist nicht auf der aktuellen Seite der Tabelle."
+    },
+    "reclamacionesPage": {
+      "descripcion": "Formulare aus dem Beschwerdebuch. Jedes muss innerhalb von 15 Werktagen beantwortet werden.",
+      "estados": {
+        "recibido": "Eingegangen",
+        "en_atencion": "In Bearbeitung",
+        "respondido": "Beantwortet"
+      },
+      "tabla": {
+        "codigo": "Formular",
+        "tipo": "Art",
+        "consumidor": "Person",
+        "plazo": "Frist"
+      },
+      "dias_one": "{{count}} Werktag",
+      "dias_other": "{{count}} Werktage",
+      "venceHoy": "Heute fällig",
+      "vencida_one": "Seit {{count}} Werktag überfällig",
+      "vencida_other": "Seit {{count}} Werktagen überfällig",
+      "respondida": "Beantwortet",
+      "contacto": "Kontakt",
+      "detalleTitulo": "Formular {{codigo}}",
+      "detalleDescripcion": "Angaben zur Person, Formular und Antwort.",
+      "respuesta": "Antwort an die Person",
+      "respuestaAyuda": "Wird per E-Mail verschickt und schließt das Formular.",
+      "respuestaCorta": "Schreib eine Antwort mit mindestens 20 Zeichen",
+      "enviarRespuesta": "Antwort senden",
+      "marcarEnAtencion": "In Bearbeitung setzen",
+      "respondidaPor": "Beantwortet von {{nombre}} · {{fecha}}",
+      "actualizada": "Formular {{codigo}} aktualisiert",
+      "noEncontrada": "Dieses Formular ist nicht auf der aktuellen Seite der Tabelle."
     }
   },
   "noEncontrado": {
@@ -701,6 +736,92 @@
     },
     "privacidad": {
       "titulo": "Datenschutzerklärung"
+    }
+  },
+  "reclamaciones": {
+    "titulo": "Beschwerdebuch",
+    "descripcion": "Hier kannst du eine Reklamation oder Beschwerde einreichen (Libro de Reclamaciones). Du bekommst eine Kopie per E-Mail, und wir antworten innerhalb von höchstens 15 Werktagen.",
+    "proveedor": {
+      "razonSocial": "Firma",
+      "ruc": "Steuernummer (RUC)",
+      "domicilio": "Geschäftsadresse",
+      "fecha": "Datum",
+      "hoja": "Beschwerdeformular Nr.",
+      "hojaPendiente": "Wird beim Absenden vergeben"
+    },
+    "avisoLegal": "Die Einreichung einer Reklamation schließt andere Wege der Streitbeilegung nicht aus und ist keine Voraussetzung für eine Anzeige bei INDECOPI.",
+    "plazo": "Der Anbieter muss die Reklamation oder Beschwerde innerhalb von fünfzehn (15) Werktagen beantworten; diese Frist ist nicht verlängerbar.",
+    "secciones": {
+      "consumidor": "1. Angaben zur Person",
+      "bien": "2. Gekauftes Produkt oder gekaufte Leistung",
+      "detalle": "3. Einzelheiten und Anliegen"
+    },
+    "campos": {
+      "nombre": "Vollständiger Name",
+      "tipoDocumento": "Ausweisart",
+      "numeroDocumento": "Ausweisnummer",
+      "domicilio": "Adresse",
+      "telefono": "Telefon",
+      "correo": "E-Mail",
+      "menorDeEdad": "Ich bin minderjährig",
+      "apoderadoNombre": "Name eines Elternteils oder Vormunds",
+      "bienContratado": "Gekauft",
+      "descripcion": "Beschreibung des Produkts oder der Leistung",
+      "pedidoCodigo": "Bestellnummer (optional)",
+      "pedidoCodigoAyuda": "Sie steht in deiner Bestellbestätigung, zum Beispiel KD-000123.",
+      "montoReclamado": "Geforderter Betrag in Soles (optional)",
+      "tipo": "Art",
+      "detalle": "Einzelheiten",
+      "pedidoConsumidor": "Dein Anliegen",
+      "pedidoConsumidorAyuda": "Welche Lösung du von uns erwartest."
+    },
+    "documentos": {
+      "DNI": "DNI (peruanischer Ausweis)",
+      "CE": "Ausländerausweis (CE)",
+      "PASAPORTE": "Reisepass"
+    },
+    "bienes": {
+      "producto": "Produkt",
+      "servicio": "Leistung"
+    },
+    "tipos": {
+      "reclamo": {
+        "nombre": "Reklamation",
+        "definicion": "Unzufriedenheit mit den Produkten oder Leistungen."
+      },
+      "queja": {
+        "nombre": "Beschwerde",
+        "definicion": "Unzufriedenheit, die nicht die Produkte oder Leistungen betrifft, oder mit dem Kundenservice."
+      }
+    },
+    "enviar": "Beschwerdeformular absenden",
+    "errores": {
+      "tipo": "Wähle, ob es eine Reklamation oder eine Beschwerde ist",
+      "nombre": "Gib deinen vollständigen Namen ein",
+      "dni": "Eine DNI hat 8 Ziffern",
+      "documento": "Prüfe die Ausweisnummer (6 bis 12 Buchstaben oder Ziffern)",
+      "domicilio": "Gib deine Adresse ein",
+      "telefono": "Gib eine gültige Telefonnummer ein, zum Beispiel +49 30 1234 5678",
+      "correo": "Gib eine gültige E-Mail ein, zum Beispiel name@email.de",
+      "apoderado": "Gib den Namen eines Elternteils oder Vormunds ein",
+      "pedidoCodigo": "Bestellnummern haben das Format KD-000123",
+      "monto": "Gib einen Betrag über 0 mit höchstens 2 Nachkommastellen ein",
+      "descripcion": "Beschreibe das Produkt oder die Leistung",
+      "detalle": "Erzähl uns, was passiert ist (mindestens 10 Zeichen)",
+      "pedidoConsumidor": "Gib an, welche Lösung du erwartest",
+      "largo": "Der Text ist zu lang"
+    },
+    "constancia": {
+      "titulo": "Beschwerdeformular {{codigo}}",
+      "registrada_reclamo": "Wir haben deine Reklamation registriert",
+      "registrada_queja": "Wir haben deine Beschwerde registriert",
+      "copia": "Wir haben eine Kopie an {{correo}} geschickt. Wir antworten spätestens am {{fecha}}.",
+      "fechaLimite": "Antwortfrist",
+      "imprimir": "Bestätigung drucken",
+      "otra": "Weiteres Formular einreichen",
+      "volver": "Zurück zum Shop",
+      "pedidoCodigo": "Bestellnummer",
+      "montoReclamado": "Geforderter Betrag"
     }
   },
   "producto": {

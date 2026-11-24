@@ -17,7 +17,7 @@ const ESCRITORIO = '(min-width: 64rem)';
 // Contenido de cada documento por idioma: se descarga solo el del idioma activo.
 const CONTENIDOS = import.meta.glob(['./contenido/terminos.*.js', './contenido/privacidad.*.js']);
 
-const legalKeys ={ documento: (documento, idioma) => ['legal', documento, idioma] };
+const legalKeys = { documento: (documento, idioma) => ['legal', documento, idioma] };
 
 function useDocumento(documento) {
   const { i18n } = useTranslation();

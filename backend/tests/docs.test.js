@@ -46,6 +46,9 @@ const RUTAS = {
   '/admin/usuarios': ['get', 'post'],
   '/admin/usuarios/{id}': ['patch'],
   '/admin/buscar': ['get'],
+  '/reclamaciones': ['post'],
+  '/admin/reclamaciones': ['get'],
+  '/admin/reclamaciones/{id}': ['patch'],
 };
 
 describe('Documentación OpenAPI', () => {

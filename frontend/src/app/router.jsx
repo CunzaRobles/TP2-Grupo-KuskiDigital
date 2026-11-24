@@ -8,6 +8,7 @@ import {
   cargarCatalogo,
   cargarHome,
   cargarLegal,
+  cargarLibroReclamaciones,
   cargarLogin,
   cargarProducto,
   cargarRegistro,
@@ -87,6 +88,15 @@ const rutasAdmin = [
               lazy: pagina(() => import('@/features/admin/categorias-page'), 'CategoriasPage'),
             },
           ]),
+          conPermiso('reclamaciones', [
+            {
+              path: 'reclamaciones',
+              lazy: pagina(
+                () => import('@/features/admin/reclamaciones-page'),
+                'ReclamacionesPage',
+              ),
+            },
+          ]),
           conPermiso('usuarios', [
             {
               path: 'usuarios',
@@ -144,6 +154,10 @@ export const routes = [
       { path: 'registro', lazy: pagina(cargarRegistro, 'RegistroPage') },
       { path: 'terminos', lazy: pagina(cargarLegal, 'TerminosPage') },
       { path: 'privacidad', lazy: pagina(cargarLegal, 'PrivacidadPage') },
+      {
+        path: 'libro-reclamaciones',
+        lazy: pagina(cargarLibroReclamaciones, 'LibroReclamacionesPage'),
+      },
       {
         Component: RequireAuth,
         children: [

@@ -35,6 +35,10 @@ tags:
     description: Creación, historial y tracking de pedidos
   - name: Direcciones
     description: Libreta de direcciones del usuario (una principal)
+  - name: Libro de Reclamaciones
+    description: |
+      Libro de Reclamaciones virtual (Ley 29571, arts. 150-151, modificados por la Ley 32495;
+      D.S. 011-2011-PCM, modificado por el D.S. 101-2022-PCM). Respuesta en 15 días hábiles.
   - name: Admin
     description: |
       Panel de administración. Permisos por rol: **gerente** todo; **ventas** dashboard, ventas,
@@ -1509,6 +1513,124 @@ paths:
         '401': { $ref: '#/components/responses/NoAutenticado' }
         '403': { $ref: '#/components/responses/SinPermiso' }
 
+  /reclamaciones:
+    post:
+      tags: [Libro de Reclamaciones]
+      summary: Registrar una hoja de reclamación (reclamo o queja)
+      description: |
+        Público, sin sesión. Límite propio: **5 hojas por hora por IP**. Asigna el código
+        correlativo del año (`LR-2026-000001`), la fecha límite (15 días hábiles, sin sábados ni
+        domingos) y envía la constancia con la copia de la hoja al correo del consumidor (correo
+        simulado).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ReclamacionInput' }
+      responses:
+        '201':
+          description: Hoja registrada (la constancia)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Reclamacion' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '429':
+          description: '`RATE_LIMITED`: 5 hojas por hora por IP'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /admin/reclamaciones:
+    get:
+      tags: [Admin, Libro de Reclamaciones]
+      summary: Hojas del Libro de Reclamaciones
+      description: |
+        **Roles:** gerente, ventas. Primero las pendientes, por fecha límite; luego las respondidas.
+        `diasRestantes` son días hábiles hasta la fecha límite (negativo si venció).
+      security: [{ cookieSesion: [] }]
+      parameters:
+        - { name: page, in: query, schema: { type: integer, minimum: 1, default: 1 } }
+        - {
+            name: limit,
+            in: query,
+            schema: { type: integer, minimum: 1, maximum: 100, default: 20 },
+          }
+        - name: estado
+          in: query
+          description: Uno o varios, separados por comas
+          schema: { type: string, example: 'recibido,en_atencion' }
+        - name: desde
+          in: query
+          description: Fecha de registro desde (AAAA-MM-DD, hora de Lima)
+          schema: { type: string, format: date }
+        - name: hasta
+          in: query
+          description: Fecha de registro hasta, incluida (AAAA-MM-DD)
+          schema: { type: string, format: date }
+      responses:
+        '200':
+          description: Hojas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      items: { type: array, items: { $ref: '#/components/schemas/Reclamacion' } }
+                      pagination: { $ref: '#/components/schemas/Pagination' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+
+  /admin/reclamaciones/{id}:
+    patch:
+      tags: [Admin, Libro de Reclamaciones]
+      summary: Pasar a "en atención" o registrar la respuesta
+      description: |
+        **Roles:** gerente, ventas. Transiciones: recibido → en_atencion → respondido (también
+        recibido → respondido). `respondido` exige `respuesta`, guarda quién y cuándo respondió y
+        envía la respuesta al consumidor (correo simulado). Una hoja respondida no cambia (409).
+      security: [{ cookieSesion: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: integer, minimum: 1 } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [estado]
+              properties:
+                estado: { type: string, enum: [en_atencion, respondido] }
+                respuesta:
+                  type: string
+                  minLength: 20
+                  maxLength: 5000
+                  description: Obligatoria con `respondido`
+      responses:
+        '200':
+          description: Hoja actualizada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Reclamacion' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409':
+          description: '`RECLAMACION_TRANSICION_INVALIDA`: la hoja ya fue respondida o el cambio no es válido'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
 components:
   securitySchemes:
     cookieSesion:
@@ -1689,6 +1811,89 @@ components:
               data: { $ref: '#/components/schemas/UsuarioAdmin' }
 
   schemas:
+    ReclamacionInput:
+      type: object
+      required:
+        [
+          tipo,
+          nombre,
+          tipoDocumento,
+          numeroDocumento,
+          domicilio,
+          telefono,
+          correo,
+          bienContratado,
+          descripcion,
+          detalle,
+          pedidoConsumidor,
+        ]
+      properties:
+        tipo:
+          type: string
+          enum: [reclamo, queja]
+          description: 'Reclamo: disconformidad con el producto o servicio. Queja: malestar con la atención.'
+        nombre: { type: string, minLength: 3, maxLength: 150, example: María Quispe }
+        tipoDocumento: { type: string, enum: [DNI, CE, PASAPORTE] }
+        numeroDocumento:
+          type: string
+          description: DNI de 8 dígitos; CE de 8 a 12 y pasaporte de 6 a 12 caracteres alfanuméricos
+          example: '45678912'
+        domicilio: { type: string, minLength: 5, maxLength: 255, example: 'Av. El Sol 123, Cusco' }
+        telefono: { type: string, example: '+51 984 123 456' }
+        correo: { type: string, format: email, example: maria.quispe@example.com }
+        menorDeEdad: { type: boolean, default: false }
+        apoderadoNombre:
+          type: string
+          maxLength: 150
+          description: Nombre del padre, madre o apoderado. Obligatorio si `menorDeEdad`.
+        bienContratado: { type: string, enum: [producto, servicio] }
+        pedidoCodigo: { type: string, pattern: '^KD-\d{6}$', example: KD-000123 }
+        montoReclamado: { type: number, exclusiveMinimum: 0, description: En soles, 2 decimales }
+        descripcion: { type: string, minLength: 3, maxLength: 500 }
+        detalle: { type: string, minLength: 10, maxLength: 3000 }
+        pedidoConsumidor: { type: string, minLength: 5, maxLength: 2000 }
+
+    Reclamacion:
+      type: object
+      properties:
+        id: { type: integer }
+        codigo: { type: string, example: LR-2026-000001 }
+        tipo: { type: string, enum: [reclamo, queja] }
+        estado: { type: string, enum: [recibido, en_atencion, respondido] }
+        creadoEn: { type: string, format: date-time }
+        fechaLimite: { type: string, format: date, description: 15 días hábiles desde el registro }
+        diasRestantes:
+          type: integer
+          nullable: true
+          description: Días hábiles hasta la fecha límite (null si ya se respondió)
+        consumidor:
+          type: object
+          properties:
+            nombre: { type: string }
+            tipoDocumento: { type: string, enum: [DNI, CE, PASAPORTE] }
+            numeroDocumento: { type: string }
+            domicilio: { type: string }
+            telefono: { type: string }
+            correo: { type: string }
+            menorDeEdad: { type: boolean }
+            apoderadoNombre: { type: string, nullable: true }
+        bien:
+          type: object
+          properties:
+            tipo: { type: string, enum: [producto, servicio] }
+            pedidoCodigo: { type: string, nullable: true }
+            montoReclamado: { type: number, nullable: true }
+            descripcion: { type: string }
+        detalle: { type: string }
+        pedidoConsumidor: { type: string }
+        respuesta:
+          type: object
+          nullable: true
+          properties:
+            texto: { type: string }
+            fecha: { type: string, format: date-time }
+            respondidoPor: { type: string, nullable: true }
+
     Error:
       type: object
       required: [error]

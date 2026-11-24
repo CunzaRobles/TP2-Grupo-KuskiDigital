@@ -308,7 +308,8 @@
     },
     "pagoSeguro": "100% secure payment",
     "pagoSeguroDetalle": "SSL-encrypted connection",
-    "metodosPago": "Accepted payment methods"
+    "metodosPago": "Accepted payment methods",
+    "libroReclamaciones": "Complaints Book"
   },
   "admin": {
     "titulo": "Admin panel",
@@ -327,7 +328,8 @@
       "productos": "Products",
       "categorias": "Categories",
       "usuarios": "Users",
-      "estadisticas": "Statistics"
+      "estadisticas": "Statistics",
+      "reclamaciones": "Complaints"
     },
     "grupos": {
       "general": "Overview",
@@ -681,7 +683,40 @@
       "STORAGE_NO_CONFIGURADO": "Image storage is not configured on the server.",
       "PRODUCTO_NO_ENCONTRADO": "We could not find that product.",
       "PEDIDO_NO_ENCONTRADO": "We could not find that order.",
-      "CORREO_EN_USO": "An account with that email already exists."
+      "CORREO_EN_USO": "An account with that email already exists.",
+      "RECLAMACION_TRANSICION_INVALIDA": "This form was already answered or changed status. Reload the table.",
+      "RECLAMACION_NO_ENCONTRADA": "This form is not on the current page of the table."
+    },
+    "reclamacionesPage": {
+      "descripcion": "Complaints Book forms. Each one must be answered within 15 business days.",
+      "estados": {
+        "recibido": "Received",
+        "en_atencion": "In progress",
+        "respondido": "Answered"
+      },
+      "tabla": {
+        "codigo": "Form",
+        "tipo": "Type",
+        "consumidor": "Consumer",
+        "plazo": "Deadline"
+      },
+      "dias_one": "{{count}} business day",
+      "dias_other": "{{count}} business days",
+      "venceHoy": "Due today",
+      "vencida_one": "Overdue by {{count}} business day",
+      "vencida_other": "Overdue by {{count}} business days",
+      "respondida": "Answered",
+      "contacto": "Contact",
+      "detalleTitulo": "Form {{codigo}}",
+      "detalleDescripcion": "Consumer details, the form and the reply.",
+      "respuesta": "Reply to the consumer",
+      "respuestaAyuda": "It is emailed to the consumer and closes the form.",
+      "respuestaCorta": "Write a reply of at least 20 characters",
+      "enviarRespuesta": "Send reply",
+      "marcarEnAtencion": "Mark as in progress",
+      "respondidaPor": "Answered by {{nombre}} · {{fecha}}",
+      "actualizada": "Form {{codigo}} updated",
+      "noEncontrada": "This form is not on the current page of the table."
     }
   },
   "noEncontrado": {
@@ -701,6 +736,92 @@
     },
     "privacidad": {
       "titulo": "Privacy Policy"
+    }
+  },
+  "reclamaciones": {
+    "titulo": "Complaints Book",
+    "descripcion": "File your claim or complaint here (Libro de Reclamaciones). We will email you a copy and reply within 15 business days at the latest.",
+    "proveedor": {
+      "razonSocial": "Company name",
+      "ruc": "Tax ID (RUC)",
+      "domicilio": "Registered address",
+      "fecha": "Date",
+      "hoja": "Complaint form no.",
+      "hojaPendiente": "Assigned when you submit"
+    },
+    "avisoLegal": "Filing a claim does not prevent you from using other dispute resolution channels, nor is it a prerequisite for filing a complaint with INDECOPI.",
+    "plazo": "The provider must reply to the claim or complaint within fifteen (15) business days, which cannot be extended.",
+    "secciones": {
+      "consumidor": "1. Consumer identification",
+      "bien": "2. Product or service purchased",
+      "detalle": "3. Details of the claim and consumer request"
+    },
+    "campos": {
+      "nombre": "Full name",
+      "tipoDocumento": "ID type",
+      "numeroDocumento": "ID number",
+      "domicilio": "Address",
+      "telefono": "Phone",
+      "correo": "Email",
+      "menorDeEdad": "I am a minor",
+      "apoderadoNombre": "Name of parent or legal guardian",
+      "bienContratado": "Purchased",
+      "descripcion": "Description of the product or service",
+      "pedidoCodigo": "Order number (optional)",
+      "pedidoCodigoAyuda": "It is in your confirmation email, for example KD-000123.",
+      "montoReclamado": "Amount claimed in soles (optional)",
+      "tipo": "Type",
+      "detalle": "Details",
+      "pedidoConsumidor": "Consumer request",
+      "pedidoConsumidorAyuda": "What solution you expect from us."
+    },
+    "documentos": {
+      "DNI": "DNI (Peruvian ID)",
+      "CE": "Foreigner ID card (CE)",
+      "PASAPORTE": "Passport"
+    },
+    "bienes": {
+      "producto": "Product",
+      "servicio": "Service"
+    },
+    "tipos": {
+      "reclamo": {
+        "nombre": "Claim",
+        "definicion": "Dissatisfaction related to the products or services."
+      },
+      "queja": {
+        "nombre": "Complaint",
+        "definicion": "Dissatisfaction not related to the products or services, or with the customer service received."
+      }
+    },
+    "enviar": "Submit complaint form",
+    "errores": {
+      "tipo": "Choose whether it is a claim or a complaint",
+      "nombre": "Enter your full name",
+      "dni": "A DNI has 8 digits",
+      "documento": "Check the ID number (6 to 12 letters or digits)",
+      "domicilio": "Enter your address",
+      "telefono": "Enter a valid phone number, for example +49 30 1234 5678",
+      "correo": "Enter a valid email, for example name@email.com",
+      "apoderado": "Enter the name of your parent or legal guardian",
+      "pedidoCodigo": "Order numbers look like KD-000123",
+      "monto": "Enter an amount greater than 0, with up to 2 decimals",
+      "descripcion": "Describe the product or service",
+      "detalle": "Tell us what happened (at least 10 characters)",
+      "pedidoConsumidor": "Tell us what solution you expect",
+      "largo": "The text is too long"
+    },
+    "constancia": {
+      "titulo": "Complaint form {{codigo}}",
+      "registrada_reclamo": "We registered your claim",
+      "registrada_queja": "We registered your complaint",
+      "copia": "We sent a copy to {{correo}}. We will reply by {{fecha}} at the latest.",
+      "fechaLimite": "Reply deadline",
+      "imprimir": "Print receipt",
+      "otra": "File another form",
+      "volver": "Back to the store",
+      "pedidoCodigo": "Order number",
+      "montoReclamado": "Amount claimed"
     }
   },
   "producto": {

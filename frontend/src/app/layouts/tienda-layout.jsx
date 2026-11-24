@@ -25,7 +25,7 @@ export function TiendaLayout() {
           {t('nav.saltarContenido')}
         </a>
         <SiteHeader />
-        <main id="contenido" className="flex-1 pt-header">
+        <main id="contenido" className="flex-1 pt-header print:pt-0">
           <TransicionRuta />
         </main>
         <SiteFooter />

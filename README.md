@@ -84,6 +84,7 @@ cp backend/.env.example backend/.env
 | `SUPABASE_URL`                                  | URL del proyecto de Supabase (_Project Settings → API_). Solo para Storage (fotos de productos).                                                            |
 | `SUPABASE_SERVICE_ROLE_KEY`                     | Clave secreta (`service_role` o `sb_secret_…`). Solo vive en el backend, nunca en el frontend.                                                              |
 | `SUPABASE_STORAGE_BUCKET`                       | Bucket público de las fotos de productos (por defecto `productos`).                                                                                         |
+| `EMPRESA_RUC` / `EMPRESA_DOMICILIO`             | RUC y domicilio del proveedor en la constancia del Libro de Reclamaciones (opcionales; deben coincidir con `frontend/src/features/legal/empresa.js`).       |
 
 `backend/.env` nunca se sube al repositorio.
 
@@ -96,6 +97,7 @@ PostgreSQL en Supabase. El esquema se gestiona **solo con migraciones** de Seque
 - `backend/migrations/20260929000000-baseline-esquema-kuski.cjs` ejecuta `backend/database/01_esquema_kuski_db.sql` completo (19 tablas, ENUMs, índices, triggers, vistas y RLS). Su `down` elimina todos esos objetos.
 - Cada cambio posterior del esquema va en una **migración nueva**; no se edita la baseline.
 - `20260930000000-rls-tablas-sequelize.cjs` activa RLS en la tabla de control `sequelize_meta` (y en la de seeders, si existiera), así el Security Advisor de Supabase queda sin errores aunque se recree la base.
+- `20261124000000-reclamaciones.cjs` crea la tabla `reclamaciones` del Libro de Reclamaciones (ENUMs propios, restricciones de coherencia, trigger de `actualizado_en` y RLS activado sin políticas).
 - Los seeders replican `02_datos_base_kuski_db.sql` y amplían el catálogo: 4 categorías, 8 comunidades de Cusco, 4 certificaciones, tipos de cambio y tarifas de envío simulados, **44 productos** (2 imágenes placeholder de Unsplash cada uno, certificaciones y movimiento de inventario inicial) y 5 usuarios de prueba. Los datos del catálogo están en `backend/database/seed-data/catalogo.cjs`.
 
 > Solo el responsable de backend ejecuta migraciones sobre el proyecto compartido de Supabase. `db:reset` **borra y recrea** todas las tablas de Kuski.
@@ -104,7 +106,7 @@ PostgreSQL en Supabase. El esquema se gestiona **solo con migraciones** de Seque
 npm run db:migrate        # aplica las migraciones pendientes
 npm run db:seed           # carga los datos semilla (sobre una base recién migrada)
 npm run db:reset          # deshace todas las migraciones, migra y siembra de nuevo
-npm run db:test           # comprueba la conexión: tablas (19/19) y número de productos
+npm run db:test           # comprueba la conexión: tablas (20/20) y número de productos
 ```
 
 ### Usuarios de prueba
@@ -140,6 +142,7 @@ Las respuestas tienen la forma `{ data }` o `{ error: { code, message, details? 
 | GET            | `/comunidades`                  | Público | Comunidades con coordenadas (mapa).                                                                                                                                                   |
 | GET            | `/certificaciones`              | Público | Certificaciones (filtro del catálogo).                                                                                                                                                |
 | GET            | `/estadisticas/trazabilidad`    | Público | Comunidades, familias, productos y países.                                                                                                                                            |
+| POST           | `/reclamaciones`                | Público | Hoja del Libro de Reclamaciones: código correlativo, fecha límite a 15 días hábiles y constancia por correo. 5 por hora por IP.                                                       |
 | GET            | `/carrito`                      | Sesión  | Carrito del usuario con totales.                                                                                                                                                      |
 | POST           | `/carrito/items`                | Sesión  | Agrega un producto (suma si ya estaba; valida stock).                                                                                                                                 |
 | PATCH / DELETE | `/carrito/items/:id`            | Sesión  | Cambia la cantidad o quita un ítem.                                                                                                                                                   |
@@ -183,6 +186,8 @@ Cada ruta exige sesión, **vuelve a leer el rol y el estado de la cuenta en la b
 | GET / POST / PUT / DELETE | `/admin/categorias[/:id]`                  | CRUD de categorías; no se elimina una con productos (409).                                                                                                         |
 | GET / POST / PATCH        | `/admin/usuarios[/:id]`                    | Usuarios con filtros, alta de cuentas del equipo y cambio de rol o estado (nadie puede cambiar su propio rol ni desactivarse).                                     |
 | GET                       | `/admin/buscar?q=`                         | Búsqueda rápida (Ctrl+K): productos, pedidos y usuarios, solo los grupos que el rol puede ver.                                                                     |
+| GET                       | `/admin/reclamaciones`                     | Hojas del Libro de Reclamaciones con filtros por estado y fecha (gerente, ventas).                                                                                 |
+| PATCH                     | `/admin/reclamaciones/:id`                 | Pasar a «en atención» o registrar la respuesta, que se envía al consumidor (gerente, ventas).                                                                      |
 
 **Tracking simulado:** `pagado → preparando → en_transito → entregado`; se puede cancelar mientras el pedido no haya salido del almacén. `entregado` guarda la fecha de entrega y `cancelado` devuelve el stock (entrada en el kardex) y marca el pago como `reembolsado`. Cada cambio envía un correo simulado al cliente.
 
@@ -268,13 +273,22 @@ Sigue la estructura del wireframe: header → hero → categorías → destacado
 - **Login** (`/login`) y **Registro** (`/registro`): validación con Zod en el navegador (mismas reglas que el backend, mensajes traducidos, foco en el primer error), requisitos de la contraseña a la vista y errores de la API en su campo (p. ej. `CORREO_EN_USO`) o en un aviso (`CREDENCIALES_INVALIDAS`, límite de intentos, sin conexión). `?redirect=` devuelve a la página de origen (solo rutas internas). Al iniciar sesión, el carrito de invitado se fusiona con el de la cuenta.
 - El registro exige marcar «Al registrarte aceptas los Términos y Condiciones y la Política de Privacidad» (enlaces en otra pestaña para no perder lo escrito). Lo validan Zod en el navegador y `registroBody` en la API (`aceptaTerminos: true`; sin él, 400 `VALIDATION_ERROR`). La aceptación no se guarda en la base de datos.
 - `RequireAuth` protege `/checkout`, `/pedido/:codigo` y `/cuenta`: sin sesión lleva al login y vuelve después. La API aplica la misma regla con `requireAuth`.
+- **Mi cuenta** (`/cuenta`): mis pedidos (paginados, con estado y tracking compacto) y mis direcciones (`/cuenta/direcciones`: agregar, marcar como principal y eliminar con confirmación). Cerrar sesión borra de la caché los datos privados.
 
 ### Páginas legales (`/terminos`, `/privacidad`, `src/features/legal`)
 
 - Términos y Condiciones (Ley 29571) y Política de Privacidad (Ley 29733, D.S. 016-2024-JUS y RGPD), enlazadas desde el pie y el registro. Una sola ruta diferida (`cargarLegal`) para las dos.
 - Layout de documento: fecha de última actualización, índice lateral fijo en escritorio que marca la sección que se lee (plegable en móvil), columna de lectura de 68 caracteres y tablas con scroll horizontal propio en móvil.
 - El texto vive en `contenido/<documento>.<idioma>.js` (es, en, de) y se descarga solo el del idioma activo. Los datos de la empresa (correos, RUC, domicilio), las fechas de actualización y los plazos de envío están en `empresa.js`. **RUC y domicilio están pendientes** (`null`: no se muestran).
-- **Mi cuenta** (`/cuenta`): mis pedidos (paginados, con estado y tracking compacto) y mis direcciones (`/cuenta/direcciones`: agregar, marcar como principal y eliminar con confirmación). Cerrar sesión borra de la caché los datos privados.
+
+### Libro de Reclamaciones (`/libro-reclamaciones`, `src/features/reclamaciones`)
+
+Exigido por la Ley 29571 (arts. 150-151, modificados por la Ley 32495, que incluye a las plataformas de comercio electrónico) y el D.S. 011-2011-PCM (modificado por el D.S. 101-2022-PCM).
+
+- **Enlace permanente** con el ícono del libro en el pie de todas las páginas de la tienda.
+- Formulario en las tres secciones de la hoja oficial (consumidor, bien contratado, detalle y pedido), con el aviso legal visible y los datos del proveedor (razón social, y RUC y domicilio cuando estén configurados en `features/legal/empresa.js`). Validación con Zod en el navegador y en la API (DNI de 8 dígitos; CE y pasaporte alfanuméricos; apoderado obligatorio si es menor de edad).
+- Al enviar, `POST /reclamaciones` asigna el código correlativo del año (`LR-2026-000001`, bajo un bloqueo `pg_advisory_xact_lock` para que dos hojas simultáneas no lo compartan), la fecha límite a **15 días hábiles** (sin sábados ni domingos; los feriados no se descuentan, así que el plazo nunca excede el legal) y envía la constancia con la copia de la hoja (correo simulado). La página muestra la constancia con botón para imprimirla (cabecera y pie se ocultan al imprimir). Límite propio: 5 hojas por hora por IP.
+- **Panel → Reclamaciones** (gerente y ventas; también en Ctrl+K): tabla con código, fecha, tipo, estado y días hábiles restantes (en rojo con ícono si quedan 3 o menos o venció), filtros por estado y fecha en la URL, y un panel de detalle para pasar a «en atención» o enviar la respuesta (se manda por correo al consumidor y registra quién y cuándo respondió).
 
 ### Checkout (`/checkout`, `src/features/checkout`)
 

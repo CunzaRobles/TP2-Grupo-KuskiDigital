@@ -1,4 +1,4 @@
-import { Lock, MapPin, ShieldCheck } from 'lucide-react';
+import { BookOpenText, Lock, MapPin, ShieldCheck } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { MarcasRegla } from '@/components/ui/marcas-regla';
 import { Link } from '@/lib/motion/enlaces';
@@ -78,7 +78,7 @@ export function SiteFooter() {
 
   return (
     // Única banda Puna de la tienda: texto Niebla, acentos Ichu (6.56:1). Cochinilla no va aquí.
-    <footer className="bg-puna text-niebla [--ring:var(--color-niebla)]">
+    <footer className="bg-puna text-niebla [--ring:var(--color-niebla)] print:hidden">
       <MarcasRegla className="text-ichu" />
 
       <div className="container-page grid gap-12 py-16 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-16">
@@ -148,9 +148,20 @@ export function SiteFooter() {
 
       <div className="border-t border-niebla/15">
         <div className="container-page flex flex-col gap-6 py-8 md:flex-row md:items-center md:justify-between">
-          <p className="text-sm text-niebla/75">
-            {t('footer.derechos', { year: new Date().getFullYear() })}
-          </p>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
+            {/* Libro de Reclamaciones: enlace permanente en todas las páginas de la tienda
+                (Ley 29571, art. 150, modificado por la Ley 32495) */}
+            <Link
+              to="/libro-reclamaciones"
+              className="inline-flex w-fit items-center gap-2.5 rounded-button border border-niebla/40 px-3.5 py-2 text-sm font-semibold text-niebla transition-colors duration-200 ease-andino hover:border-niebla hover:bg-niebla hover:text-puna"
+            >
+              <BookOpenText className="size-5" aria-hidden="true" />
+              {t('footer.libroReclamaciones')}
+            </Link>
+            <p className="text-sm text-niebla/75">
+              {t('footer.derechos', { year: new Date().getFullYear() })}
+            </p>
+          </div>
 
           {/* Sello de pago seguro (la pasarela es simulada; ver backend/src/adapters/payments) */}
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">

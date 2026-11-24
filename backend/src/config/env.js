@@ -41,6 +41,9 @@ export const env = {
   SUPABASE_URL: process.env.SUPABASE_URL,
   SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
   SUPABASE_STORAGE_BUCKET: process.env.SUPABASE_STORAGE_BUCKET || 'productos',
+  // Datos del proveedor en el Libro de Reclamaciones (opcionales hasta tenerlos).
+  EMPRESA_RUC: process.env.EMPRESA_RUC?.trim() || null,
+  EMPRESA_DOMICILIO: process.env.EMPRESA_DOMICILIO?.trim() || null,
 };
 
 export const COOKIE_SESION = 'kuski_token';

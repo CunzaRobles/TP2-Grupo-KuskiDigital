@@ -34,6 +34,8 @@ const ENDPOINTS = [
   ['get', '/admin/usuarios', 'usuarios'],
   ['post', '/admin/usuarios', 'usuarios'],
   ['patch', '/admin/usuarios/5', 'usuarios'],
+  ['get', '/admin/reclamaciones', 'reclamaciones'],
+  ['patch', '/admin/reclamaciones/1', 'reclamaciones'],
   ['get', '/admin/buscar?q=cafe', null],
 ];
 

@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { PERMISOS } from '../config/permisos.js';
 import * as admin from '../controllers/admin.controller.js';
+import * as reclamacion from '../controllers/reclamacion.controller.js';
 import { requireAuth, requireRol, requireSesionVigente } from '../middleware/auth.js';
 import { subirImagen } from '../middleware/upload.js';
 import { validate } from '../middleware/validate.js';
@@ -24,6 +25,10 @@ import {
   usuariosAdminQuery,
 } from '../schemas/admin.schema.js';
 import { codigoPedidoParams } from '../schemas/checkout.schema.js';
+import {
+  reclamacionesAdminQuery,
+  responderReclamacionBody,
+} from '../schemas/reclamacion.schema.js';
 import { idParams } from '../schemas/comun.schema.js';
 
 // Panel admin (/api/v1/admin). Toda ruta exige sesión, relee el rol en la base y comprueba
@@ -161,6 +166,20 @@ router.patch(
   permiso('usuarios'),
   validate({ params: idParams, body: actualizarUsuarioBody }),
   admin.actualizarUsuario,
+);
+
+// Libro de Reclamaciones
+router.get(
+  '/reclamaciones',
+  permiso('reclamaciones'),
+  validate({ query: reclamacionesAdminQuery }),
+  reclamacion.listarAdmin,
+);
+router.patch(
+  '/reclamaciones/:id',
+  permiso('reclamaciones'),
+  validate({ params: idParams, body: responderReclamacionBody }),
+  reclamacion.responder,
 );
 
 export default router;
