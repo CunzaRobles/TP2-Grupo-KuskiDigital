@@ -38,6 +38,7 @@ describe('POST /api/v1/auth/registro', () => {
     correo: '  Maria.Quispe@Example.com ',
     password: PASSWORD,
     paisCodigo: 'pe',
+    aceptaTerminos: true,
   };
 
   it('crea un cliente, guarda la contraseña con bcrypt e inicia sesión con cookie httpOnly', async () => {
@@ -56,6 +57,7 @@ describe('POST /api/v1/auth/registro', () => {
     expect(datos.rol).toBe('cliente');
     expect(datos.passwordHash).toMatch(/^\$2[aby]\$10\$/);
     expect(datos).not.toHaveProperty('password');
+    expect(datos).not.toHaveProperty('aceptaTerminos'); // se valida, no se guarda
 
     const cookie = cookieSesion(res);
     expect(cookie).toMatch(/HttpOnly/);
@@ -78,6 +80,24 @@ describe('POST /api/v1/auth/registro', () => {
 
     expect(res.status).toBe(409);
     expect(res.body.error.code).toBe('CORREO_EN_USO');
+    expect(usuarioRepository.create).not.toHaveBeenCalled();
+  });
+
+  it('rechaza el registro si no se aceptan los Términos y la Política de Privacidad', async () => {
+    // undefined no viaja en el JSON: equivale a no enviar el campo
+    for (const aceptaTerminos of [undefined, false]) {
+      const cuerpo = { ...nuevo, aceptaTerminos };
+      const res = await request(app).post('/api/v1/auth/registro').send(cuerpo);
+
+      expect(res.status).toBe(400);
+      expect(res.body.error.code).toBe('VALIDATION_ERROR');
+      expect(res.body.error.details).toEqual([
+        {
+          path: 'aceptaTerminos',
+          message: 'Debes aceptar los Términos y Condiciones y la Política de Privacidad',
+        },
+      ]);
+    }
     expect(usuarioRepository.create).not.toHaveBeenCalled();
   });
 

@@ -4,6 +4,7 @@ import { ScrollRestoration } from 'react-router';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { SiteHeader } from '@/components/layout/site-header';
 import { CarritoDrawer } from '@/features/carrito/carrito-drawer';
+import { Chatbot } from '@/features/chatbot/chatbot';
 import { LenisProvider } from '@/lib/motion/lenis-provider';
 import { TransicionRuta } from '@/lib/motion/transicion-ruta';
 import { precargarPaginasFrecuentes } from '../paginas-tienda';
@@ -25,11 +26,13 @@ export function TiendaLayout() {
           {t('nav.saltarContenido')}
         </a>
         <SiteHeader />
-        <main id="contenido" className="flex-1 pt-header">
+        <main id="contenido" className="flex-1 pt-header print:pt-0">
           <TransicionRuta />
         </main>
         <SiteFooter />
         <CarritoDrawer />
+        {/* Asistente virtual: solo en la tienda (el admin usa su propio layout) */}
+        <Chatbot />
         <ScrollRestoration />
       </div>
     </LenisProvider>

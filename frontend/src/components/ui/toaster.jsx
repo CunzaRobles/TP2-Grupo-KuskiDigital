@@ -7,6 +7,9 @@ export function Toaster(props) {
     <Sonner
       theme="light"
       position="bottom-right"
+      // Por encima del botón del asistente virtual (abajo a la derecha en la tienda)
+      offset={{ bottom: '6rem', right: '1.5rem' }}
+      mobileOffset={{ bottom: '5.5rem' }}
       closeButton
       icons={{
         success: <CircleCheck className="size-5 text-success" />,

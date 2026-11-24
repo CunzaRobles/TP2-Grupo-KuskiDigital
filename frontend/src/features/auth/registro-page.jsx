@@ -1,8 +1,10 @@
 import { Check, Circle } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
+import { useId } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { Navigate, useSearchParams } from 'react-router';
 import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Field } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { PaisSelect } from '@/components/ui/pais-select';
@@ -39,6 +41,60 @@ function Requisitos({ password }) {
   );
 }
 
+const CLASE_ENLACE_LEGAL =
+  'font-semibold text-link underline decoration-1 underline-offset-4 hover:decoration-2';
+
+// Casilla obligatoria de aceptación. Los documentos se abren en otra pestaña para no perder lo
+// escrito en el formulario.
+function AceptarTerminos({ marcada, onCambiar, error }) {
+  const id = useId();
+  const errorId = `${id}-error`;
+
+  return (
+    <div className="grid gap-1.5">
+      <div className="flex items-start gap-3">
+        <Checkbox
+          id={id}
+          name="aceptaTerminos"
+          checked={marcada}
+          onCheckedChange={(valor) => onCambiar(valor === true)}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? errorId : undefined}
+          className="mt-0.5"
+        />
+        <label htmlFor={id} className="text-sm leading-snug">
+          <Trans
+            i18nKey="auth.registro.aceptar"
+            components={{
+              terminos: (
+                <a
+                  href="/terminos"
+                  target="_blank"
+                  rel="noreferrer"
+                  className={CLASE_ENLACE_LEGAL}
+                />
+              ),
+              privacidad: (
+                <a
+                  href="/privacidad"
+                  target="_blank"
+                  rel="noreferrer"
+                  className={CLASE_ENLACE_LEGAL}
+                />
+              ),
+            }}
+          />
+        </label>
+      </div>
+      {error && (
+        <p id={errorId} className="pl-8 text-sm font-medium text-destructive">
+          {error}
+        </p>
+      )}
+    </div>
+  );
+}
+
 export function RegistroPage() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
@@ -54,6 +110,7 @@ export function RegistroPage() {
     password: '',
     confirmacion: '',
     paisCodigo: 'PE',
+    aceptaTerminos: false,
   });
 
   if (usuario && !registro.isSuccess) return <Navigate to={destino} replace />;
@@ -66,7 +123,7 @@ export function RegistroPage() {
   const error = (nombre) => (errores[nombre] ? t(errores[nombre]) : erroresApi[nombre]);
 
   // La confirmación solo se valida aquí: la API recibe los datos de la cuenta.
-  const alEnviar = enviar(({ nombre, apellido, correo, password, paisCodigo }) =>
+  const alEnviar = enviar(({ nombre, apellido, correo, password, paisCodigo, aceptaTerminos }) =>
     registro.mutate(
       {
         nombre,
@@ -74,6 +131,7 @@ export function RegistroPage() {
         correo,
         password,
         paisCodigo,
+        aceptaTerminos,
         idiomaPreferido: i18n.resolvedLanguage ?? 'es',
         monedaPreferida: moneda,
       },
@@ -123,6 +181,11 @@ export function RegistroPage() {
         <Field label={t('auth.campos.confirmacion')} error={error('confirmacion')}>
           <PasswordInput autoComplete="new-password" {...campo('confirmacion')} />
         </Field>
+        <AceptarTerminos
+          marcada={valores.aceptaTerminos}
+          onCambiar={(valor) => cambiar('aceptaTerminos', valor)}
+          error={error('aceptaTerminos')}
+        />
         <Button type="submit" size="lg" loading={registro.isPending}>
           {t('auth.registro.enviar')}
         </Button>

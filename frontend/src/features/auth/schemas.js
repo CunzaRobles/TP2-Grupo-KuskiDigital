@@ -27,6 +27,9 @@ export const registroSchema = z
       .regex(/\d/, 'validacion.passwordNumero'),
     confirmacion: z.string(),
     paisCodigo: z.string().regex(/^[A-Z]{2}$/, 'validacion.pais'),
+    // Obligatorio, como en la API: sin aceptar los Términos y la Privacidad no hay cuenta.
+    // boolean + refine (y no literal) para que el error no impida validar la confirmación.
+    aceptaTerminos: z.boolean().refine((acepta) => acepta, 'validacion.aceptarTerminos'),
   })
   .refine((v) => v.password === v.confirmacion, {
     message: 'validacion.passwordNoCoincide',

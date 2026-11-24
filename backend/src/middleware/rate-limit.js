@@ -25,3 +25,27 @@ const authLimiterBase = limitador({
 });
 export const authLimiter = (req, res, next) =>
   env.NODE_ENV === 'test' ? next() : authLimiterBase(req, res, next);
+
+// Libro de Reclamaciones: 5 hojas por hora por IP, contra el spam del formulario público.
+// La fábrica permite probar el límite real; en las pruebas de la API se desactiva.
+export const crearReclamacionLimiter = () =>
+  limitador({
+    windowMs: 60 * 60 * 1000,
+    limit: 5,
+    message:
+      'Registraste varias hojas en poco tiempo. Espera una hora o escríbenos a contacto@kuski.pe',
+  });
+const reclamacionLimiterBase = crearReclamacionLimiter();
+export const reclamacionLimiter = (req, res, next) =>
+  env.NODE_ENV === 'test' ? next() : reclamacionLimiterBase(req, res, next);
+
+// Asistente virtual: 30 mensajes por minuto por IP (desactivado en las pruebas de la API).
+export const crearChatbotLimiter = () =>
+  limitador({
+    windowMs: 60 * 1000,
+    limit: 30,
+    message: 'Enviaste muchos mensajes seguidos. Espera un minuto e inténtalo de nuevo.',
+  });
+const chatbotLimiterBase = crearChatbotLimiter();
+export const chatbotLimiter = (req, res, next) =>
+  env.NODE_ENV === 'test' ? next() : chatbotLimiterBase(req, res, next);

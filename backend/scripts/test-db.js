@@ -23,6 +23,7 @@ const TABLAS_KUSKI = [
   'pagos',
   'envios',
   'movimientos_inventario',
+  'reclamaciones', // migración 20261124000000
 ];
 
 try {

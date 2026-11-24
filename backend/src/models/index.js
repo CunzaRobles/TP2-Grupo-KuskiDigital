@@ -1,4 +1,5 @@
-// Registro de los 19 modelos y sus asociaciones (espejo de database/01_esquema_kuski_db.sql).
+// Registro de los modelos y sus asociaciones: los 19 de database/01_esquema_kuski_db.sql y los
+// de migraciones posteriores (reclamaciones).
 // El esquema lo gestionan las migraciones: aquí nunca se llama a sequelize.sync().
 import { sequelize } from '../config/database.js';
 import defineCarrito from './carrito.model.js';
@@ -13,6 +14,7 @@ import definePago from './pago.model.js';
 import definePedido from './pedido.model.js';
 import definePedidoEstado from './pedido-estado.model.js';
 import definePedidoItem from './pedido-item.model.js';
+import defineReclamacion from './reclamacion.model.js';
 import defineProducto from './producto.model.js';
 import defineProductoCertificacion from './producto-certificacion.model.js';
 import defineProductoImagen from './producto-imagen.model.js';
@@ -40,6 +42,7 @@ const PedidoEstado = definePedidoEstado(sequelize);
 const Pago = definePago(sequelize);
 const Envio = defineEnvio(sequelize);
 const MovimientoInventario = defineMovimientoInventario(sequelize);
+const Reclamacion = defineReclamacion(sequelize);
 
 // --- Usuarios ---------------------------------------------------------
 Usuario.hasMany(Direccion, { as: 'direcciones', foreignKey: 'usuarioId', onDelete: 'CASCADE' });
@@ -146,6 +149,14 @@ Pedido.hasMany(MovimientoInventario, {
 });
 MovimientoInventario.belongsTo(Pedido, { as: 'pedido', foreignKey: 'pedidoId' });
 
+// --- Libro de Reclamaciones -------------------------------------------
+Usuario.hasMany(Reclamacion, {
+  as: 'reclamacionesRespondidas',
+  foreignKey: 'respondidoPor',
+  onDelete: 'SET NULL',
+});
+Reclamacion.belongsTo(Usuario, { as: 'respondidoPorUsuario', foreignKey: 'respondidoPor' });
+
 export {
   sequelize,
   Usuario,
@@ -167,4 +178,5 @@ export {
   Pago,
   Envio,
   MovimientoInventario,
+  Reclamacion,
 };

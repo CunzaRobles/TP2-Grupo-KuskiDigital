@@ -1,5 +1,6 @@
 import {
   BarChart3,
+  BookOpenText,
   Boxes,
   LayoutDashboard,
   Package,
@@ -33,6 +34,13 @@ export const SECCIONES = [
     ruta: '/admin/pedidos',
     permiso: 'pedidos',
     Icono: Truck,
+    grupo: 'operacion',
+  },
+  {
+    clave: 'reclamaciones',
+    ruta: '/admin/reclamaciones',
+    permiso: 'reclamaciones',
+    Icono: BookOpenText,
     grupo: 'operacion',
   },
   {

@@ -308,7 +308,8 @@
     },
     "pagoSeguro": "Pago 100 % seguro",
     "pagoSeguroDetalle": "Conexión cifrada SSL",
-    "metodosPago": "Métodos de pago aceptados"
+    "metodosPago": "Métodos de pago aceptados",
+    "libroReclamaciones": "Libro de Reclamaciones"
   },
   "admin": {
     "titulo": "Panel de administración",
@@ -327,7 +328,8 @@
       "productos": "Productos",
       "categorias": "Categorías",
       "usuarios": "Usuarios",
-      "estadisticas": "Estadísticas"
+      "estadisticas": "Estadísticas",
+      "reclamaciones": "Reclamaciones"
     },
     "grupos": {
       "general": "General",
@@ -681,7 +683,40 @@
       "STORAGE_NO_CONFIGURADO": "El almacenamiento de imágenes no está configurado en el servidor.",
       "PRODUCTO_NO_ENCONTRADO": "No encontramos ese producto.",
       "PEDIDO_NO_ENCONTRADO": "No encontramos ese pedido.",
-      "CORREO_EN_USO": "Ya existe una cuenta con ese correo."
+      "CORREO_EN_USO": "Ya existe una cuenta con ese correo.",
+      "RECLAMACION_TRANSICION_INVALIDA": "Esta hoja ya fue respondida o cambió de estado. Recarga la tabla.",
+      "RECLAMACION_NO_ENCONTRADA": "Esta hoja no está en la página actual de la tabla."
+    },
+    "reclamacionesPage": {
+      "descripcion": "Hojas del Libro de Reclamaciones. Cada una debe responderse dentro de los 15 días hábiles.",
+      "estados": {
+        "recibido": "Recibido",
+        "en_atencion": "En atención",
+        "respondido": "Respondido"
+      },
+      "tabla": {
+        "codigo": "Hoja",
+        "tipo": "Tipo",
+        "consumidor": "Consumidor",
+        "plazo": "Plazo"
+      },
+      "dias_one": "{{count}} día hábil",
+      "dias_other": "{{count}} días hábiles",
+      "venceHoy": "Vence hoy",
+      "vencida_one": "Vencida hace {{count}} día hábil",
+      "vencida_other": "Vencida hace {{count}} días hábiles",
+      "respondida": "Respondida",
+      "contacto": "Contacto",
+      "detalleTitulo": "Hoja {{codigo}}",
+      "detalleDescripcion": "Datos del consumidor, detalle de la hoja y respuesta.",
+      "respuesta": "Respuesta al consumidor",
+      "respuestaAyuda": "Se envía por correo al consumidor y cierra la hoja.",
+      "respuestaCorta": "Escribe una respuesta de al menos 20 caracteres",
+      "enviarRespuesta": "Enviar respuesta",
+      "marcarEnAtencion": "Marcar en atención",
+      "respondidaPor": "Respondida por {{nombre}} · {{fecha}}",
+      "actualizada": "Hoja {{codigo}} actualizada",
+      "noEncontrada": "Esta hoja no está en la página actual de la tabla."
     }
   },
   "noEncontrado": {
@@ -691,6 +726,178 @@
     "eyebrow": "Error 404",
     "catalogo": "Explorar el catálogo",
     "sugerencias": "O visita una de nuestras categorías"
+  },
+  "nosotros": {
+    "meta": "Acerca de nosotros",
+    "hero": {
+      "titulo": "Kuski Agroindustria S.A.",
+      "descripcion": "30 años transformando la biodiversidad andina en Cusco.",
+      "detalle": "Café, superalimentos, textiles de alpaca y artesanía, cada uno con la comunidad que lo produce identificada, del valle a las alturas de Cusco."
+    },
+    "mision": {
+      "titulo": "Misión",
+      "texto": "Empresa agroindustrial comprometida con la producción y comercialización de alimentos de la biodiversidad andina peruana mediante innovación y sostenibilidad, buscando el bienestar de agricultores y el respeto al medio ambiente."
+    },
+    "vision": {
+      "titulo": "Visión",
+      "texto": "Ser una empresa líder en la agroindustria reconocida mundialmente por la excelencia de sus productos andinos, siendo referentes en sostenibilidad y competitividad agrícola."
+    },
+    "comunidades": {
+      "titulo": "Nuestras comunidades",
+      "descripcion": "Trabajamos con comunidades productoras de Cusco. Cada producto de la tienda lleva el nombre y la altitud de la comunidad que lo cultivó o tejió.",
+      "cifras": {
+        "comunidades": "Comunidades productoras",
+        "familias": "Familias beneficiadas",
+        "altitud": "Altitud de origen, de la comunidad más baja a la más alta"
+      },
+      "rango": "De {{min}} a {{max}}",
+      "unidad": "msnm"
+    },
+    "valores": {
+      "titulo": "Lo que nos guía",
+      "descripcion": "Cuatro compromisos que sostienen cada producto, del campo a tu mesa.",
+      "comercioJusto": {
+        "titulo": "Comercio justo",
+        "texto": "Precios justos y acuerdos estables con las familias productoras, para que el valor de cada producto llegue a quien lo cultiva."
+      },
+      "trazabilidad": {
+        "titulo": "Trazabilidad",
+        "texto": "Cada producto indica su comunidad de origen y su altitud: sabes quién lo produjo y dónde."
+      },
+      "sostenibilidad": {
+        "titulo": "Sostenibilidad",
+        "texto": "Prácticas agrícolas que cuidan el suelo, el agua y la biodiversidad de los Andes."
+      },
+      "calidad": {
+        "titulo": "Calidad",
+        "texto": "Selección y control en cada etapa, de la cosecha al empaque, respaldados por certificaciones."
+      }
+    },
+    "cta": {
+      "titulo": "Lleva el origen a tu mesa",
+      "descripcion": "Café, superalimentos, textiles de alpaca y artesanía de nuestras comunidades, con envío a Perú y al mundo.",
+      "boton": "Explorar catálogo"
+    }
+  },
+  "legal": {
+    "indice": "Índice",
+    "actualizado": "Última actualización:",
+    "verTambien": "Consulta también:",
+    "terminos": {
+      "titulo": "Términos y Condiciones"
+    },
+    "privacidad": {
+      "titulo": "Política de Privacidad"
+    }
+  },
+  "reclamaciones": {
+    "titulo": "Libro de Reclamaciones",
+    "descripcion": "Registra aquí tu reclamo o queja. Te enviaremos una copia por correo y te responderemos en un plazo máximo de 15 días hábiles.",
+    "proveedor": {
+      "razonSocial": "Razón social",
+      "ruc": "RUC",
+      "domicilio": "Domicilio",
+      "fecha": "Fecha",
+      "hoja": "Hoja de reclamación N.°",
+      "hojaPendiente": "Se asigna al enviar"
+    },
+    "avisoLegal": "La formulación del reclamo no impide acudir a otras vías de solución de controversias ni es requisito previo para interponer una denuncia ante INDECOPI.",
+    "plazo": "El proveedor deberá dar respuesta al reclamo o queja en un plazo no mayor a quince (15) días hábiles improrrogables.",
+    "secciones": {
+      "consumidor": "1. Identificación del consumidor",
+      "bien": "2. Identificación del bien contratado",
+      "detalle": "3. Detalle de la reclamación y pedido del consumidor"
+    },
+    "campos": {
+      "nombre": "Nombre completo",
+      "tipoDocumento": "Tipo de documento",
+      "numeroDocumento": "Número de documento",
+      "domicilio": "Domicilio",
+      "telefono": "Teléfono",
+      "correo": "Correo electrónico",
+      "menorDeEdad": "Soy menor de edad",
+      "apoderadoNombre": "Nombre del padre, madre o apoderado",
+      "bienContratado": "Bien contratado",
+      "descripcion": "Descripción del producto o servicio",
+      "pedidoCodigo": "Código de pedido (opcional)",
+      "pedidoCodigoAyuda": "Está en el correo de confirmación, por ejemplo KD-000123.",
+      "montoReclamado": "Monto reclamado en soles (opcional)",
+      "tipo": "Tipo",
+      "detalle": "Detalle",
+      "pedidoConsumidor": "Pedido del consumidor",
+      "pedidoConsumidorAyuda": "Qué solución esperas de nosotros."
+    },
+    "documentos": {
+      "DNI": "DNI",
+      "CE": "Carné de extranjería",
+      "PASAPORTE": "Pasaporte"
+    },
+    "bienes": {
+      "producto": "Producto",
+      "servicio": "Servicio"
+    },
+    "tipos": {
+      "reclamo": {
+        "nombre": "Reclamo",
+        "definicion": "Disconformidad relacionada con los productos o servicios."
+      },
+      "queja": {
+        "nombre": "Queja",
+        "definicion": "Disconformidad no relacionada con los productos o servicios, o malestar con la atención al público."
+      }
+    },
+    "enviar": "Enviar hoja de reclamación",
+    "errores": {
+      "tipo": "Elige si es un reclamo o una queja",
+      "nombre": "Escribe tu nombre completo",
+      "dni": "El DNI tiene 8 dígitos",
+      "documento": "Revisa el número de documento (6 a 12 letras o números)",
+      "domicilio": "Escribe tu domicilio",
+      "telefono": "Escribe un teléfono válido, por ejemplo +51 984 123 456",
+      "correo": "Ingresa un correo válido, por ejemplo nombre@correo.com",
+      "apoderado": "Escribe el nombre de tu padre, madre o apoderado",
+      "pedidoCodigo": "El código de pedido tiene el formato KD-000123",
+      "monto": "Escribe un monto mayor que 0, con hasta 2 decimales",
+      "descripcion": "Describe el producto o servicio",
+      "detalle": "Cuéntanos qué pasó (al menos 10 caracteres)",
+      "pedidoConsumidor": "Indica qué solución esperas",
+      "largo": "El texto es demasiado largo"
+    },
+    "constancia": {
+      "titulo": "Hoja de reclamación {{codigo}}",
+      "registrada_reclamo": "Registramos tu reclamo",
+      "registrada_queja": "Registramos tu queja",
+      "copia": "Te enviamos una copia a {{correo}}. Te responderemos a más tardar el {{fecha}}.",
+      "fechaLimite": "Fecha límite de respuesta",
+      "imprimir": "Imprimir constancia",
+      "otra": "Registrar otra hoja",
+      "volver": "Volver a la tienda",
+      "pedidoCodigo": "Código de pedido",
+      "montoReclamado": "Monto reclamado"
+    }
+  },
+  "chatbot": {
+    "abrir": "Abrir el asistente virtual",
+    "cerrar": "Cerrar el asistente virtual",
+    "titulo": "Asistente de Kuski",
+    "descripcion": "Respuestas automáticas. Si lo necesitas, te derivamos a una persona del equipo.",
+    "conversacion": "Conversación con el asistente",
+    "bienvenida": "¡Hola! Soy el asistente virtual de Kuski. Pregúntame por envíos, medios de pago, el catálogo o el estado de tu pedido.",
+    "escribiendo": "Kuski está escribiendo…",
+    "campo": "Tu consulta",
+    "placeholder": "Escribe tu consulta…",
+    "enviar": "Enviar",
+    "tu": "Tú",
+    "asistente": "Asistente",
+    "sugerenciasTitulo": "Sugerencias rápidas",
+    "error": "No pude responder ahora. Inténtalo de nuevo en un momento.",
+    "errorLimite": "Enviaste muchos mensajes seguidos. Espera un minuto e inténtalo de nuevo.",
+    "sugerencias": {
+      "envio": "¿Cuánto cuesta el envío?",
+      "pedido": "Estado de mi pedido",
+      "pago": "Medios de pago",
+      "asesor": "Hablar con un asesor"
+    }
   },
   "producto": {
     "agotado": "Agotado",
@@ -887,7 +1094,8 @@
     "titular": "Escribe el nombre como aparece en la tarjeta",
     "vencimiento": "Usa una fecha MM/AA que no haya pasado",
     "cvv": "Revisa el código de seguridad (3 dígitos, 4 en American Express)",
-    "celular": "Ingresa un celular peruano de 9 dígitos que empiece por 9"
+    "celular": "Ingresa un celular peruano de 9 dígitos que empiece por 9",
+    "aceptarTerminos": "Para crear tu cuenta debes aceptar los Términos y la Política de Privacidad"
   },
   "errores": {
     "generico": "Algo salió mal. Inténtalo de nuevo.",
@@ -933,7 +1141,8 @@
       "descripcion": "Solo te pedimos lo necesario para enviarte tus pedidos.",
       "enviar": "Crear cuenta",
       "conCuenta": "¿Ya tienes cuenta?",
-      "iniciarSesion": "Iniciar sesión"
+      "iniciarSesion": "Iniciar sesión",
+      "aceptar": "Al registrarte aceptas los <terminos>Términos y Condiciones</terminos> y la <privacidad>Política de Privacidad</privacidad>."
     },
     "campos": {
       "nombre": "Nombre",

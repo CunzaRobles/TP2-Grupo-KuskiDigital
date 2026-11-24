@@ -16,6 +16,7 @@ export const adminKeys = {
   categorias: ['admin', 'categorias'],
   usuarios: (query) => ['admin', 'usuarios', query],
   buscar: (q) => ['admin', 'buscar', q],
+  reclamaciones: (query) => ['admin', 'reclamaciones', query],
 };
 
 const lista = (queryKey, path, params) => ({
@@ -204,3 +205,16 @@ export const useBusquedaAdmin = (q) =>
     placeholderData: keepPreviousData,
     staleTime: 30_000,
   });
+
+// Libro de Reclamaciones: hojas con filtros y respuesta del proveedor.
+export const useReclamacionesAdmin = (query) =>
+  useQuery(lista(adminKeys.reclamaciones(query), '/admin/reclamaciones', query));
+
+export function useResponderReclamacion() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, estado, respuesta }) =>
+      http.patch(`/admin/reclamaciones/${id}`, { estado, respuesta: respuesta || undefined }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin', 'reclamaciones'] }),
+  });
+}

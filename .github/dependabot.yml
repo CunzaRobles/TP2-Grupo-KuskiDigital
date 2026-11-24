@@ -1,0 +1,33 @@
+# Actualizaciones automáticas de dependencias (Dependabot).
+# - npm: la raíz del monorepo (workspaces frontend y backend con un solo package-lock.json).
+# - github-actions: las acciones de .github/workflows.
+# Las menores y de parche se agrupan en un PR; las mayores llegan aparte, porque las versiones del
+# stack las aprueba el equipo (CLAUDE.md). Revisa cada PR antes de fusionarlo.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '08:00'
+      timezone: America/Lima
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: chore(deps)
+    groups:
+      menores-y-parches:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '08:00'
+      timezone: America/Lima
+    commit-message:
+      prefix: ci
+    groups:
+      acciones:
+        patterns: ['*']

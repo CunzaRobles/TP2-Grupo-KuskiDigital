@@ -41,6 +41,12 @@ export const env = {
   SUPABASE_URL: process.env.SUPABASE_URL,
   SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
   SUPABASE_STORAGE_BUCKET: process.env.SUPABASE_STORAGE_BUCKET || 'productos',
+  // Datos del proveedor en el Libro de Reclamaciones (opcionales hasta tenerlos).
+  EMPRESA_RUC: process.env.EMPRESA_RUC?.trim() || null,
+  EMPRESA_DOMICILIO: process.env.EMPRESA_DOMICILIO?.trim() || null,
+  // Asistente virtual: contacto del asesor humano. Sin WhatsApp, solo se ofrece el correo.
+  CHATBOT_WHATSAPP: process.env.CHATBOT_WHATSAPP?.trim() || null,
+  CHATBOT_CORREO: process.env.CHATBOT_CORREO?.trim() || 'contacto@kuski.pe',
 };
 
 export const COOKIE_SESION = 'kuski_token';

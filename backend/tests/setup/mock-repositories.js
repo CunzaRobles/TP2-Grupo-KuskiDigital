@@ -118,6 +118,15 @@ vi.mock('../../src/repositories/reporte.repository.js', () => ({
   findTopProductos: vi.fn(),
 }));
 
+vi.mock('../../src/repositories/reclamacion.repository.js', () => ({
+  bloquearCorrelativo: vi.fn(),
+  findUltimoCodigo: vi.fn(),
+  create: vi.fn(),
+  findById: vi.fn(),
+  update: vi.fn(),
+  findAdmin: vi.fn(),
+}));
+
 // Datos de soporte de la simulación (tipos_cambio y tarifas_envio del seed).
 vi.mock('../../src/repositories/tipo-cambio.repository.js', () => {
   const tasas = {
@@ -149,5 +158,6 @@ vi.mock('../../src/repositories/tarifa-envio.repository.js', () => {
   }));
   return {
     findByZona: vi.fn(async (zona) => tarifas.filter((t) => t.zona === zona)),
+    findAll: vi.fn(async () => tarifas),
   };
 });

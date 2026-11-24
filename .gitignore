@@ -42,3 +42,7 @@ Thumbs.db
 frontend/cypress/screenshots/
 frontend/cypress/videos/
 frontend/cypress/downloads/
+
+# ===== Credenciales locales (se entregan por canal privado; nunca al repositorio) =====
+backend/database/seeders/README-credenciales.md
+**/README-credenciales*.md

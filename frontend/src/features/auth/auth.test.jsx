@@ -23,7 +23,7 @@ const apiConLogin = (rutas = {}) => {
     'GET /auth/me': () =>
       usuario ? { usuario } : json(401, { error: { code: 'NO_AUTENTICADO', message: 'x' } }),
     'POST /auth/login': (_url, { correo, password }) => {
-      if (password !== 'KuskiCliente2026!') {
+      if (password !== 'Quinua2026') {
         return json(401, {
           error: { code: 'CREDENCIALES_INVALIDAS', message: 'Correo o contraseña incorrectos' },
         });
@@ -67,7 +67,7 @@ describe('login', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent('Correo o contraseña incorrectos');
 
     await user.clear(screen.getByLabelText('Contraseña'));
-    await user.type(screen.getByLabelText('Contraseña'), 'KuskiCliente2026!');
+    await user.type(screen.getByLabelText('Contraseña'), 'Quinua2026');
     await user.click(screen.getByRole('button', { name: 'Iniciar sesión' }));
 
     await waitFor(() => expect(router.state.location.pathname).toBe('/cuenta'));
@@ -95,7 +95,7 @@ describe('login', () => {
     ).toHaveAttribute('href', '/admin/login');
 
     await user.type(screen.getByLabelText('Correo electrónico'), 'gerente@kuski.pe');
-    await user.type(screen.getByLabelText('Contraseña'), 'KuskiAdmin2026!');
+    await user.type(screen.getByLabelText('Contraseña'), 'Panel2026');
     await user.click(screen.getByRole('button', { name: 'Iniciar sesión' }));
 
     await waitFor(() => expect(router.state.location.pathname).toMatch(/^\/admin/));
@@ -113,7 +113,7 @@ describe('login', () => {
     renderRuta('/login');
 
     await user.type(await screen.findByLabelText('Correo electrónico'), USUARIO.correo);
-    await user.type(screen.getByLabelText('Contraseña'), 'KuskiCliente2026!');
+    await user.type(screen.getByLabelText('Contraseña'), 'Quinua2026');
     await user.click(screen.getByRole('button', { name: 'Iniciar sesión' }));
 
     await waitFor(() => expect(llamadas(fetchMock, 'POST /carrito/fusionar')).toHaveLength(1));
@@ -154,6 +154,7 @@ describe('registro', () => {
     await user.type(screen.getByLabelText('Correo electrónico'), 'anna@example.com');
     await user.type(screen.getByLabelText('Contraseña'), 'Kastanie2026');
     await user.type(screen.getByLabelText('Repite la contraseña'), 'Kastanie2026');
+    await user.click(screen.getByRole('checkbox', { name: /Al registrarte aceptas/ }));
     await user.click(screen.getByRole('button', { name: 'Crear cuenta' }));
 
     expect(await screen.findByText(/Ya existe una cuenta con ese correo/)).toBeInTheDocument();
@@ -164,9 +165,55 @@ describe('registro', () => {
       correo: 'anna@example.com',
       password: 'Kastanie2026',
       paisCodigo: 'PE',
+      aceptaTerminos: true,
       idiomaPreferido: 'es',
       monedaPreferida: 'PEN',
     });
+  });
+
+  it('enlaza los Términos y la Privacidad y rechaza el registro si no se aceptan', async () => {
+    const user = userEvent.setup();
+    const fetchMock = apiConLogin();
+    renderRuta('/registro');
+
+    const casilla = await screen.findByRole('checkbox', {
+      name: 'Al registrarte aceptas los Términos y Condiciones y la Política de Privacidad.',
+    });
+    expect(casilla).not.toBeChecked();
+    // Se abren en otra pestaña para no perder lo escrito
+    expect(screen.getByRole('link', { name: 'Términos y Condiciones' })).toHaveAttribute(
+      'href',
+      '/terminos',
+    );
+    expect(screen.getByRole('link', { name: 'Política de Privacidad' })).toHaveAttribute(
+      'target',
+      '_blank',
+    );
+
+    await user.type(screen.getByLabelText('Nombre'), 'María');
+    await user.type(screen.getByLabelText('Apellido'), 'Quispe');
+    await user.type(screen.getByLabelText('Correo electrónico'), 'maria@example.com');
+    await user.type(screen.getByLabelText('Contraseña'), 'Quinua2026');
+    await user.type(screen.getByLabelText('Repite la contraseña'), 'Quinua2026');
+    await user.click(screen.getByRole('button', { name: 'Crear cuenta' }));
+
+    expect(
+      await screen.findByText(
+        'Para crear tu cuenta debes aceptar los Términos y la Política de Privacidad',
+      ),
+    ).toBeInTheDocument();
+    expect(casilla).toHaveAttribute('aria-invalid', 'true');
+    await waitFor(() => expect(casilla).toHaveFocus());
+    expect(llamadas(fetchMock, 'POST /auth/registro')).toHaveLength(0);
+
+    // Al marcarla, el error desaparece
+    await user.click(casilla);
+    expect(casilla).toBeChecked();
+    expect(
+      screen.queryByText(
+        'Para crear tu cuenta debes aceptar los Términos y la Política de Privacidad',
+      ),
+    ).not.toBeInTheDocument();
   });
 });
 

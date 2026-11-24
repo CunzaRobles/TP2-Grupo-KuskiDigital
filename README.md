@@ -4,6 +4,28 @@ Tienda e-commerce de **Kuski Agroindustria S.A.** (Cusco, Perú): café orgánic
 
 Proyecto del curso Taller de Proyectos — Universidad Continental.
 
+## Funcionalidades
+
+| Área   | Ruta                                                            | Qué ofrece                                                                                                       |
+| ------ | --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Tienda | `/`                                                             | Hero, recorrido «Del valle a la puna» por categorías, destacados y mapa de trazabilidad de las comunidades.      |
+| Tienda | `/catalogo`                                                     | Catálogo con filtros (categoría, precio, comunidad, certificación), orden, búsqueda y paginación.                |
+| Tienda | `/producto/:slug`                                               | Ficha con galería, panel de compra, pestañas Descripción / Origen (mapa) / Reseñas y línea de tiempo del origen. |
+| Tienda | `/carrito`                                                      | Resumen del carrito (también drawer lateral desde el header).                                                    |
+| Tienda | `/checkout`                                                     | Compra en 4 pasos: envío, método de envío, pago (simulado) y confirmación.                                       |
+| Tienda | `/pedido/:codigo`                                               | Confirmación y tracking del pedido.                                                                              |
+| Tienda | `/login`, `/registro`                                           | Acceso y registro (con aceptación obligatoria de Términos y Privacidad).                                         |
+| Tienda | `/cuenta`                                                       | Mis pedidos y mis direcciones.                                                                                   |
+| Tienda | `/nosotros`                                                     | Acerca de nosotros: misión, visión, comunidades con datos reales y valores.                                      |
+| Tienda | `/terminos`, `/privacidad`                                      | Términos y Condiciones (Ley 29571) y Política de Privacidad (Ley 29733 y RGPD).                                  |
+| Tienda | `/libro-reclamaciones`                                          | Libro de Reclamaciones virtual con constancia imprimible; enlace permanente en el pie.                           |
+| Tienda | Todas las páginas                                               | **Asistente virtual** (chatbot por reglas): envíos, pagos, catálogo, estado de pedido y derivación a un asesor.  |
+| Panel  | `/admin/dashboard`                                              | KPIs, gráfico mensual y pendientes.                                                                              |
+| Panel  | `/admin/ventas`, `/pedidos`                                     | Ventas y cola de pedidos con filtros; cambio de estado (tracking simulado).                                      |
+| Panel  | `/admin/reclamaciones`                                          | **Reclamaciones**: hojas del Libro de Reclamaciones con días hábiles restantes y respuesta al consumidor.        |
+| Panel  | `/admin/inventario`                                             | Stock editable en línea y kardex.                                                                                |
+| Panel  | `/admin/productos`, `/categorias`, `/usuarios`, `/estadisticas` | Catálogo con fotos, categorías, equipo y roles, y estadísticas de mercado.                                       |
+
 ## Estructura
 
 Monorepo con npm workspaces y un único `package-lock.json` en la raíz.
@@ -23,7 +45,7 @@ Monorepo con npm workspaces y un único `package-lock.json` en la raíz.
 ├── backend/           # API REST en Express 5 (puerto 3000)
 │   ├── src/
 │   │   ├── config/        # env, conexión Sequelize (database.js) y config de sequelize-cli (database.cjs)
-│   │   ├── models/        # 19 modelos Sequelize + asociaciones (index.js)
+│   │   ├── models/        # modelos Sequelize (los 19 del esquema + reclamaciones) y asociaciones
 │   │   ├── repositories/  # única capa que usa Sequelize
 │   │   ├── services/      # reglas de negocio
 │   │   ├── controllers/   # capa HTTP
@@ -73,17 +95,20 @@ Copia la plantilla y completa los valores:
 cp backend/.env.example backend/.env
 ```
 
-| Variable                                        | Descripción                                                                                                                                                 |
-| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `PORT`                                          | Puerto de la API (por defecto `3000`).                                                                                                                      |
-| `DATABASE_URL`                                  | Cadena de conexión de Supabase: _Project Settings → Database → Connection string_. Local: **Session pooler** (5432); Vercel: **Transaction pooler** (6543). |
-| `JWT_SECRET`                                    | Secreto para firmar los tokens JWT. Obligatorio en producción (en desarrollo hay uno por defecto).                                                          |
-| `JWT_EXPIRES_IN`                                | Duración de la sesión (por defecto `7d`).                                                                                                                   |
-| `FRONTEND_URL`                                  | URL pública del frontend, permitida por CORS (varias separadas por comas). Fuera de producción también se permite `http://localhost:5173`.                  |
-| `PAGO_LATENCIA_MIN_MS` / `PAGO_LATENCIA_MAX_MS` | Latencia simulada de la pasarela de pago (por defecto 1000–2000 ms; 0 en pruebas).                                                                          |
-| `SUPABASE_URL`                                  | URL del proyecto de Supabase (_Project Settings → API_). Solo para Storage (fotos de productos).                                                            |
-| `SUPABASE_SERVICE_ROLE_KEY`                     | Clave secreta (`service_role` o `sb_secret_…`). Solo vive en el backend, nunca en el frontend.                                                              |
-| `SUPABASE_STORAGE_BUCKET`                       | Bucket público de las fotos de productos (por defecto `productos`).                                                                                         |
+| Variable                                        | Descripción                                                                                                                                                                                                |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `PORT`                                          | Puerto de la API (por defecto `3000`).                                                                                                                                                                     |
+| `DATABASE_URL`                                  | Cadena de conexión de Supabase: _Project Settings → Database → Connection string_. Local: **Session pooler** (5432); Vercel: **Transaction pooler** (6543).                                                |
+| `JWT_SECRET`                                    | Secreto para firmar los tokens JWT. Obligatorio en producción (en desarrollo hay uno por defecto).                                                                                                         |
+| `JWT_EXPIRES_IN`                                | Duración de la sesión (por defecto `7d`).                                                                                                                                                                  |
+| `FRONTEND_URL`                                  | URL pública del frontend, permitida por CORS (varias separadas por comas). Fuera de producción también se permite `http://localhost:5173`.                                                                 |
+| `PAGO_LATENCIA_MIN_MS` / `PAGO_LATENCIA_MAX_MS` | Latencia simulada de la pasarela de pago (por defecto 1000–2000 ms; 0 en pruebas).                                                                                                                         |
+| `SUPABASE_URL`                                  | URL del proyecto de Supabase (_Project Settings → API_). Solo para Storage (fotos de productos).                                                                                                           |
+| `SUPABASE_SERVICE_ROLE_KEY`                     | Clave secreta (`service_role` o `sb_secret_…`). Solo vive en el backend, nunca en el frontend.                                                                                                             |
+| `SUPABASE_STORAGE_BUCKET`                       | Bucket público de las fotos de productos (por defecto `productos`).                                                                                                                                        |
+| `EMPRESA_RUC` / `EMPRESA_DOMICILIO`             | RUC y domicilio del proveedor en la constancia del Libro de Reclamaciones (opcionales; deben coincidir con `frontend/src/features/legal/empresa.js`).                                                      |
+| `CHATBOT_WHATSAPP` / `CHATBOT_CORREO`           | Contacto del asesor humano que ofrece el asistente virtual. Sin WhatsApp, solo se ofrece el correo (por defecto `contacto@kuski.pe`).                                                                      |
+| `SEED_PASSWORD`                                 | Contraseña de los usuarios de prueba que crean los seeders (mín. 8 caracteres). Obligatoria fuera de `NODE_ENV=development`; defínela siempre al sembrar la base compartida. Se entrega por canal privado. |
 
 `backend/.env` nunca se sube al repositorio.
 
@@ -96,6 +121,7 @@ PostgreSQL en Supabase. El esquema se gestiona **solo con migraciones** de Seque
 - `backend/migrations/20260929000000-baseline-esquema-kuski.cjs` ejecuta `backend/database/01_esquema_kuski_db.sql` completo (19 tablas, ENUMs, índices, triggers, vistas y RLS). Su `down` elimina todos esos objetos.
 - Cada cambio posterior del esquema va en una **migración nueva**; no se edita la baseline.
 - `20260930000000-rls-tablas-sequelize.cjs` activa RLS en la tabla de control `sequelize_meta` (y en la de seeders, si existiera), así el Security Advisor de Supabase queda sin errores aunque se recree la base.
+- `20261124000000-reclamaciones.cjs` crea la tabla `reclamaciones` del Libro de Reclamaciones (ENUMs propios, restricciones de coherencia, trigger de `actualizado_en` y RLS activado sin políticas).
 - Los seeders replican `02_datos_base_kuski_db.sql` y amplían el catálogo: 4 categorías, 8 comunidades de Cusco, 4 certificaciones, tipos de cambio y tarifas de envío simulados, **44 productos** (2 imágenes placeholder de Unsplash cada uno, certificaciones y movimiento de inventario inicial) y 5 usuarios de prueba. Los datos del catálogo están en `backend/database/seed-data/catalogo.cjs`.
 
 > Solo el responsable de backend ejecuta migraciones sobre el proyecto compartido de Supabase. `db:reset` **borra y recrea** todas las tablas de Kuski.
@@ -104,20 +130,22 @@ PostgreSQL en Supabase. El esquema se gestiona **solo con migraciones** de Seque
 npm run db:migrate        # aplica las migraciones pendientes
 npm run db:seed           # carga los datos semilla (sobre una base recién migrada)
 npm run db:reset          # deshace todas las migraciones, migra y siembra de nuevo
-npm run db:test           # comprueba la conexión: tablas (19/19) y número de productos
+npm run db:test           # comprueba la conexión: tablas (20/20) y número de productos
 ```
 
 ### Usuarios de prueba
 
-Solo para desarrollo; las contraseñas se guardan cifradas con bcrypt.
+Los crea el seeder `backend/seeders/20260929000200-usuarios.cjs`, con la contraseña de `SEED_PASSWORD` (`backend/.env`), cifrada con bcrypt.
 
-| Rol               | Correo                     | Contraseña          | Notas                     |
-| ----------------- | -------------------------- | ------------------- | ------------------------- |
-| `admin_gerente`   | `gerente@kuski.pe`         | `KuskiAdmin2026!`   |                           |
-| `admin_ventas`    | `ventas@kuski.pe`          | `KuskiAdmin2026!`   |                           |
-| `admin_logistica` | `logistica@kuski.pe`       | `KuskiAdmin2026!`   |                           |
-| `cliente`         | `maria.quispe@example.com` | `KuskiCliente2026!` | Perú, español, PEN, Cusco |
-| `cliente`         | `anna.becker@example.com`  | `KuskiCliente2026!` | Alemania, alemán, EUR     |
+| Rol               | Correo                     | Notas                     |
+| ----------------- | -------------------------- | ------------------------- |
+| `admin_gerente`   | `gerente@kuski.pe`         |                           |
+| `admin_ventas`    | `ventas@kuski.pe`          |                           |
+| `admin_logistica` | `logistica@kuski.pe`       |                           |
+| `cliente`         | `maria.quispe@example.com` | Perú, español, PEN, Cusco |
+| `cliente`         | `anna.becker@example.com`  | Alemania, alemán, EUR     |
+
+> **Las credenciales se entregan por canal privado.** No las escribas en el repositorio, en issues ni en PRs.
 
 ## API
 
@@ -125,32 +153,34 @@ Prefijo `/api/v1`. Documentación interactiva (Swagger UI) en **http://localhost
 
 Las respuestas tienen la forma `{ data }` o `{ error: { code, message, details? } }`. Las listas paginadas devuelven `{ data: { items, pagination: { page, limit, total, totalPages } } }`. Los endpoints con precios aceptan `?moneda=PEN|USD|EUR`.
 
-| Método         | Ruta                            | Acceso  | Descripción                                                                                                                                                                           |
-| -------------- | ------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GET            | `/health`                       | Público | Estado de la API y de la base (`503 DB_UNAVAILABLE` si no responde).                                                                                                                  |
-| POST           | `/auth/registro`                | Público | Crea un cliente e inicia sesión. Correo de bienvenida simulado.                                                                                                                       |
-| POST           | `/auth/login`                   | Público | Inicia sesión: JWT en la cookie httpOnly `kuski_token` (SameSite lax, Secure en producción).                                                                                          |
-| POST           | `/auth/logout`                  | Público | Borra la cookie de sesión.                                                                                                                                                            |
-| GET            | `/auth/me`                      | Público | Usuario actual; sin sesión responde `usuario: null` (no 401).                                                                                                                         |
-| GET            | `/productos`                    | Público | Catálogo. Query: `categoria`, `comunidad`, `certificacion`, `precio_min`, `precio_max`, `q`, `orden`, `page`, `limit`, `moneda`.                                                      |
-| GET            | `/productos/destacados`         | Público | Destacados del home.                                                                                                                                                                  |
-| GET            | `/productos/:slug`              | Público | Ficha: imágenes, comunidad con coordenadas, certificaciones, reseñas, promedio y distribución.                                                                                        |
-| GET            | `/productos/:slug/relacionados` | Público | Relacionados: misma categoría primero, completa con destacados. Query: `moneda`, `limit` (4).                                                                                         |
-| GET            | `/categorias`                   | Público | Categorías con número de productos, rango de altitud de origen (`altitudMin`/`altitudMax`) y comunidad principal (`comunidadPrincipal`).                                              |
-| GET            | `/comunidades`                  | Público | Comunidades con coordenadas (mapa).                                                                                                                                                   |
-| GET            | `/certificaciones`              | Público | Certificaciones (filtro del catálogo).                                                                                                                                                |
-| GET            | `/estadisticas/trazabilidad`    | Público | Comunidades, familias, productos y países.                                                                                                                                            |
-| GET            | `/carrito`                      | Sesión  | Carrito del usuario con totales.                                                                                                                                                      |
-| POST           | `/carrito/items`                | Sesión  | Agrega un producto (suma si ya estaba; valida stock).                                                                                                                                 |
-| PATCH / DELETE | `/carrito/items/:id`            | Sesión  | Cambia la cantidad o quita un ítem.                                                                                                                                                   |
-| POST           | `/carrito/fusionar`             | Sesión  | Une el carrito de invitado (localStorage) al iniciar sesión; ajusta al stock y devuelve `ajustes`.                                                                                    |
-| POST           | `/carrito/invitado`             | Público | Precios del carrito de invitado en la moneda pedida, con stock y avisos (no guarda nada).                                                                                             |
-| POST           | `/checkout/cotizar`             | Público | Subtotal, opciones de envío estándar/express, IGV (solo PE), tipo de cambio y total.                                                                                                  |
-| POST           | `/pedidos`                      | Sesión  | Crea el pedido con el carrito en una transacción (stock, kardex, pago, envío, tracking, código `KD-000001`). Con `guardarDireccion`, guarda la dirección nueva si el pago se aprueba. |
-| GET            | `/pedidos`                      | Sesión  | Mis pedidos, con los pasos del tracking.                                                                                                                                              |
-| GET            | `/pedidos/:codigo`              | Sesión  | Detalle y tracking (el cliente solo ve los suyos; los admin, todos). Montos de los ítems también en la moneda del pedido.                                                             |
-| GET / POST     | `/direcciones`                  | Sesión  | Mis direcciones (la principal primero) / guardar una (la primera es la principal; máx. 10).                                                                                           |
-| PATCH / DELETE | `/direcciones/:id`              | Sesión  | Editar o marcar como principal / borrar (si era la principal, pasa a serlo la más reciente).                                                                                          |
+| Método         | Ruta                            | Acceso                    | Descripción                                                                                                                                                                           |
+| -------------- | ------------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET            | `/health`                       | Público                   | Estado de la API y de la base (`503 DB_UNAVAILABLE` si no responde).                                                                                                                  |
+| POST           | `/auth/registro`                | Público                   | Crea un cliente e inicia sesión. Correo de bienvenida simulado.                                                                                                                       |
+| POST           | `/auth/login`                   | Público                   | Inicia sesión: JWT en la cookie httpOnly `kuski_token` (SameSite lax, Secure en producción).                                                                                          |
+| POST           | `/auth/logout`                  | Público                   | Borra la cookie de sesión.                                                                                                                                                            |
+| GET            | `/auth/me`                      | Público                   | Usuario actual; sin sesión responde `usuario: null` (no 401).                                                                                                                         |
+| GET            | `/productos`                    | Público                   | Catálogo. Query: `categoria`, `comunidad`, `certificacion`, `precio_min`, `precio_max`, `q`, `orden`, `page`, `limit`, `moneda`.                                                      |
+| GET            | `/productos/destacados`         | Público                   | Destacados del home.                                                                                                                                                                  |
+| GET            | `/productos/:slug`              | Público                   | Ficha: imágenes, comunidad con coordenadas, certificaciones, reseñas, promedio y distribución.                                                                                        |
+| GET            | `/productos/:slug/relacionados` | Público                   | Relacionados: misma categoría primero, completa con destacados. Query: `moneda`, `limit` (4).                                                                                         |
+| GET            | `/categorias`                   | Público                   | Categorías con número de productos, rango de altitud de origen (`altitudMin`/`altitudMax`) y comunidad principal (`comunidadPrincipal`).                                              |
+| GET            | `/comunidades`                  | Público                   | Comunidades con coordenadas (mapa).                                                                                                                                                   |
+| GET            | `/certificaciones`              | Público                   | Certificaciones (filtro del catálogo).                                                                                                                                                |
+| GET            | `/estadisticas/trazabilidad`    | Público                   | Comunidades, familias, productos y países.                                                                                                                                            |
+| POST           | `/reclamaciones`                | Público                   | Hoja del Libro de Reclamaciones: código correlativo, fecha límite a 15 días hábiles y constancia por correo. 5 por hora por IP.                                                       |
+| POST           | `/chatbot/mensaje`              | Público (sesión opcional) | Asistente virtual por reglas: `{ intencion, texto, sugerencias, enlaces }` en es/en/de. 30 mensajes por minuto por IP.                                                                |
+| GET            | `/carrito`                      | Sesión                    | Carrito del usuario con totales.                                                                                                                                                      |
+| POST           | `/carrito/items`                | Sesión                    | Agrega un producto (suma si ya estaba; valida stock).                                                                                                                                 |
+| PATCH / DELETE | `/carrito/items/:id`            | Sesión                    | Cambia la cantidad o quita un ítem.                                                                                                                                                   |
+| POST           | `/carrito/fusionar`             | Sesión                    | Une el carrito de invitado (localStorage) al iniciar sesión; ajusta al stock y devuelve `ajustes`.                                                                                    |
+| POST           | `/carrito/invitado`             | Público                   | Precios del carrito de invitado en la moneda pedida, con stock y avisos (no guarda nada).                                                                                             |
+| POST           | `/checkout/cotizar`             | Público                   | Subtotal, opciones de envío estándar/express, IGV (solo PE), tipo de cambio y total.                                                                                                  |
+| POST           | `/pedidos`                      | Sesión                    | Crea el pedido con el carrito en una transacción (stock, kardex, pago, envío, tracking, código `KD-000001`). Con `guardarDireccion`, guarda la dirección nueva si el pago se aprueba. |
+| GET            | `/pedidos`                      | Sesión                    | Mis pedidos, con los pasos del tracking.                                                                                                                                              |
+| GET            | `/pedidos/:codigo`              | Sesión                    | Detalle y tracking (el cliente solo ve los suyos; los admin, todos). Montos de los ítems también en la moneda del pedido.                                                             |
+| GET / POST     | `/direcciones`                  | Sesión                    | Mis direcciones (la principal primero) / guardar una (la primera es la principal; máx. 10).                                                                                           |
+| PATCH / DELETE | `/direcciones/:id`              | Sesión                    | Editar o marcar como principal / borrar (si era la principal, pasa a serlo la más reciente).                                                                                          |
 
 Seguridad: helmet, CORS (solo `FRONTEND_URL` y, en desarrollo, `localhost:5173`, con credenciales), un límite de 300 peticiones cada 15 minutos por IP en `/api` y de 20 intentos en login y registro.
 
@@ -164,6 +194,7 @@ Cada ruta exige sesión, **vuelve a leer el rol y el estado de la cuenta en la b
 | Pedidos (consultar)                        |    ✔     |   ✔    |     ✔     |
 | Pedidos (cambiar estado)                   |    ✔     |        |     ✔     |
 | Inventario y kardex                        |    ✔     |        |     ✔     |
+| Reclamaciones (Libro de Reclamaciones)     |    ✔     |   ✔    |           |
 | Productos e imágenes, categorías, usuarios |    ✔     |        |           |
 
 | Método                    | Ruta                                       | Descripción                                                                                                                                                        |
@@ -183,6 +214,8 @@ Cada ruta exige sesión, **vuelve a leer el rol y el estado de la cuenta en la b
 | GET / POST / PUT / DELETE | `/admin/categorias[/:id]`                  | CRUD de categorías; no se elimina una con productos (409).                                                                                                         |
 | GET / POST / PATCH        | `/admin/usuarios[/:id]`                    | Usuarios con filtros, alta de cuentas del equipo y cambio de rol o estado (nadie puede cambiar su propio rol ni desactivarse).                                     |
 | GET                       | `/admin/buscar?q=`                         | Búsqueda rápida (Ctrl+K): productos, pedidos y usuarios, solo los grupos que el rol puede ver.                                                                     |
+| GET                       | `/admin/reclamaciones`                     | Hojas del Libro de Reclamaciones con filtros por estado y fecha (gerente, ventas).                                                                                 |
+| PATCH                     | `/admin/reclamaciones/:id`                 | Pasar a «en atención» o registrar la respuesta, que se envía al consumidor (gerente, ventas).                                                                      |
 
 **Tracking simulado:** `pagado → preparando → en_transito → entregado`; se puede cancelar mientras el pedido no haya salido del almacén. `entregado` guarda la fecha de entrega y `cancelado` devuelve el stock (entrada en el kardex) y marca el pago como `reembolsado`. Cada cambio envía un correo simulado al cliente.
 
@@ -257,6 +290,12 @@ Sigue la estructura del wireframe: header → hero → categorías → destacado
 - Pestañas Descripción (con ficha técnica) / Origen (ficha de la comunidad y mini mapa con Leaflet, cargado solo al abrir la pestaña) / Reseñas (promedio, distribución y lista).
 - Línea de tiempo del origen (cosecha → proceso → envío) con textos por categoría que incluyen la comunidad y la altitud reales, y productos relacionados.
 
+### Acerca de nosotros (`/nosotros`, `src/features/nosotros`)
+
+- Ruta diferida (`cargarNosotros` en `app/paginas-tienda.js`), enlazada desde la cabecera, el menú móvil y el pie.
+- Hero corto (Kuski Agroindustria S.A., 30 años en Cusco) cerrado con las marcas de la regla, misión y visión con el texto institucional, **Nuestras comunidades** con datos reales (`GET /estadisticas/trazabilidad` para las cifras y `GET /comunidades` para el perfil de altitud y la lista de la Home, `perfil-altitud.jsx` y `comunidades-altitud.jsx`), valores (comercio justo, trazabilidad, sostenibilidad, calidad) y un CTA final al catálogo.
+- Sin animaciones de aparición; skeletons mientras carga y error con "Reintentar" por bloque. Textos en `nosotros.*` de los locales es/en/de.
+
 ### Carrito (`src/features/carrito`)
 
 - **Invitado:** vive en `localStorage` (`kuski.carrito`, sincronizado entre pestañas). Los precios en la moneda elegida, el stock actual y los avisos llegan de `POST /carrito/invitado`.
@@ -266,8 +305,32 @@ Sigue la estructura del wireframe: header → hero → categorías → destacado
 ### Cuenta y acceso (`src/features/auth`, `src/features/cuenta`)
 
 - **Login** (`/login`) y **Registro** (`/registro`): validación con Zod en el navegador (mismas reglas que el backend, mensajes traducidos, foco en el primer error), requisitos de la contraseña a la vista y errores de la API en su campo (p. ej. `CORREO_EN_USO`) o en un aviso (`CREDENCIALES_INVALIDAS`, límite de intentos, sin conexión). `?redirect=` devuelve a la página de origen (solo rutas internas). Al iniciar sesión, el carrito de invitado se fusiona con el de la cuenta.
+- El registro exige marcar «Al registrarte aceptas los Términos y Condiciones y la Política de Privacidad» (enlaces en otra pestaña para no perder lo escrito). Lo validan Zod en el navegador y `registroBody` en la API (`aceptaTerminos: true`; sin él, 400 `VALIDATION_ERROR`). La aceptación no se guarda en la base de datos.
 - `RequireAuth` protege `/checkout`, `/pedido/:codigo` y `/cuenta`: sin sesión lleva al login y vuelve después. La API aplica la misma regla con `requireAuth`.
 - **Mi cuenta** (`/cuenta`): mis pedidos (paginados, con estado y tracking compacto) y mis direcciones (`/cuenta/direcciones`: agregar, marcar como principal y eliminar con confirmación). Cerrar sesión borra de la caché los datos privados.
+
+### Páginas legales (`/terminos`, `/privacidad`, `src/features/legal`)
+
+- Términos y Condiciones (Ley 29571) y Política de Privacidad (Ley 29733, D.S. 016-2024-JUS y RGPD), enlazadas desde el pie y el registro. Una sola ruta diferida (`cargarLegal`) para las dos.
+- Layout de documento: fecha de última actualización, índice lateral fijo en escritorio que marca la sección que se lee (plegable en móvil), columna de lectura de 68 caracteres y tablas con scroll horizontal propio en móvil.
+- El texto vive en `contenido/<documento>.<idioma>.js` (es, en, de) y se descarga solo el del idioma activo. Los datos de la empresa (correos, RUC, domicilio), las fechas de actualización y los plazos de envío están en `empresa.js`. **RUC y domicilio están pendientes** (`null`: no se muestran).
+
+### Asistente virtual (`src/features/chatbot`, `backend/src/services/chatbot.service.js`)
+
+Previsto en el Acta de Constitución. Costo cero: **motor de intenciones por reglas**, sin APIs de IA de pago.
+
+- **Backend:** `chatbotService` normaliza el mensaje (minúsculas, sin tildes ni diéresis) y puntúa las palabras clave de cada intención en es/en/de (`chatbot.textos.js`); las frases valen más que las palabras sueltas y una prioridad desempata. Intenciones: saludo, envíos (zonas, plazos y costo base leídos de `tarifas_envio`), medios de pago, catálogo (categorías y destacados de la base, con enlaces), estado de pedido, Libro de Reclamaciones, trazabilidad, asesor humano (`CHATBOT_WHATSAPP` / `CHATBOT_CORREO`) y un fallback con 3 sugerencias.
+- **Estado de pedido:** reconoce `KD-000123` (también `kd 000123`). Solo informa el estado y la última fecha del historial al dueño del pedido con sesión; sin sesión pide iniciarla, y un pedido ajeno o inexistente responde lo mismo ("no lo encontré en tu cuenta"), también para los administradores.
+- **Frontend:** botón flotante de 56 px abajo a la derecha en todas las páginas de la tienda (no en el admin), por debajo de drawers y diálogos, así que nunca tapa el botón de pago del carrito. Abre un panel modal (Radix): foco atrapado, Esc cierra y el foco vuelve al botón; respuestas anunciadas con `role="log"`, indicador «escribiendo…», chips de sugerencias y enlaces navegables. El historial vive en memoria durante la visita. Responde en el idioma activo. Sin animación con `prefers-reduced-motion`. Los toasts suben para no quedar bajo el botón.
+
+### Libro de Reclamaciones (`/libro-reclamaciones`, `src/features/reclamaciones`)
+
+Exigido por la Ley 29571 (arts. 150-151, modificados por la Ley 32495, que incluye a las plataformas de comercio electrónico) y el D.S. 011-2011-PCM (modificado por el D.S. 101-2022-PCM).
+
+- **Enlace permanente** con el ícono del libro en el pie de todas las páginas de la tienda.
+- Formulario en las tres secciones de la hoja oficial (consumidor, bien contratado, detalle y pedido), con el aviso legal visible y los datos del proveedor (razón social, y RUC y domicilio cuando estén configurados en `features/legal/empresa.js`). Validación con Zod en el navegador y en la API (DNI de 8 dígitos; CE y pasaporte alfanuméricos; apoderado obligatorio si es menor de edad).
+- Al enviar, `POST /reclamaciones` asigna el código correlativo del año (`LR-2026-000001`, bajo un bloqueo `pg_advisory_xact_lock` para que dos hojas simultáneas no lo compartan), la fecha límite a **15 días hábiles** (sin sábados ni domingos; los feriados no se descuentan, así que el plazo nunca excede el legal) y envía la constancia con la copia de la hoja (correo simulado). La página muestra la constancia con botón para imprimirla (cabecera y pie se ocultan al imprimir). Límite propio: 5 hojas por hora por IP.
+- **Panel → Reclamaciones** (gerente y ventas; también en Ctrl+K): tabla con código, fecha, tipo, estado y días hábiles restantes (en rojo con ícono si quedan 3 o menos o venció), filtros por estado y fecha en la URL, y un panel de detalle para pasar a «en atención» o enviar la respuesta (se manda por correo al consumidor y registra quién y cuándo respondió).
 
 ### Checkout (`/checkout`, `src/features/checkout`)
 
@@ -314,6 +377,11 @@ Dos proyectos de Vercel sobre el mismo repositorio; la base sigue en Supabase.
 - **Swagger UI** (`/api/v1/docs`) carga `swagger-ui-dist` desde jsDelivr (versión fijada) y lee `docs/openapi.yaml`, que Vercel incluye en la función.
 - `app.set('trust proxy', 1)` hace que la cookie `secure` y el límite por IP funcionen detrás del proxy de Vercel.
 - El mapa usa Stadia por defecto: en producción hay que registrar el dominio de la tienda en Stadia (gratis) o definir `VITE_MAP_TILES_URL`.
+- **Cabeceras de seguridad** (`frontend/vercel.json`): en todas las páginas de la tienda (`/((?!api/).*)`; `/api/*` lleva las de helmet desde el backend, y sumarles esta CSP rompería Swagger UI) se envían Content-Security-Policy, `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin` y `Permissions-Policy` sin cámara, micrófono ni geolocalización. `/assets/*` (nombres con hash de Vite) se cachea un año (`immutable`).
+  - La CSP permite solo lo que la tienda carga: Google Fonts (`fonts.googleapis.com` y `fonts.gstatic.com`), fotos de `images.unsplash.com` y del Storage de Supabase, teselas de `tiles.stadiamaps.com`, `blob:` para las vistas previas del admin y la API (mismo origen por el rewrite, o `kuski-api.vercel.app`). **Si cambias `VITE_MAP_TILES_URL`, el proyecto de Supabase o el de la API, agrega el nuevo origen a la CSP.**
+  - Scripts: sin `'unsafe-inline'` ni `'unsafe-eval'`. Los dos scripts en línea de `index.html` (cargador de fuentes y precarga de la Home) están en `frontend/scripts-en-linea.js` con código estático y se autorizan por su hash; `src/test/cabeceras-seguridad.test.js` falla si el hash no coincide. Zod corre con `jitless` (`main.jsx`) para no intentar `new Function`.
+  - Estilos: `'unsafe-inline'` en `style-src` es necesario porque Sonner y el bloqueo de scroll de Radix insertan `<style>` con contenido dinámico.
+  - `npm run preview` sirve el build con estas mismas cabeceras (`vite.config.js` las lee de `vercel.json`), así las violaciones aparecen en la consola antes de desplegar.
 
 ### Keep-alive de Supabase
 
@@ -351,6 +419,7 @@ Para ejecutar un script en un solo workspace: `npm run <script> -w backend`.
 
 - `frontend/cypress/e2e/cp-090-compra-completa.cy.js` — **CP-090**: catálogo → producto → carrito → login → checkout (dirección guardada, envío estándar, Yape) → confirmación con código de pedido, código de aprobación y tracking → "Mis pedidos".
 - Corre contra la app real: primero `npm run dev` (frontend 5173 + API 3000 con los datos semilla) y luego `npm run e2e` (o `npm run e2e:open -w frontend` para la interfaz de Cypress). Usa la clienta de prueba María Quispe, vacía su carrito por la API antes de empezar y **crea un pedido real** (descuenta 1 unidad de stock).
+- La contraseña de María es la `SEED_PASSWORD` con la que se sembró la base: `CYPRESS_SEED_PASSWORD=… npm run e2e` (sin ella usa la de desarrollo del seeder, que solo vale en una base local).
 - Si Vite arrancó en otro puerto, indícalo con `CYPRESS_BASE_URL=http://localhost:5174`.
 - En la terminal integrada de VS Code, Cypress falla con `bad option: --smoke-test` porque VS Code define `ELECTRON_RUN_AS_NODE`: ejecútalo desde otra terminal o sin esa variable (`env -u ELECTRON_RUN_AS_NODE npm run e2e` en Git Bash).
 
@@ -368,7 +437,9 @@ Para ejecutar un script en un solo workspace: `npm run <script> -w backend`.
 
 ### Integración continua
 
-`.github/workflows/ci.yml` se ejecuta en cada Pull Request a `main` (y a mano con _Run workflow_): con Node 24 (`.nvmrc`) corre `npm ci`, `npm run lint` y `npm test` de backend y frontend. Las pruebas unitarias no usan base de datos. Las de integración contra Supabase solo se ejecutan si el repositorio define el secreto `DATABASE_URL` (Settings → Secrets and variables → Actions); si no existe, se omiten.
+`.github/workflows/ci.yml` se ejecuta en cada Pull Request a `main` (y a mano con _Run workflow_): con Node 24 (`.nvmrc`) corre `npm ci`, `npm audit --audit-level=high` (falla si alguna dependencia tiene una vulnerabilidad alta o crítica), `npm run lint` y `npm test` de backend y frontend. Las pruebas unitarias no usan base de datos. Las de integración contra Supabase solo se ejecutan si el repositorio define el secreto `DATABASE_URL` (Settings → Secrets and variables → Actions); si no existe, se omiten.
+
+**Dependabot** (`.github/dependabot.yml`) revisa cada lunes las dependencias npm de la raíz (los dos workspaces comparten el `package-lock.json`) y las acciones de GitHub, y abre un PR por grupo de actualizaciones. Las versiones mayores llegan en PR aparte: las versiones del stack las aprueba el equipo (ver CLAUDE.md), así que revisa cada PR antes de fusionarlo.
 
 ## Equipo
 

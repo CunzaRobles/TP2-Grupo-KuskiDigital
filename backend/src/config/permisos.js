@@ -15,6 +15,7 @@ export const PERMISOS = {
   productos: [GERENTE],
   categorias: [GERENTE],
   usuarios: [GERENTE],
+  reclamaciones: [GERENTE, VENTAS],
 };
 
 export const puede = (rol, permiso) => PERMISOS[permiso]?.includes(rol) ?? false;

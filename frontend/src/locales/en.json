@@ -308,7 +308,8 @@
     },
     "pagoSeguro": "100% secure payment",
     "pagoSeguroDetalle": "SSL-encrypted connection",
-    "metodosPago": "Accepted payment methods"
+    "metodosPago": "Accepted payment methods",
+    "libroReclamaciones": "Complaints Book"
   },
   "admin": {
     "titulo": "Admin panel",
@@ -327,7 +328,8 @@
       "productos": "Products",
       "categorias": "Categories",
       "usuarios": "Users",
-      "estadisticas": "Statistics"
+      "estadisticas": "Statistics",
+      "reclamaciones": "Complaints"
     },
     "grupos": {
       "general": "Overview",
@@ -681,7 +683,40 @@
       "STORAGE_NO_CONFIGURADO": "Image storage is not configured on the server.",
       "PRODUCTO_NO_ENCONTRADO": "We could not find that product.",
       "PEDIDO_NO_ENCONTRADO": "We could not find that order.",
-      "CORREO_EN_USO": "An account with that email already exists."
+      "CORREO_EN_USO": "An account with that email already exists.",
+      "RECLAMACION_TRANSICION_INVALIDA": "This form was already answered or changed status. Reload the table.",
+      "RECLAMACION_NO_ENCONTRADA": "This form is not on the current page of the table."
+    },
+    "reclamacionesPage": {
+      "descripcion": "Complaints Book forms. Each one must be answered within 15 business days.",
+      "estados": {
+        "recibido": "Received",
+        "en_atencion": "In progress",
+        "respondido": "Answered"
+      },
+      "tabla": {
+        "codigo": "Form",
+        "tipo": "Type",
+        "consumidor": "Consumer",
+        "plazo": "Deadline"
+      },
+      "dias_one": "{{count}} business day",
+      "dias_other": "{{count}} business days",
+      "venceHoy": "Due today",
+      "vencida_one": "Overdue by {{count}} business day",
+      "vencida_other": "Overdue by {{count}} business days",
+      "respondida": "Answered",
+      "contacto": "Contact",
+      "detalleTitulo": "Form {{codigo}}",
+      "detalleDescripcion": "Consumer details, the form and the reply.",
+      "respuesta": "Reply to the consumer",
+      "respuestaAyuda": "It is emailed to the consumer and closes the form.",
+      "respuestaCorta": "Write a reply of at least 20 characters",
+      "enviarRespuesta": "Send reply",
+      "marcarEnAtencion": "Mark as in progress",
+      "respondidaPor": "Answered by {{nombre}} · {{fecha}}",
+      "actualizada": "Form {{codigo}} updated",
+      "noEncontrada": "This form is not on the current page of the table."
     }
   },
   "noEncontrado": {
@@ -691,6 +726,178 @@
     "eyebrow": "Error 404",
     "catalogo": "Explore the catalog",
     "sugerencias": "Or visit one of our categories"
+  },
+  "nosotros": {
+    "meta": "About us",
+    "hero": {
+      "titulo": "Kuski Agroindustria S.A.",
+      "descripcion": "30 years transforming Andean biodiversity in Cusco.",
+      "detalle": "Coffee, superfoods, alpaca textiles and handicrafts, each traced to the community that makes it, from the valley to the highlands of Cusco."
+    },
+    "mision": {
+      "titulo": "Mission",
+      "texto": "An agro-industrial company committed to producing and marketing foods from Peru’s Andean biodiversity through innovation and sustainability, seeking the well-being of farmers and respect for the environment."
+    },
+    "vision": {
+      "titulo": "Vision",
+      "texto": "To be a leading agro-industrial company, recognized worldwide for the excellence of its Andean products and a benchmark in sustainability and agricultural competitiveness."
+    },
+    "comunidades": {
+      "titulo": "Our communities",
+      "descripcion": "We work with producer communities in Cusco. Every product in the store carries the name and altitude of the community that grew or wove it.",
+      "cifras": {
+        "comunidades": "Producer communities",
+        "familias": "Families benefited",
+        "altitud": "Altitude of origin, from the lowest community to the highest"
+      },
+      "rango": "{{min}} to {{max}}",
+      "unidad": "m a.s.l."
+    },
+    "valores": {
+      "titulo": "What guides us",
+      "descripcion": "Four commitments behind every product, from the field to your table.",
+      "comercioJusto": {
+        "titulo": "Fair trade",
+        "texto": "Fair prices and stable agreements with producer families, so the value of each product reaches the people who grow it."
+      },
+      "trazabilidad": {
+        "titulo": "Traceability",
+        "texto": "Every product shows its community of origin and its altitude: you know who made it and where."
+      },
+      "sostenibilidad": {
+        "titulo": "Sustainability",
+        "texto": "Farming practices that care for the soil, the water and the biodiversity of the Andes."
+      },
+      "calidad": {
+        "titulo": "Quality",
+        "texto": "Selection and control at every stage, from harvest to packaging, backed by certifications."
+      }
+    },
+    "cta": {
+      "titulo": "Bring the origin to your table",
+      "descripcion": "Coffee, superfoods, alpaca textiles and handicrafts from our communities, shipped within Peru and worldwide.",
+      "boton": "Explore the catalog"
+    }
+  },
+  "legal": {
+    "indice": "Contents",
+    "actualizado": "Last updated:",
+    "verTambien": "See also:",
+    "terminos": {
+      "titulo": "Terms and Conditions"
+    },
+    "privacidad": {
+      "titulo": "Privacy Policy"
+    }
+  },
+  "reclamaciones": {
+    "titulo": "Complaints Book",
+    "descripcion": "File your claim or complaint here (Libro de Reclamaciones). We will email you a copy and reply within 15 business days at the latest.",
+    "proveedor": {
+      "razonSocial": "Company name",
+      "ruc": "Tax ID (RUC)",
+      "domicilio": "Registered address",
+      "fecha": "Date",
+      "hoja": "Complaint form no.",
+      "hojaPendiente": "Assigned when you submit"
+    },
+    "avisoLegal": "Filing a claim does not prevent you from using other dispute resolution channels, nor is it a prerequisite for filing a complaint with INDECOPI.",
+    "plazo": "The provider must reply to the claim or complaint within fifteen (15) business days, which cannot be extended.",
+    "secciones": {
+      "consumidor": "1. Consumer identification",
+      "bien": "2. Product or service purchased",
+      "detalle": "3. Details of the claim and consumer request"
+    },
+    "campos": {
+      "nombre": "Full name",
+      "tipoDocumento": "ID type",
+      "numeroDocumento": "ID number",
+      "domicilio": "Address",
+      "telefono": "Phone",
+      "correo": "Email",
+      "menorDeEdad": "I am a minor",
+      "apoderadoNombre": "Name of parent or legal guardian",
+      "bienContratado": "Purchased",
+      "descripcion": "Description of the product or service",
+      "pedidoCodigo": "Order number (optional)",
+      "pedidoCodigoAyuda": "It is in your confirmation email, for example KD-000123.",
+      "montoReclamado": "Amount claimed in soles (optional)",
+      "tipo": "Type",
+      "detalle": "Details",
+      "pedidoConsumidor": "Consumer request",
+      "pedidoConsumidorAyuda": "What solution you expect from us."
+    },
+    "documentos": {
+      "DNI": "DNI (Peruvian ID)",
+      "CE": "Foreigner ID card (CE)",
+      "PASAPORTE": "Passport"
+    },
+    "bienes": {
+      "producto": "Product",
+      "servicio": "Service"
+    },
+    "tipos": {
+      "reclamo": {
+        "nombre": "Claim",
+        "definicion": "Dissatisfaction related to the products or services."
+      },
+      "queja": {
+        "nombre": "Complaint",
+        "definicion": "Dissatisfaction not related to the products or services, or with the customer service received."
+      }
+    },
+    "enviar": "Submit complaint form",
+    "errores": {
+      "tipo": "Choose whether it is a claim or a complaint",
+      "nombre": "Enter your full name",
+      "dni": "A DNI has 8 digits",
+      "documento": "Check the ID number (6 to 12 letters or digits)",
+      "domicilio": "Enter your address",
+      "telefono": "Enter a valid phone number, for example +49 30 1234 5678",
+      "correo": "Enter a valid email, for example name@email.com",
+      "apoderado": "Enter the name of your parent or legal guardian",
+      "pedidoCodigo": "Order numbers look like KD-000123",
+      "monto": "Enter an amount greater than 0, with up to 2 decimals",
+      "descripcion": "Describe the product or service",
+      "detalle": "Tell us what happened (at least 10 characters)",
+      "pedidoConsumidor": "Tell us what solution you expect",
+      "largo": "The text is too long"
+    },
+    "constancia": {
+      "titulo": "Complaint form {{codigo}}",
+      "registrada_reclamo": "We registered your claim",
+      "registrada_queja": "We registered your complaint",
+      "copia": "We sent a copy to {{correo}}. We will reply by {{fecha}} at the latest.",
+      "fechaLimite": "Reply deadline",
+      "imprimir": "Print receipt",
+      "otra": "File another form",
+      "volver": "Back to the store",
+      "pedidoCodigo": "Order number",
+      "montoReclamado": "Amount claimed"
+    }
+  },
+  "chatbot": {
+    "abrir": "Open the virtual assistant",
+    "cerrar": "Close the virtual assistant",
+    "titulo": "Kuski assistant",
+    "descripcion": "Automatic answers. If you need it, we will put you in touch with a person.",
+    "conversacion": "Conversation with the assistant",
+    "bienvenida": "Hi! I am Kuski’s virtual assistant. Ask me about shipping, payment methods, the catalog or your order status.",
+    "escribiendo": "Kuski is typing…",
+    "campo": "Your question",
+    "placeholder": "Type your question…",
+    "enviar": "Send",
+    "tu": "You",
+    "asistente": "Assistant",
+    "sugerenciasTitulo": "Quick suggestions",
+    "error": "I couldn’t answer right now. Please try again in a moment.",
+    "errorLimite": "You sent many messages in a row. Wait a minute and try again.",
+    "sugerencias": {
+      "envio": "How much is shipping?",
+      "pedido": "Order status",
+      "pago": "Payment methods",
+      "asesor": "Talk to an advisor"
+    }
   },
   "producto": {
     "agotado": "Sold out",
@@ -887,7 +1094,8 @@
     "titular": "Enter the name as it appears on the card",
     "vencimiento": "Use an MM/YY date that hasn’t passed",
     "cvv": "Check the security code (3 digits, 4 for American Express)",
-    "celular": "Enter a 9-digit Peruvian mobile number starting with 9"
+    "celular": "Enter a 9-digit Peruvian mobile number starting with 9",
+    "aceptarTerminos": "To create your account you must accept the Terms and the Privacy Policy"
   },
   "errores": {
     "generico": "Something went wrong. Please try again.",
@@ -933,7 +1141,8 @@
       "descripcion": "We only ask for what we need to ship your orders.",
       "enviar": "Create account",
       "conCuenta": "Already have an account?",
-      "iniciarSesion": "Sign in"
+      "iniciarSesion": "Sign in",
+      "aceptar": "By signing up you accept the <terminos>Terms and Conditions</terminos> and the <privacidad>Privacy Policy</privacidad>."
     },
     "campos": {
       "nombre": "First name",

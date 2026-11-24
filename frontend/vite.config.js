@@ -1,7 +1,14 @@
+import { readFileSync } from 'node:fs';
 import { fileURLToPath, URL } from 'node:url';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
+import {
+  CARGAR_FUENTES,
+  ID_DATOS_PRECARGA,
+  jsonEnHtml,
+  PRECARGAR_HOME,
+} from './scripts-en-linea.js';
 import { SIZES_HERO, srcSetHero } from './src/features/home/hero-foto.js';
 
 const PAGINA_HOME = '/src/features/home/home-page.jsx';
@@ -44,30 +51,55 @@ function precargarHome() {
           if (id) idiomas[id[1]] = `/${c.fileName}`;
         }
 
-        const modulos = JSON.stringify([...porCargar].map((f) => `/${f}`));
-        // Sin href: el navegador elige el ancho con imagesrcset/imagesizes, igual que el <img>
-        // del hero, y no descarga dos versiones de la foto.
-        const foto = JSON.stringify({ srcset: srcSetHero, sizes: SIZES_HERO });
-        const codigo = [
-          `(function(){var h=document.head,l;`,
-          `function pre(m){l=document.createElement('link');l.rel='modulepreload';l.crossOrigin='';l.href=m;h.appendChild(l)}`,
-          `var t=${JSON.stringify(idiomas)},i;`,
-          `try{i=localStorage.getItem('kuski.idioma')}catch(e){}`,
-          `i=(i||(navigator.languages||[navigator.language]).map(function(x){return String(x).slice(0,2)}).filter(function(x){return x==='es'||x in t})[0]||'').slice(0,2);`,
-          `if(t[i])pre(t[i]);`,
-          `if(location.pathname==='/'){${modulos}.forEach(pre);var f=${foto};`,
-          `l=document.createElement('link');l.rel='preload';l.as='image';l.setAttribute('imagesrcset',f.srcset);l.setAttribute('imagesizes',f.sizes);l.fetchPriority='low';h.appendChild(l)}})()`,
-        ].join('');
+        // Los datos que cambian en cada build van en JSON (no se ejecuta); el script es estático
+        // para que la CSP lo autorice por su hash (scripts-en-linea.js). Sin href en la foto: el
+        // navegador elige el ancho con imagesrcset/imagesizes, igual que el <img> del hero, y no
+        // descarga dos versiones.
+        const datos = jsonEnHtml({
+          idiomas,
+          modulos: [...porCargar].map((f) => `/${f}`),
+          foto: { srcset: srcSetHero, sizes: SIZES_HERO },
+        });
+        const etiquetas = [
+          `<script type="application/json" id="${ID_DATOS_PRECARGA}">${datos}</script>`,
+          `<script>${PRECARGAR_HOME}</script>`,
+        ].join('\n    ');
         // Justo después de <meta name="viewport"> (sin ella, imagesizes se calcularía con el
         // viewport de 980 px por defecto y bajaría la foto más grande) y antes de las hojas de
         // estilo (un script en línea después de una hoja de estilos espera a que esta cargue).
         const viewport = html.match(/<meta\s+name="viewport"[^>]*>/);
-        if (!viewport) return [{ tag: 'script', children: codigo, injectTo: 'head-prepend' }];
-        return html.replace(viewport[0], `${viewport[0]}\n    <script>${codigo}</script>`);
+        if (!viewport) throw new Error('index.html necesita <meta name="viewport">');
+        return html.replace(viewport[0], () => `${viewport[0]}\n    ${etiquetas}`);
       },
     },
   };
 }
+
+/**
+ * Aplica las hojas de Google Fonts precargadas en index.html (<link rel="preload" data-fuentes>)
+ * con un script en línea estático justo después del enlace, en desarrollo y en build.
+ */
+function cargarFuentes() {
+  return {
+    name: 'kuski:cargar-fuentes',
+    transformIndexHtml(html) {
+      const enlace = html.match(/<link\b[^>]*\bdata-fuentes\b[^>]*>/);
+      if (!enlace) throw new Error('index.html necesita el <link rel="preload" data-fuentes>');
+      return html.replace(enlace[0], () => `${enlace[0]}\n    <script>${CARGAR_FUENTES}</script>`);
+    },
+  };
+}
+
+// Cabeceras de vercel.json para las páginas de la tienda (todo menos /api, que lleva las de helmet
+// desde el backend): `npm run preview` sirve el build con la misma Content-Security-Policy que
+// producción, así sus violaciones se ven antes de desplegar.
+const REGLA_PAGINAS = '/((?!api/).*)';
+const vercel = JSON.parse(readFileSync(new URL('./vercel.json', import.meta.url), 'utf8'));
+const CABECERAS_PRODUCCION = Object.fromEntries(
+  (vercel.headers ?? [])
+    .filter((regla) => regla.source === REGLA_PAGINAS)
+    .flatMap((regla) => regla.headers.map(({ key, value }) => [key, value])),
+);
 
 // Sin agrupar, Rolldown parte el código compartido en decenas de chunks diminutos (un ícono por
 // archivo) y el arranque hace ~50 peticiones. Se agrupan en pocos chunks estables. GSAP, Leaflet
@@ -80,7 +112,7 @@ const FUERA_DEL_COMUN = /[\\/]lib[\\/](motion[\\/](gsap|split-text)|mapa)/;
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss(), precargarHome()],
+  plugins: [react(), tailwindcss(), cargarFuentes(), precargarHome()],
   build: {
     // Mapas de código en producción: errores legibles y Lighthouse los exige en los JS grandes.
     sourcemap: true,
@@ -111,6 +143,10 @@ export default defineConfig({
     proxy: {
       '/api': 'http://localhost:3000',
     },
+  },
+  // `npm run preview`: mismo proxy de /api (hereda server.proxy) y cabeceras de vercel.json.
+  preview: {
+    headers: CABECERAS_PRODUCCION,
   },
   test: {
     environment: 'jsdom',

@@ -32,6 +32,11 @@ jobs:
       - name: Instalar dependencias
         run: npm ci
 
+      # Falla si alguna dependencia (de producción o de desarrollo) tiene una vulnerabilidad alta
+      # o crítica conocida. Las actualizaciones las propone Dependabot (.github/dependabot.yml).
+      - name: Auditoría de dependencias
+        run: npm audit --audit-level=high
+
       - name: Lint backend
         run: npm run lint -w backend
 
