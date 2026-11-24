@@ -692,6 +692,58 @@
     "catalogo": "Katalog entdecken",
     "sugerencias": "Oder besuche eine unserer Kategorien"
   },
+  "nosotros": {
+    "meta": "Über uns",
+    "hero": {
+      "titulo": "Kuski Agroindustria S.A.",
+      "descripcion": "Seit 30 Jahren veredeln wir die Biodiversität der Anden in Cusco.",
+      "detalle": "Kaffee, Superfoods, Alpaka-Textilien und Kunsthandwerk – jedes Produkt mit der Gemeinschaft, die es herstellt, vom Tal bis in die Höhen von Cusco."
+    },
+    "mision": {
+      "titulo": "Mission",
+      "texto": "Ein Agrarindustrieunternehmen, das sich der Erzeugung und Vermarktung von Lebensmitteln aus der Andenbiodiversität Perus durch Innovation und Nachhaltigkeit verschrieben hat – zum Wohl der Bäuerinnen und Bauern und im Respekt vor der Umwelt."
+    },
+    "vision": {
+      "titulo": "Vision",
+      "texto": "Ein führendes Unternehmen der Agrarindustrie zu sein, weltweit anerkannt für die Exzellenz seiner Andenprodukte und Vorbild für Nachhaltigkeit und landwirtschaftliche Wettbewerbsfähigkeit."
+    },
+    "comunidades": {
+      "titulo": "Unsere Gemeinschaften",
+      "descripcion": "Wir arbeiten mit Erzeugergemeinschaften in Cusco. Jedes Produkt im Shop trägt den Namen und die Höhenlage der Gemeinschaft, die es angebaut oder gewebt hat.",
+      "cifras": {
+        "comunidades": "Erzeugergemeinschaften",
+        "familias": "Begünstigte Familien",
+        "altitud": "Herkunftshöhe, von der niedrigsten bis zur höchsten Gemeinschaft"
+      },
+      "rango": "{{min}} bis {{max}}",
+      "unidad": "m ü. M."
+    },
+    "valores": {
+      "titulo": "Was uns leitet",
+      "descripcion": "Vier Verpflichtungen hinter jedem Produkt, vom Feld bis auf Ihren Tisch.",
+      "comercioJusto": {
+        "titulo": "Fairer Handel",
+        "texto": "Faire Preise und stabile Vereinbarungen mit den Erzeugerfamilien, damit der Wert jedes Produkts bei denen ankommt, die es anbauen."
+      },
+      "trazabilidad": {
+        "titulo": "Rückverfolgbarkeit",
+        "texto": "Jedes Produkt nennt seine Herkunftsgemeinschaft und deren Höhenlage: Sie wissen, wer es hergestellt hat und wo."
+      },
+      "sostenibilidad": {
+        "titulo": "Nachhaltigkeit",
+        "texto": "Anbaumethoden, die Boden, Wasser und die Biodiversität der Anden schützen."
+      },
+      "calidad": {
+        "titulo": "Qualität",
+        "texto": "Auswahl und Kontrolle in jeder Phase, von der Ernte bis zur Verpackung, belegt durch Zertifizierungen."
+      }
+    },
+    "cta": {
+      "titulo": "Der Ursprung auf Ihrem Tisch",
+      "descripcion": "Kaffee, Superfoods, Alpaka-Textilien und Kunsthandwerk unserer Gemeinschaften, Versand innerhalb Perus und weltweit.",
+      "boton": "Katalog entdecken"
+    }
+  },
   "producto": {
     "agotado": "Ausverkauft",
     "altitud": "{{valor}} m ü. M.",

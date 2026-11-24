@@ -8,6 +8,7 @@ import {
   cargarCatalogo,
   cargarHome,
   cargarLogin,
+  cargarNosotros,
   cargarProducto,
   cargarRegistro,
 } from './paginas-tienda';
@@ -139,6 +140,7 @@ export const routes = [
       { path: 'catalogo', lazy: pagina(cargarCatalogo, 'CatalogoPage') },
       { path: 'producto/:slug', lazy: pagina(cargarProducto, 'ProductoRuta') },
       { path: 'carrito', lazy: pagina(cargarCarrito, 'CarritoPage') },
+      { path: 'nosotros', lazy: pagina(cargarNosotros, 'NosotrosPage') },
       { path: 'login', lazy: pagina(cargarLogin, 'LoginPage') },
       { path: 'registro', lazy: pagina(cargarRegistro, 'RegistroPage') },
       {

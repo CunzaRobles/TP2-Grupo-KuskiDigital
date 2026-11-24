@@ -692,6 +692,58 @@
     "catalogo": "Explore the catalog",
     "sugerencias": "Or visit one of our categories"
   },
+  "nosotros": {
+    "meta": "About us",
+    "hero": {
+      "titulo": "Kuski Agroindustria S.A.",
+      "descripcion": "30 years transforming Andean biodiversity in Cusco.",
+      "detalle": "Coffee, superfoods, alpaca textiles and handicrafts, each traced to the community that makes it, from the valley to the highlands of Cusco."
+    },
+    "mision": {
+      "titulo": "Mission",
+      "texto": "An agro-industrial company committed to producing and marketing foods from Peru’s Andean biodiversity through innovation and sustainability, seeking the well-being of farmers and respect for the environment."
+    },
+    "vision": {
+      "titulo": "Vision",
+      "texto": "To be a leading agro-industrial company, recognized worldwide for the excellence of its Andean products and a benchmark in sustainability and agricultural competitiveness."
+    },
+    "comunidades": {
+      "titulo": "Our communities",
+      "descripcion": "We work with producer communities in Cusco. Every product in the store carries the name and altitude of the community that grew or wove it.",
+      "cifras": {
+        "comunidades": "Producer communities",
+        "familias": "Families benefited",
+        "altitud": "Altitude of origin, from the lowest community to the highest"
+      },
+      "rango": "{{min}} to {{max}}",
+      "unidad": "m a.s.l."
+    },
+    "valores": {
+      "titulo": "What guides us",
+      "descripcion": "Four commitments behind every product, from the field to your table.",
+      "comercioJusto": {
+        "titulo": "Fair trade",
+        "texto": "Fair prices and stable agreements with producer families, so the value of each product reaches the people who grow it."
+      },
+      "trazabilidad": {
+        "titulo": "Traceability",
+        "texto": "Every product shows its community of origin and its altitude: you know who made it and where."
+      },
+      "sostenibilidad": {
+        "titulo": "Sustainability",
+        "texto": "Farming practices that care for the soil, the water and the biodiversity of the Andes."
+      },
+      "calidad": {
+        "titulo": "Quality",
+        "texto": "Selection and control at every stage, from harvest to packaging, backed by certifications."
+      }
+    },
+    "cta": {
+      "titulo": "Bring the origin to your table",
+      "descripcion": "Coffee, superfoods, alpaca textiles and handicrafts from our communities, shipped within Peru and worldwide.",
+      "boton": "Explore the catalog"
+    }
+  },
   "producto": {
     "agotado": "Sold out",
     "altitud": "{{valor}} m a.s.l.",
