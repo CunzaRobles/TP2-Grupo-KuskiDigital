@@ -158,5 +158,6 @@ vi.mock('../../src/repositories/tarifa-envio.repository.js', () => {
   }));
   return {
     findByZona: vi.fn(async (zona) => tarifas.filter((t) => t.zona === zona)),
+    findAll: vi.fn(async () => tarifas),
   };
 });

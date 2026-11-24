@@ -47,6 +47,7 @@ const RUTAS = {
   '/admin/usuarios/{id}': ['patch'],
   '/admin/buscar': ['get'],
   '/reclamaciones': ['post'],
+  '/chatbot/mensaje': ['post'],
   '/admin/reclamaciones': ['get'],
   '/admin/reclamaciones/{id}': ['patch'],
 };

@@ -824,6 +824,29 @@
       "montoReclamado": "Geforderter Betrag"
     }
   },
+  "chatbot": {
+    "abrir": "Virtuellen Assistenten öffnen",
+    "cerrar": "Virtuellen Assistenten schließen",
+    "titulo": "Kuski-Assistent",
+    "descripcion": "Automatische Antworten. Bei Bedarf verbinden wir dich mit einer Person aus dem Team.",
+    "conversacion": "Unterhaltung mit dem Assistenten",
+    "bienvenida": "Hallo! Ich bin der virtuelle Assistent von Kuski. Frag mich zu Versand, Zahlungsarten, dem Katalog oder dem Status deiner Bestellung.",
+    "escribiendo": "Kuski schreibt…",
+    "campo": "Deine Frage",
+    "placeholder": "Schreib deine Frage…",
+    "enviar": "Senden",
+    "tu": "Du",
+    "asistente": "Assistent",
+    "sugerenciasTitulo": "Schnelle Vorschläge",
+    "error": "Ich konnte gerade nicht antworten. Versuch es gleich noch einmal.",
+    "errorLimite": "Du hast viele Nachrichten hintereinander gesendet. Warte eine Minute.",
+    "sugerencias": {
+      "envio": "Was kostet der Versand?",
+      "pedido": "Status meiner Bestellung",
+      "pago": "Zahlungsarten",
+      "asesor": "Mit einer Person sprechen"
+    }
+  },
   "producto": {
     "agotado": "Ausverkauft",
     "altitud": "{{valor}} m ü. M.",

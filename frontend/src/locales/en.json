@@ -824,6 +824,29 @@
       "montoReclamado": "Amount claimed"
     }
   },
+  "chatbot": {
+    "abrir": "Open the virtual assistant",
+    "cerrar": "Close the virtual assistant",
+    "titulo": "Kuski assistant",
+    "descripcion": "Automatic answers. If you need it, we will put you in touch with a person.",
+    "conversacion": "Conversation with the assistant",
+    "bienvenida": "Hi! I am Kuski’s virtual assistant. Ask me about shipping, payment methods, the catalog or your order status.",
+    "escribiendo": "Kuski is typing…",
+    "campo": "Your question",
+    "placeholder": "Type your question…",
+    "enviar": "Send",
+    "tu": "You",
+    "asistente": "Assistant",
+    "sugerenciasTitulo": "Quick suggestions",
+    "error": "I couldn’t answer right now. Please try again in a moment.",
+    "errorLimite": "You sent many messages in a row. Wait a minute and try again.",
+    "sugerencias": {
+      "envio": "How much is shipping?",
+      "pedido": "Order status",
+      "pago": "Payment methods",
+      "asesor": "Talk to an advisor"
+    }
+  },
   "producto": {
     "agotado": "Sold out",
     "altitud": "{{valor}} m a.s.l.",

@@ -38,3 +38,14 @@ export const crearReclamacionLimiter = () =>
 const reclamacionLimiterBase = crearReclamacionLimiter();
 export const reclamacionLimiter = (req, res, next) =>
   env.NODE_ENV === 'test' ? next() : reclamacionLimiterBase(req, res, next);
+
+// Asistente virtual: 30 mensajes por minuto por IP (desactivado en las pruebas de la API).
+export const crearChatbotLimiter = () =>
+  limitador({
+    windowMs: 60 * 1000,
+    limit: 30,
+    message: 'Enviaste muchos mensajes seguidos. Espera un minuto e inténtalo de nuevo.',
+  });
+const chatbotLimiterBase = crearChatbotLimiter();
+export const chatbotLimiter = (req, res, next) =>
+  env.NODE_ENV === 'test' ? next() : chatbotLimiterBase(req, res, next);

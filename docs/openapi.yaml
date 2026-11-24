@@ -39,6 +39,11 @@ tags:
     description: |
       Libro de Reclamaciones virtual (Ley 29571, arts. 150-151, modificados por la Ley 32495;
       D.S. 011-2011-PCM, modificado por el D.S. 101-2022-PCM). Respuesta en 15 días hábiles.
+  - name: Asistente virtual
+    description: |
+      Chatbot de la tienda con un motor de intenciones por reglas (palabras clave en es/en/de,
+      sin servicios de IA de pago). Responde envíos, medios de pago, catálogo, estado de pedido,
+      Libro de Reclamaciones, trazabilidad y derivación a un asesor humano.
   - name: Admin
     description: |
       Panel de administración. Permisos por rol: **gerente** todo; **ventas** dashboard, ventas,
@@ -1543,6 +1548,55 @@ paths:
             application/json:
               schema: { $ref: '#/components/schemas/Error' }
 
+  /chatbot/mensaje:
+    post:
+      tags: [Asistente virtual]
+      summary: Enviar un mensaje al asistente virtual
+      description: |
+        Público, con **sesión opcional** (cookie). Límite propio: **30 mensajes por minuto por IP**.
+        Detecta la intención por palabras clave normalizadas (minúsculas, sin tildes) en es/en/de y
+        responde en `idioma`. Intenciones: `saludo`, `envios` (zonas, plazos y costos de
+        `tarifas_envio`), `medios_pago`, `catalogo` (categorías y destacados de la base),
+        `estado_pedido`, `libro_reclamaciones`, `trazabilidad`, `asesor_humano` (WhatsApp y
+        correo de `CHATBOT_WHATSAPP` / `CHATBOT_CORREO`) y `fallback` con 3 sugerencias.
+
+        **Estado de pedido:** si el mensaje trae un código `KD-000000`, solo se informa el estado
+        y la última fecha del historial al dueño del pedido con sesión. Sin sesión se pide iniciarla;
+        un pedido ajeno o inexistente responde igual ("no lo encontré en tu cuenta"), también para
+        los administradores.
+      security: [{}, { cookieSesion: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [mensaje]
+              properties:
+                mensaje:
+                  {
+                    type: string,
+                    minLength: 1,
+                    maxLength: 300,
+                    example: '¿Cuánto cuesta el envío?',
+                  }
+                idioma: { type: string, enum: [es, en, de], default: es }
+      responses:
+        '200':
+          description: Respuesta del asistente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/ChatbotRespuesta' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '429':
+          description: '`RATE_LIMITED`: 30 mensajes por minuto por IP'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
   /admin/reclamaciones:
     get:
       tags: [Admin, Libro de Reclamaciones]
@@ -1811,6 +1865,39 @@ components:
               data: { $ref: '#/components/schemas/UsuarioAdmin' }
 
   schemas:
+    ChatbotRespuesta:
+      type: object
+      properties:
+        intencion:
+          type: string
+          enum:
+            [
+              saludo,
+              envios,
+              medios_pago,
+              catalogo,
+              estado_pedido,
+              libro_reclamaciones,
+              trazabilidad,
+              asesor_humano,
+              fallback,
+            ]
+        texto: { type: string, description: Texto plano; las líneas se separan con \n }
+        sugerencias:
+          type: array
+          items: { type: string }
+          description: Respuestas rápidas en el idioma pedido (se envían como mensaje)
+        enlaces:
+          type: array
+          items:
+            type: object
+            properties:
+              texto: { type: string, example: Libro de Reclamaciones }
+              url:
+                type: string
+                description: Ruta interna de la tienda, https://wa.me/… o mailto:…
+                example: /libro-reclamaciones
+
     ReclamacionInput:
       type: object
       required:

@@ -824,6 +824,29 @@
       "montoReclamado": "Monto reclamado"
     }
   },
+  "chatbot": {
+    "abrir": "Abrir el asistente virtual",
+    "cerrar": "Cerrar el asistente virtual",
+    "titulo": "Asistente de Kuski",
+    "descripcion": "Respuestas automáticas. Si lo necesitas, te derivamos a una persona del equipo.",
+    "conversacion": "Conversación con el asistente",
+    "bienvenida": "¡Hola! Soy el asistente virtual de Kuski. Pregúntame por envíos, medios de pago, el catálogo o el estado de tu pedido.",
+    "escribiendo": "Kuski está escribiendo…",
+    "campo": "Tu consulta",
+    "placeholder": "Escribe tu consulta…",
+    "enviar": "Enviar",
+    "tu": "Tú",
+    "asistente": "Asistente",
+    "sugerenciasTitulo": "Sugerencias rápidas",
+    "error": "No pude responder ahora. Inténtalo de nuevo en un momento.",
+    "errorLimite": "Enviaste muchos mensajes seguidos. Espera un minuto e inténtalo de nuevo.",
+    "sugerencias": {
+      "envio": "¿Cuánto cuesta el envío?",
+      "pedido": "Estado de mi pedido",
+      "pago": "Medios de pago",
+      "asesor": "Hablar con un asesor"
+    }
+  },
   "producto": {
     "agotado": "Agotado",
     "altitud": "{{valor}} msnm",

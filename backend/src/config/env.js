@@ -44,6 +44,9 @@ export const env = {
   // Datos del proveedor en el Libro de Reclamaciones (opcionales hasta tenerlos).
   EMPRESA_RUC: process.env.EMPRESA_RUC?.trim() || null,
   EMPRESA_DOMICILIO: process.env.EMPRESA_DOMICILIO?.trim() || null,
+  // Asistente virtual: contacto del asesor humano. Sin WhatsApp, solo se ofrece el correo.
+  CHATBOT_WHATSAPP: process.env.CHATBOT_WHATSAPP?.trim() || null,
+  CHATBOT_CORREO: process.env.CHATBOT_CORREO?.trim() || 'contacto@kuski.pe',
 };
 
 export const COOKIE_SESION = 'kuski_token';
