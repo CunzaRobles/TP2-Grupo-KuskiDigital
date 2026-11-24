@@ -4,6 +4,28 @@ Tienda e-commerce de **Kuski Agroindustria S.A.** (Cusco, Perú): café orgánic
 
 Proyecto del curso Taller de Proyectos — Universidad Continental.
 
+## Funcionalidades
+
+| Área   | Ruta                                                            | Qué ofrece                                                                                                       |
+| ------ | --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Tienda | `/`                                                             | Hero, recorrido «Del valle a la puna» por categorías, destacados y mapa de trazabilidad de las comunidades.      |
+| Tienda | `/catalogo`                                                     | Catálogo con filtros (categoría, precio, comunidad, certificación), orden, búsqueda y paginación.                |
+| Tienda | `/producto/:slug`                                               | Ficha con galería, panel de compra, pestañas Descripción / Origen (mapa) / Reseñas y línea de tiempo del origen. |
+| Tienda | `/carrito`                                                      | Resumen del carrito (también drawer lateral desde el header).                                                    |
+| Tienda | `/checkout`                                                     | Compra en 4 pasos: envío, método de envío, pago (simulado) y confirmación.                                       |
+| Tienda | `/pedido/:codigo`                                               | Confirmación y tracking del pedido.                                                                              |
+| Tienda | `/login`, `/registro`                                           | Acceso y registro (con aceptación obligatoria de Términos y Privacidad).                                         |
+| Tienda | `/cuenta`                                                       | Mis pedidos y mis direcciones.                                                                                   |
+| Tienda | `/nosotros`                                                     | Acerca de nosotros: misión, visión, comunidades con datos reales y valores.                                      |
+| Tienda | `/terminos`, `/privacidad`                                      | Términos y Condiciones (Ley 29571) y Política de Privacidad (Ley 29733 y RGPD).                                  |
+| Tienda | `/libro-reclamaciones`                                          | Libro de Reclamaciones virtual con constancia imprimible; enlace permanente en el pie.                           |
+| Tienda | Todas las páginas                                               | **Asistente virtual** (chatbot por reglas): envíos, pagos, catálogo, estado de pedido y derivación a un asesor.  |
+| Panel  | `/admin/dashboard`                                              | KPIs, gráfico mensual y pendientes.                                                                              |
+| Panel  | `/admin/ventas`, `/pedidos`                                     | Ventas y cola de pedidos con filtros; cambio de estado (tracking simulado).                                      |
+| Panel  | `/admin/reclamaciones`                                          | **Reclamaciones**: hojas del Libro de Reclamaciones con días hábiles restantes y respuesta al consumidor.        |
+| Panel  | `/admin/inventario`                                             | Stock editable en línea y kardex.                                                                                |
+| Panel  | `/admin/productos`, `/categorias`, `/usuarios`, `/estadisticas` | Catálogo con fotos, categorías, equipo y roles, y estadísticas de mercado.                                       |
+
 ## Estructura
 
 Monorepo con npm workspaces y un único `package-lock.json` en la raíz.
@@ -23,7 +45,7 @@ Monorepo con npm workspaces y un único `package-lock.json` en la raíz.
 ├── backend/           # API REST en Express 5 (puerto 3000)
 │   ├── src/
 │   │   ├── config/        # env, conexión Sequelize (database.js) y config de sequelize-cli (database.cjs)
-│   │   ├── models/        # 19 modelos Sequelize + asociaciones (index.js)
+│   │   ├── models/        # modelos Sequelize (los 19 del esquema + reclamaciones) y asociaciones
 │   │   ├── repositories/  # única capa que usa Sequelize
 │   │   ├── services/      # reglas de negocio
 │   │   ├── controllers/   # capa HTTP
@@ -73,19 +95,20 @@ Copia la plantilla y completa los valores:
 cp backend/.env.example backend/.env
 ```
 
-| Variable                                        | Descripción                                                                                                                                                 |
-| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `PORT`                                          | Puerto de la API (por defecto `3000`).                                                                                                                      |
-| `DATABASE_URL`                                  | Cadena de conexión de Supabase: _Project Settings → Database → Connection string_. Local: **Session pooler** (5432); Vercel: **Transaction pooler** (6543). |
-| `JWT_SECRET`                                    | Secreto para firmar los tokens JWT. Obligatorio en producción (en desarrollo hay uno por defecto).                                                          |
-| `JWT_EXPIRES_IN`                                | Duración de la sesión (por defecto `7d`).                                                                                                                   |
-| `FRONTEND_URL`                                  | URL pública del frontend, permitida por CORS (varias separadas por comas). Fuera de producción también se permite `http://localhost:5173`.                  |
-| `PAGO_LATENCIA_MIN_MS` / `PAGO_LATENCIA_MAX_MS` | Latencia simulada de la pasarela de pago (por defecto 1000–2000 ms; 0 en pruebas).                                                                          |
-| `SUPABASE_URL`                                  | URL del proyecto de Supabase (_Project Settings → API_). Solo para Storage (fotos de productos).                                                            |
-| `SUPABASE_SERVICE_ROLE_KEY`                     | Clave secreta (`service_role` o `sb_secret_…`). Solo vive en el backend, nunca en el frontend.                                                              |
-| `SUPABASE_STORAGE_BUCKET`                       | Bucket público de las fotos de productos (por defecto `productos`).                                                                                         |
-| `EMPRESA_RUC` / `EMPRESA_DOMICILIO`             | RUC y domicilio del proveedor en la constancia del Libro de Reclamaciones (opcionales; deben coincidir con `frontend/src/features/legal/empresa.js`).       |
-| `CHATBOT_WHATSAPP` / `CHATBOT_CORREO`           | Contacto del asesor humano que ofrece el asistente virtual. Sin WhatsApp, solo se ofrece el correo (por defecto `contacto@kuski.pe`).                       |
+| Variable                                        | Descripción                                                                                                                                                                                                |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `PORT`                                          | Puerto de la API (por defecto `3000`).                                                                                                                                                                     |
+| `DATABASE_URL`                                  | Cadena de conexión de Supabase: _Project Settings → Database → Connection string_. Local: **Session pooler** (5432); Vercel: **Transaction pooler** (6543).                                                |
+| `JWT_SECRET`                                    | Secreto para firmar los tokens JWT. Obligatorio en producción (en desarrollo hay uno por defecto).                                                                                                         |
+| `JWT_EXPIRES_IN`                                | Duración de la sesión (por defecto `7d`).                                                                                                                                                                  |
+| `FRONTEND_URL`                                  | URL pública del frontend, permitida por CORS (varias separadas por comas). Fuera de producción también se permite `http://localhost:5173`.                                                                 |
+| `PAGO_LATENCIA_MIN_MS` / `PAGO_LATENCIA_MAX_MS` | Latencia simulada de la pasarela de pago (por defecto 1000–2000 ms; 0 en pruebas).                                                                                                                         |
+| `SUPABASE_URL`                                  | URL del proyecto de Supabase (_Project Settings → API_). Solo para Storage (fotos de productos).                                                                                                           |
+| `SUPABASE_SERVICE_ROLE_KEY`                     | Clave secreta (`service_role` o `sb_secret_…`). Solo vive en el backend, nunca en el frontend.                                                                                                             |
+| `SUPABASE_STORAGE_BUCKET`                       | Bucket público de las fotos de productos (por defecto `productos`).                                                                                                                                        |
+| `EMPRESA_RUC` / `EMPRESA_DOMICILIO`             | RUC y domicilio del proveedor en la constancia del Libro de Reclamaciones (opcionales; deben coincidir con `frontend/src/features/legal/empresa.js`).                                                      |
+| `CHATBOT_WHATSAPP` / `CHATBOT_CORREO`           | Contacto del asesor humano que ofrece el asistente virtual. Sin WhatsApp, solo se ofrece el correo (por defecto `contacto@kuski.pe`).                                                                      |
+| `SEED_PASSWORD`                                 | Contraseña de los usuarios de prueba que crean los seeders (mín. 8 caracteres). Obligatoria fuera de `NODE_ENV=development`; defínela siempre al sembrar la base compartida. Se entrega por canal privado. |
 
 `backend/.env` nunca se sube al repositorio.
 
@@ -112,15 +135,17 @@ npm run db:test           # comprueba la conexión: tablas (20/20) y número de 
 
 ### Usuarios de prueba
 
-Solo para desarrollo; las contraseñas se guardan cifradas con bcrypt.
+Los crea el seeder `backend/seeders/20260929000200-usuarios.cjs`, con la contraseña de `SEED_PASSWORD` (`backend/.env`), cifrada con bcrypt.
 
-| Rol               | Correo                     | Contraseña          | Notas                     |
-| ----------------- | -------------------------- | ------------------- | ------------------------- |
-| `admin_gerente`   | `gerente@kuski.pe`         | `KuskiAdmin2026!`   |                           |
-| `admin_ventas`    | `ventas@kuski.pe`          | `KuskiAdmin2026!`   |                           |
-| `admin_logistica` | `logistica@kuski.pe`       | `KuskiAdmin2026!`   |                           |
-| `cliente`         | `maria.quispe@example.com` | `KuskiCliente2026!` | Perú, español, PEN, Cusco |
-| `cliente`         | `anna.becker@example.com`  | `KuskiCliente2026!` | Alemania, alemán, EUR     |
+| Rol               | Correo                     | Notas                     |
+| ----------------- | -------------------------- | ------------------------- |
+| `admin_gerente`   | `gerente@kuski.pe`         |                           |
+| `admin_ventas`    | `ventas@kuski.pe`          |                           |
+| `admin_logistica` | `logistica@kuski.pe`       |                           |
+| `cliente`         | `maria.quispe@example.com` | Perú, español, PEN, Cusco |
+| `cliente`         | `anna.becker@example.com`  | Alemania, alemán, EUR     |
+
+> **Las credenciales se entregan por canal privado.** No las escribas en el repositorio, en issues ni en PRs.
 
 ## API
 
@@ -169,6 +194,7 @@ Cada ruta exige sesión, **vuelve a leer el rol y el estado de la cuenta en la b
 | Pedidos (consultar)                        |    ✔     |   ✔    |     ✔     |
 | Pedidos (cambiar estado)                   |    ✔     |        |     ✔     |
 | Inventario y kardex                        |    ✔     |        |     ✔     |
+| Reclamaciones (Libro de Reclamaciones)     |    ✔     |   ✔    |           |
 | Productos e imágenes, categorías, usuarios |    ✔     |        |           |
 
 | Método                    | Ruta                                       | Descripción                                                                                                                                                        |
@@ -393,6 +419,7 @@ Para ejecutar un script en un solo workspace: `npm run <script> -w backend`.
 
 - `frontend/cypress/e2e/cp-090-compra-completa.cy.js` — **CP-090**: catálogo → producto → carrito → login → checkout (dirección guardada, envío estándar, Yape) → confirmación con código de pedido, código de aprobación y tracking → "Mis pedidos".
 - Corre contra la app real: primero `npm run dev` (frontend 5173 + API 3000 con los datos semilla) y luego `npm run e2e` (o `npm run e2e:open -w frontend` para la interfaz de Cypress). Usa la clienta de prueba María Quispe, vacía su carrito por la API antes de empezar y **crea un pedido real** (descuenta 1 unidad de stock).
+- La contraseña de María es la `SEED_PASSWORD` con la que se sembró la base: `CYPRESS_SEED_PASSWORD=… npm run e2e` (sin ella usa la de desarrollo del seeder, que solo vale en una base local).
 - Si Vite arrancó en otro puerto, indícalo con `CYPRESS_BASE_URL=http://localhost:5174`.
 - En la terminal integrada de VS Code, Cypress falla con `bad option: --smoke-test` porque VS Code define `ELECTRON_RUN_AS_NODE`: ejecútalo desde otra terminal o sin esa variable (`env -u ELECTRON_RUN_AS_NODE npm run e2e` en Git Bash).
 
@@ -410,7 +437,9 @@ Para ejecutar un script en un solo workspace: `npm run <script> -w backend`.
 
 ### Integración continua
 
-`.github/workflows/ci.yml` se ejecuta en cada Pull Request a `main` (y a mano con _Run workflow_): con Node 24 (`.nvmrc`) corre `npm ci`, `npm run lint` y `npm test` de backend y frontend. Las pruebas unitarias no usan base de datos. Las de integración contra Supabase solo se ejecutan si el repositorio define el secreto `DATABASE_URL` (Settings → Secrets and variables → Actions); si no existe, se omiten.
+`.github/workflows/ci.yml` se ejecuta en cada Pull Request a `main` (y a mano con _Run workflow_): con Node 24 (`.nvmrc`) corre `npm ci`, `npm audit --audit-level=high` (falla si alguna dependencia tiene una vulnerabilidad alta o crítica), `npm run lint` y `npm test` de backend y frontend. Las pruebas unitarias no usan base de datos. Las de integración contra Supabase solo se ejecutan si el repositorio define el secreto `DATABASE_URL` (Settings → Secrets and variables → Actions); si no existe, se omiten.
+
+**Dependabot** (`.github/dependabot.yml`) revisa cada lunes las dependencias npm de la raíz (los dos workspaces comparten el `package-lock.json`) y las acciones de GitHub, y abre un PR por grupo de actualizaciones. Las versiones mayores llegan en PR aparte: las versiones del stack las aprueba el equipo (ver CLAUDE.md), así que revisa cada PR antes de fusionarlo.
 
 ## Equipo
 

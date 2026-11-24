@@ -2,8 +2,13 @@
 
 const API = '/api/v1';
 
-// Cliente de prueba de los datos semilla (backend/seeders/20260929000200-usuarios.cjs).
-export const MARIA = { correo: 'maria.quispe@example.com', password: 'KuskiCliente2026!' };
+// Cliente de prueba de los datos semilla (backend/seeders/20260929000200-usuarios.cjs). Su
+// contraseña es la SEED_PASSWORD con la que se sembró la base: CYPRESS_SEED_PASSWORD=… npm run e2e
+// (por defecto, la de desarrollo del seeder, que solo vale en una base local).
+export const MARIA = {
+  correo: 'maria.quispe@example.com',
+  password: Cypress.env('SEED_PASSWORD') ?? 'kuski-desarrollo-2026',
+};
 
 // Tienda en español y soles, sin carrito de invitado ni sesión previos.
 Cypress.Commands.add('visitarTienda', (ruta) =>

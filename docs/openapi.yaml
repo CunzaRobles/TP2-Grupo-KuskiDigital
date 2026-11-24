@@ -2055,7 +2055,7 @@ components:
       required: [correo, password]
       properties:
         correo: { type: string, format: email, example: maria.quispe@example.com }
-        password: { type: string, example: KuskiCliente2026! }
+        password: { type: string, example: Quinua2026 }
 
     Usuario:
       type: object

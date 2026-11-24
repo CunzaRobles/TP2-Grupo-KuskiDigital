@@ -23,7 +23,7 @@ const apiConLogin = (rutas = {}) => {
     'GET /auth/me': () =>
       usuario ? { usuario } : json(401, { error: { code: 'NO_AUTENTICADO', message: 'x' } }),
     'POST /auth/login': (_url, { correo, password }) => {
-      if (password !== 'KuskiCliente2026!') {
+      if (password !== 'Quinua2026') {
         return json(401, {
           error: { code: 'CREDENCIALES_INVALIDAS', message: 'Correo o contraseña incorrectos' },
         });
@@ -67,7 +67,7 @@ describe('login', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent('Correo o contraseña incorrectos');
 
     await user.clear(screen.getByLabelText('Contraseña'));
-    await user.type(screen.getByLabelText('Contraseña'), 'KuskiCliente2026!');
+    await user.type(screen.getByLabelText('Contraseña'), 'Quinua2026');
     await user.click(screen.getByRole('button', { name: 'Iniciar sesión' }));
 
     await waitFor(() => expect(router.state.location.pathname).toBe('/cuenta'));
@@ -95,7 +95,7 @@ describe('login', () => {
     ).toHaveAttribute('href', '/admin/login');
 
     await user.type(screen.getByLabelText('Correo electrónico'), 'gerente@kuski.pe');
-    await user.type(screen.getByLabelText('Contraseña'), 'KuskiAdmin2026!');
+    await user.type(screen.getByLabelText('Contraseña'), 'Panel2026');
     await user.click(screen.getByRole('button', { name: 'Iniciar sesión' }));
 
     await waitFor(() => expect(router.state.location.pathname).toMatch(/^\/admin/));
@@ -113,7 +113,7 @@ describe('login', () => {
     renderRuta('/login');
 
     await user.type(await screen.findByLabelText('Correo electrónico'), USUARIO.correo);
-    await user.type(screen.getByLabelText('Contraseña'), 'KuskiCliente2026!');
+    await user.type(screen.getByLabelText('Contraseña'), 'Quinua2026');
     await user.click(screen.getByRole('button', { name: 'Iniciar sesión' }));
 
     await waitFor(() => expect(llamadas(fetchMock, 'POST /carrito/fusionar')).toHaveLength(1));
