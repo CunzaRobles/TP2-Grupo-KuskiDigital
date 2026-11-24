@@ -7,6 +7,7 @@ import {
   cargarCarrito,
   cargarCatalogo,
   cargarHome,
+  cargarLegal,
   cargarLogin,
   cargarProducto,
   cargarRegistro,
@@ -141,6 +142,8 @@ export const routes = [
       { path: 'carrito', lazy: pagina(cargarCarrito, 'CarritoPage') },
       { path: 'login', lazy: pagina(cargarLogin, 'LoginPage') },
       { path: 'registro', lazy: pagina(cargarRegistro, 'RegistroPage') },
+      { path: 'terminos', lazy: pagina(cargarLegal, 'TerminosPage') },
+      { path: 'privacidad', lazy: pagina(cargarLegal, 'PrivacidadPage') },
       {
         Component: RequireAuth,
         children: [

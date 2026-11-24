@@ -7,6 +7,8 @@ export const cargarProducto = () => import('@/features/producto/producto-page');
 export const cargarCarrito = () => import('@/features/carrito/carrito-page');
 export const cargarLogin = () => import('@/features/auth/login-page');
 export const cargarRegistro = () => import('@/features/auth/registro-page');
+// Términos y Privacidad comparten chunk (el mismo layout); el texto de cada idioma va aparte.
+export const cargarLegal = () => import('@/features/legal/legal-pages');
 
 // Tras la carga, con el navegador en reposo, se adelantan las páginas a las que más se va
 // (catálogo y ficha) para que la navegación no espere su descarga.

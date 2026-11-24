@@ -12,16 +12,24 @@ const password = z
   .regex(/[A-Za-z]/, 'La contraseña debe incluir al menos una letra')
   .regex(/\d/, 'La contraseña debe incluir al menos un número');
 
-export const registroBody = z.object({
-  nombre: z.string().trim().min(1).max(100),
-  apellido: z.string().trim().min(1).max(100),
-  correo,
-  password,
-  telefono: z.string().trim().max(20).optional(),
-  paisCodigo: paisCodigoSchema.default('PE'),
-  idiomaPreferido: z.enum(['es', 'en', 'de']).default('es'),
-  monedaPreferida: z.enum(MONEDAS).default('PEN'),
-});
+// Aceptar los Términos y la Política de Privacidad es obligatorio para crear la cuenta
+// (consentimiento, Ley 29733). La aceptación no tiene columna propia: se valida y se descarta.
+export const registroBody = z
+  .object({
+    nombre: z.string().trim().min(1).max(100),
+    apellido: z.string().trim().min(1).max(100),
+    correo,
+    password,
+    telefono: z.string().trim().max(20).optional(),
+    paisCodigo: paisCodigoSchema.default('PE'),
+    idiomaPreferido: z.enum(['es', 'en', 'de']).default('es'),
+    monedaPreferida: z.enum(MONEDAS).default('PEN'),
+    aceptaTerminos: z.literal(
+      true,
+      'Debes aceptar los Términos y Condiciones y la Política de Privacidad',
+    ),
+  })
+  .transform(({ aceptaTerminos: _acepta, ...datos }) => datos);
 
 export const loginBody = z.object({
   correo,

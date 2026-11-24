@@ -692,6 +692,17 @@
     "catalogo": "Explore the catalog",
     "sugerencias": "Or visit one of our categories"
   },
+  "legal": {
+    "indice": "Contents",
+    "actualizado": "Last updated:",
+    "verTambien": "See also:",
+    "terminos": {
+      "titulo": "Terms and Conditions"
+    },
+    "privacidad": {
+      "titulo": "Privacy Policy"
+    }
+  },
   "producto": {
     "agotado": "Sold out",
     "altitud": "{{valor}} m a.s.l.",
@@ -887,7 +898,8 @@
     "titular": "Enter the name as it appears on the card",
     "vencimiento": "Use an MM/YY date that hasn’t passed",
     "cvv": "Check the security code (3 digits, 4 for American Express)",
-    "celular": "Enter a 9-digit Peruvian mobile number starting with 9"
+    "celular": "Enter a 9-digit Peruvian mobile number starting with 9",
+    "aceptarTerminos": "To create your account you must accept the Terms and the Privacy Policy"
   },
   "errores": {
     "generico": "Something went wrong. Please try again.",
@@ -933,7 +945,8 @@
       "descripcion": "We only ask for what we need to ship your orders.",
       "enviar": "Create account",
       "conCuenta": "Already have an account?",
-      "iniciarSesion": "Sign in"
+      "iniciarSesion": "Sign in",
+      "aceptar": "By signing up you accept the <terminos>Terms and Conditions</terminos> and the <privacidad>Privacy Policy</privacidad>."
     },
     "campos": {
       "nombre": "First name",

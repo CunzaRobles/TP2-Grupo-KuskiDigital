@@ -266,7 +266,14 @@ Sigue la estructura del wireframe: header → hero → categorías → destacado
 ### Cuenta y acceso (`src/features/auth`, `src/features/cuenta`)
 
 - **Login** (`/login`) y **Registro** (`/registro`): validación con Zod en el navegador (mismas reglas que el backend, mensajes traducidos, foco en el primer error), requisitos de la contraseña a la vista y errores de la API en su campo (p. ej. `CORREO_EN_USO`) o en un aviso (`CREDENCIALES_INVALIDAS`, límite de intentos, sin conexión). `?redirect=` devuelve a la página de origen (solo rutas internas). Al iniciar sesión, el carrito de invitado se fusiona con el de la cuenta.
+- El registro exige marcar «Al registrarte aceptas los Términos y Condiciones y la Política de Privacidad» (enlaces en otra pestaña para no perder lo escrito). Lo validan Zod en el navegador y `registroBody` en la API (`aceptaTerminos: true`; sin él, 400 `VALIDATION_ERROR`). La aceptación no se guarda en la base de datos.
 - `RequireAuth` protege `/checkout`, `/pedido/:codigo` y `/cuenta`: sin sesión lleva al login y vuelve después. La API aplica la misma regla con `requireAuth`.
+
+### Páginas legales (`/terminos`, `/privacidad`, `src/features/legal`)
+
+- Términos y Condiciones (Ley 29571) y Política de Privacidad (Ley 29733, D.S. 016-2024-JUS y RGPD), enlazadas desde el pie y el registro. Una sola ruta diferida (`cargarLegal`) para las dos.
+- Layout de documento: fecha de última actualización, índice lateral fijo en escritorio que marca la sección que se lee (plegable en móvil), columna de lectura de 68 caracteres y tablas con scroll horizontal propio en móvil.
+- El texto vive en `contenido/<documento>.<idioma>.js` (es, en, de) y se descarga solo el del idioma activo. Los datos de la empresa (correos, RUC, domicilio), las fechas de actualización y los plazos de envío están en `empresa.js`. **RUC y domicilio están pendientes** (`null`: no se muestran).
 - **Mi cuenta** (`/cuenta`): mis pedidos (paginados, con estado y tracking compacto) y mis direcciones (`/cuenta/direcciones`: agregar, marcar como principal y eliminar con confirmación). Cerrar sesión borra de la caché los datos privados.
 
 ### Checkout (`/checkout`, `src/features/checkout`)

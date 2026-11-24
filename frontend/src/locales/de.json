@@ -692,6 +692,17 @@
     "catalogo": "Katalog entdecken",
     "sugerencias": "Oder besuche eine unserer Kategorien"
   },
+  "legal": {
+    "indice": "Inhalt",
+    "actualizado": "Zuletzt aktualisiert:",
+    "verTambien": "Siehe auch:",
+    "terminos": {
+      "titulo": "Allgemeine Geschäftsbedingungen"
+    },
+    "privacidad": {
+      "titulo": "Datenschutzerklärung"
+    }
+  },
   "producto": {
     "agotado": "Ausverkauft",
     "altitud": "{{valor}} m ü. M.",
@@ -887,7 +898,8 @@
     "titular": "Gib den Namen wie auf der Karte ein",
     "vencimiento": "Verwende ein Datum MM/JJ, das noch nicht abgelaufen ist",
     "cvv": "Überprüfe den Sicherheitscode (3 Ziffern, 4 bei American Express)",
-    "celular": "Gib eine 9-stellige peruanische Handynummer ein, die mit 9 beginnt"
+    "celular": "Gib eine 9-stellige peruanische Handynummer ein, die mit 9 beginnt",
+    "aceptarTerminos": "Um dein Konto zu erstellen, musst du die AGB und die Datenschutzerklärung akzeptieren"
   },
   "errores": {
     "generico": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
@@ -933,7 +945,8 @@
       "descripcion": "Wir fragen nur, was wir für den Versand deiner Bestellungen brauchen.",
       "enviar": "Konto erstellen",
       "conCuenta": "Du hast schon ein Konto?",
-      "iniciarSesion": "Anmelden"
+      "iniciarSesion": "Anmelden",
+      "aceptar": "Mit der Registrierung akzeptierst du die <terminos>Allgemeinen Geschäftsbedingungen</terminos> und die <privacidad>Datenschutzerklärung</privacidad>."
     },
     "campos": {
       "nombre": "Vorname",

@@ -692,6 +692,17 @@
     "catalogo": "Explorar el catálogo",
     "sugerencias": "O visita una de nuestras categorías"
   },
+  "legal": {
+    "indice": "Índice",
+    "actualizado": "Última actualización:",
+    "verTambien": "Consulta también:",
+    "terminos": {
+      "titulo": "Términos y Condiciones"
+    },
+    "privacidad": {
+      "titulo": "Política de Privacidad"
+    }
+  },
   "producto": {
     "agotado": "Agotado",
     "altitud": "{{valor}} msnm",
@@ -887,7 +898,8 @@
     "titular": "Escribe el nombre como aparece en la tarjeta",
     "vencimiento": "Usa una fecha MM/AA que no haya pasado",
     "cvv": "Revisa el código de seguridad (3 dígitos, 4 en American Express)",
-    "celular": "Ingresa un celular peruano de 9 dígitos que empiece por 9"
+    "celular": "Ingresa un celular peruano de 9 dígitos que empiece por 9",
+    "aceptarTerminos": "Para crear tu cuenta debes aceptar los Términos y la Política de Privacidad"
   },
   "errores": {
     "generico": "Algo salió mal. Inténtalo de nuevo.",
@@ -933,7 +945,8 @@
       "descripcion": "Solo te pedimos lo necesario para enviarte tus pedidos.",
       "enviar": "Crear cuenta",
       "conCuenta": "¿Ya tienes cuenta?",
-      "iniciarSesion": "Iniciar sesión"
+      "iniciarSesion": "Iniciar sesión",
+      "aceptar": "Al registrarte aceptas los <terminos>Términos y Condiciones</terminos> y la <privacidad>Política de Privacidad</privacidad>."
     },
     "campos": {
       "nombre": "Nombre",
