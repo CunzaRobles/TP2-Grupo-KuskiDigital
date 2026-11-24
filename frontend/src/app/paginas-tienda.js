@@ -7,6 +7,7 @@ export const cargarProducto = () => import('@/features/producto/producto-page');
 export const cargarCarrito = () => import('@/features/carrito/carrito-page');
 export const cargarLogin = () => import('@/features/auth/login-page');
 export const cargarRegistro = () => import('@/features/auth/registro-page');
+export const cargarNosotros = () => import('@/features/nosotros/nosotros-page');
 // Términos y Privacidad comparten chunk (el mismo layout); el texto de cada idioma va aparte.
 export const cargarLegal = () => import('@/features/legal/legal-pages');
 export const cargarLibroReclamaciones = () =>

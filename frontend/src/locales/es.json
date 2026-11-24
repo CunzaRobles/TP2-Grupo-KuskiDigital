@@ -727,6 +727,58 @@
     "catalogo": "Explorar el catálogo",
     "sugerencias": "O visita una de nuestras categorías"
   },
+  "nosotros": {
+    "meta": "Acerca de nosotros",
+    "hero": {
+      "titulo": "Kuski Agroindustria S.A.",
+      "descripcion": "30 años transformando la biodiversidad andina en Cusco.",
+      "detalle": "Café, superalimentos, textiles de alpaca y artesanía, cada uno con la comunidad que lo produce identificada, del valle a las alturas de Cusco."
+    },
+    "mision": {
+      "titulo": "Misión",
+      "texto": "Empresa agroindustrial comprometida con la producción y comercialización de alimentos de la biodiversidad andina peruana mediante innovación y sostenibilidad, buscando el bienestar de agricultores y el respeto al medio ambiente."
+    },
+    "vision": {
+      "titulo": "Visión",
+      "texto": "Ser una empresa líder en la agroindustria reconocida mundialmente por la excelencia de sus productos andinos, siendo referentes en sostenibilidad y competitividad agrícola."
+    },
+    "comunidades": {
+      "titulo": "Nuestras comunidades",
+      "descripcion": "Trabajamos con comunidades productoras de Cusco. Cada producto de la tienda lleva el nombre y la altitud de la comunidad que lo cultivó o tejió.",
+      "cifras": {
+        "comunidades": "Comunidades productoras",
+        "familias": "Familias beneficiadas",
+        "altitud": "Altitud de origen, de la comunidad más baja a la más alta"
+      },
+      "rango": "De {{min}} a {{max}}",
+      "unidad": "msnm"
+    },
+    "valores": {
+      "titulo": "Lo que nos guía",
+      "descripcion": "Cuatro compromisos que sostienen cada producto, del campo a tu mesa.",
+      "comercioJusto": {
+        "titulo": "Comercio justo",
+        "texto": "Precios justos y acuerdos estables con las familias productoras, para que el valor de cada producto llegue a quien lo cultiva."
+      },
+      "trazabilidad": {
+        "titulo": "Trazabilidad",
+        "texto": "Cada producto indica su comunidad de origen y su altitud: sabes quién lo produjo y dónde."
+      },
+      "sostenibilidad": {
+        "titulo": "Sostenibilidad",
+        "texto": "Prácticas agrícolas que cuidan el suelo, el agua y la biodiversidad de los Andes."
+      },
+      "calidad": {
+        "titulo": "Calidad",
+        "texto": "Selección y control en cada etapa, de la cosecha al empaque, respaldados por certificaciones."
+      }
+    },
+    "cta": {
+      "titulo": "Lleva el origen a tu mesa",
+      "descripcion": "Café, superalimentos, textiles de alpaca y artesanía de nuestras comunidades, con envío a Perú y al mundo.",
+      "boton": "Explorar catálogo"
+    }
+  },
   "legal": {
     "indice": "Índice",
     "actualizado": "Última actualización:",

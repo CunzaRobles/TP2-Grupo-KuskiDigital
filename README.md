@@ -264,6 +264,12 @@ Sigue la estructura del wireframe: header → hero → categorías → destacado
 - Pestañas Descripción (con ficha técnica) / Origen (ficha de la comunidad y mini mapa con Leaflet, cargado solo al abrir la pestaña) / Reseñas (promedio, distribución y lista).
 - Línea de tiempo del origen (cosecha → proceso → envío) con textos por categoría que incluyen la comunidad y la altitud reales, y productos relacionados.
 
+### Acerca de nosotros (`/nosotros`, `src/features/nosotros`)
+
+- Ruta diferida (`cargarNosotros` en `app/paginas-tienda.js`), enlazada desde la cabecera, el menú móvil y el pie.
+- Hero corto (Kuski Agroindustria S.A., 30 años en Cusco) cerrado con las marcas de la regla, misión y visión con el texto institucional, **Nuestras comunidades** con datos reales (`GET /estadisticas/trazabilidad` para las cifras y `GET /comunidades` para el perfil de altitud y la lista de la Home, `perfil-altitud.jsx` y `comunidades-altitud.jsx`), valores (comercio justo, trazabilidad, sostenibilidad, calidad) y un CTA final al catálogo.
+- Sin animaciones de aparición; skeletons mientras carga y error con "Reintentar" por bloque. Textos en `nosotros.*` de los locales es/en/de.
+
 ### Carrito (`src/features/carrito`)
 
 - **Invitado:** vive en `localStorage` (`kuski.carrito`, sincronizado entre pestañas). Los precios en la moneda elegida, el stock actual y los avisos llegan de `POST /carrito/invitado`.
